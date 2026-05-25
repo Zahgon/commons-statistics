@@ -44,7 +44,9 @@ package org.apache.commons.statistics.descriptive;
  */
 public final class Product implements DoubleStatistic, StatisticAccumulator<Product> {
 
-    /** Product of all values. */
+    /**
+     * Product of all values.
+     */
     private double productValue = 1;
 
     /**
@@ -62,7 +64,7 @@ public final class Product implements DoubleStatistic, StatisticAccumulator<Prod
      * @return {@code Product} instance.
      */
     public static Product create() {
-        return new Product();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -77,7 +79,7 @@ public final class Product implements DoubleStatistic, StatisticAccumulator<Prod
      * @return {@code Product} instance.
      */
     public static Product of(double... values) {
-        return Statistics.add(new Product(), values);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -96,8 +98,7 @@ public final class Product implements DoubleStatistic, StatisticAccumulator<Prod
      * @since 1.2
      */
     public static Product ofRange(double[] values, int from, int to) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return createFromRange(values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -111,7 +112,7 @@ public final class Product implements DoubleStatistic, StatisticAccumulator<Prod
      * @return {@code Product} instance.
      */
     static Product createFromRange(double[] values, int from, int to) {
-        return Statistics.add(new Product(), values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -123,7 +124,7 @@ public final class Product implements DoubleStatistic, StatisticAccumulator<Prod
      * @return {@code Product} instance.
      */
     public static Product of(int... values) {
-        return Statistics.add(new Product(), values);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -139,8 +140,7 @@ public final class Product implements DoubleStatistic, StatisticAccumulator<Prod
      * @since 1.2
      */
     public static Product ofRange(int[] values, int from, int to) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return createFromRange(values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -154,7 +154,7 @@ public final class Product implements DoubleStatistic, StatisticAccumulator<Prod
      * @return {@code Product} instance.
      */
     static Product createFromRange(int[] values, int from, int to) {
-        return Statistics.add(new Product(), values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -166,7 +166,7 @@ public final class Product implements DoubleStatistic, StatisticAccumulator<Prod
      * @return {@code Product} instance.
      */
     public static Product of(long... values) {
-        return Statistics.add(new Product(), values);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -182,8 +182,7 @@ public final class Product implements DoubleStatistic, StatisticAccumulator<Prod
      * @since 1.2
      */
     public static Product ofRange(long[] values, int from, int to) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return createFromRange(values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -197,7 +196,7 @@ public final class Product implements DoubleStatistic, StatisticAccumulator<Prod
      * @return {@code Product} instance.
      */
     static Product createFromRange(long[] values, int from, int to) {
-        return Statistics.add(new Product(), values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -207,7 +206,7 @@ public final class Product implements DoubleStatistic, StatisticAccumulator<Prod
      */
     @Override
     public void accept(double value) {
-        this.productValue *= value;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -219,12 +218,11 @@ public final class Product implements DoubleStatistic, StatisticAccumulator<Prod
      */
     @Override
     public double getAsDouble() {
-        return productValue;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Product combine(Product other) {
-        productValue *= other.productValue;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

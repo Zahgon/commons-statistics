@@ -73,7 +73,10 @@ package org.apache.commons.statistics.descriptive;
  * @since 1.1
  */
 class SumOfFourthDeviations extends SumOfCubedDeviations {
-    /** Sum of forth deviations of the values that have been added. */
+
+    /**
+     * Sum of forth deviations of the values that have been added.
+     */
     private double sumFourthDev;
 
     /**
@@ -119,10 +122,7 @@ class SumOfFourthDeviations extends SumOfCubedDeviations {
      * @return {@code SumOfFourthDeviations} instance.
      */
     static SumOfFourthDeviations of(double... values) {
-        if (values.length == 0) {
-            return new SumOfFourthDeviations();
-        }
-        return create(SumOfCubedDeviations.of(values), values, 0, values.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -140,10 +140,7 @@ class SumOfFourthDeviations extends SumOfCubedDeviations {
      * @since 1.2
      */
     static SumOfFourthDeviations ofRange(double[] values, int from, int to) {
-        if (from == to) {
-            return new SumOfFourthDeviations();
-        }
-        return create(SumOfCubedDeviations.ofRange(values, from, to), values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -161,12 +158,8 @@ class SumOfFourthDeviations extends SumOfCubedDeviations {
      * @param to Exclusive end of the range.
      * @return {@code SumOfFourthDeviations} instance.
      */
-    static SumOfFourthDeviations createFromRange(org.apache.commons.numbers.core.Sum sum,
-                                                 double[] values, int from, int to) {
-        if (from == to) {
-            return new SumOfFourthDeviations();
-        }
-        return create(SumOfCubedDeviations.createFromRange(sum, values, from, to), values, from, to);
+    static SumOfFourthDeviations createFromRange(org.apache.commons.numbers.core.Sum sum, double[] values, int from, int to) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -181,9 +174,7 @@ class SumOfFourthDeviations extends SumOfCubedDeviations {
     private static SumOfFourthDeviations create(SumOfCubedDeviations sc, double[] values, int from, int to) {
         // Edge cases
         final double xbar = sc.getFirstMoment();
-        if (!Double.isFinite(xbar) ||
-            !Double.isFinite(sc.sumSquaredDev) ||
-            !Double.isFinite(sc.sumCubedDev)) {
+        if (!Double.isFinite(xbar) || !Double.isFinite(sc.sumSquaredDev) || !Double.isFinite(sc.sumCubedDev)) {
             // Overflow computing lower order deviations will overflow
             return new SumOfFourthDeviations(Double.NaN, sc);
         }
@@ -218,7 +209,7 @@ class SumOfFourthDeviations extends SumOfCubedDeviations {
      * @return {@code SumOfCubedDeviations} instance.
      */
     static SumOfFourthDeviations of(int... values) {
-        return ofRange(values, 0, values.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -235,29 +226,7 @@ class SumOfFourthDeviations extends SumOfCubedDeviations {
      * @return {@code SumOfFourthDeviations} instance.
      */
     static SumOfFourthDeviations ofRange(int[] values, int from, int to) {
-        // Logic shared with the double[] version with int[] lower order moments
-        if (from == to) {
-            return new SumOfFourthDeviations();
-        }
-        final IntVariance variance = IntVariance.createFromRange(values, from, to);
-        final double xbar = variance.computeMean();
-        final double ss = variance.computeSumOfSquaredDeviations();
-        // Unlike the double[] case, overflow/NaN is not possible:
-        // (max value)^4 times max array length ~ (2^31)^4 * 2^31 ~ 2^155.
-        // Compute sum of cubed and fourth deviations together.
-        double sc = 0;
-        double sq = 0;
-        for (int i = from; i < to; i++) {
-            final double x = values[i] - xbar;
-            final double x2 = x * x;
-            sc += x2 * x;
-            sq += x2 * x2;
-        }
-        // Edge case to avoid floating-point error for zero
-        if (to - from <= LENGTH_TWO) {
-            sc = 0;
-        }
-        return new SumOfFourthDeviations(sq, sc, ss, xbar, to - from);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -270,7 +239,7 @@ class SumOfFourthDeviations extends SumOfCubedDeviations {
      * @return {@code SumOfFourthDeviations} instance.
      */
     static SumOfFourthDeviations of(long... values) {
-        return ofRange(values, 0, values.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -287,29 +256,7 @@ class SumOfFourthDeviations extends SumOfCubedDeviations {
      * @return {@code SumOfFourthDeviations} instance.
      */
     static SumOfFourthDeviations ofRange(long[] values, int from, int to) {
-        // Logic shared with the double[] version with long[] lower order moments
-        if (from == to) {
-            return new SumOfFourthDeviations();
-        }
-        final LongVariance variance = LongVariance.createFromRange(values, from, to);
-        final double xbar = variance.computeMean();
-        final double ss = variance.computeSumOfSquaredDeviations();
-        // Unlike the double[] case, overflow/NaN is not possible:
-        // (max value)^4 times max array length ~ (2^31)^4 * 2^31 ~ 2^155.
-        // Compute sum of cubed and fourth deviations together.
-        double sc = 0;
-        double sq = 0;
-        for (int i = from; i < to; i++) {
-            final double x = values[i] - xbar;
-            final double x2 = x * x;
-            sc += x2 * x;
-            sq += x2 * x2;
-        }
-        // Edge case to avoid floating-point error for zero
-        if (to - from <= LENGTH_TWO) {
-            sc = 0;
-        }
-        return new SumOfFourthDeviations(sq, sc, ss, xbar, to - from);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -319,24 +266,7 @@ class SumOfFourthDeviations extends SumOfCubedDeviations {
      */
     @Override
     public void accept(double value) {
-        // Require current s^2 * N == sum-of-square deviations
-        // Require current g * N == sum-of-fourth deviations
-        final double ss = sumSquaredDev;
-        final double sc = sumCubedDev;
-        final double np = n;
-        super.accept(value);
-        // Terms are arranged so that values that may be zero
-        // (np, ss, sc) are first. This will cancel any overflow in
-        // multiplication of later terms (nDev * 4, nDev^2, nDev^4).
-        // This handles initialisation when np in {0, 1) to zero
-        // for any deviation (e.g. series MAX_VALUE, -MAX_VALUE).
-        // Note: (np1 * np1 - 3 * np) = (np+1)^2 - 3np = np^2 - np + 1
-        // Note: account for the half-deviation representation by scaling by 8=4*2; 24=6*2^2; 16=2^4
-        final double np1 = n;
-        sumFourthDev = sumFourthDev -
-            sc * nDev * 8 +
-            ss * nDev * nDev * 24 +
-            np * (np1 * np1 - 3 * np) * nDev * nDev * nDev * dev * 16;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -357,7 +287,7 @@ class SumOfFourthDeviations extends SumOfCubedDeviations {
      * @return sum of fourth deviations of all values.
      */
     double getSumOfFourthDeviations() {
-        return Double.isFinite(getFirstMoment()) ? sumFourthDev : Double.NaN;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -367,38 +297,6 @@ class SumOfFourthDeviations extends SumOfCubedDeviations {
      * @return {@code this} instance after combining {@code other}.
      */
     SumOfFourthDeviations combine(SumOfFourthDeviations other) {
-        if (n == 0) {
-            sumFourthDev = other.sumFourthDev;
-        } else if (other.n != 0) {
-            // Avoid overflow to compute the difference.
-            final double halfDiffOfMean = getFirstMomentHalfDifference(other);
-            sumFourthDev += other.sumFourthDev;
-            // Add additional terms that do not cancel to zero
-            if (halfDiffOfMean != 0) {
-                final double n1 = n;
-                final double n2 = other.n;
-                if (n1 == n2) {
-                    // Optimisation where sizes are equal in double-precision.
-                    // This is of use in JDK streams as spliterators use a divide by two
-                    // strategy for parallel streams.
-                    // Note: (n1 * n2) * ((n1+n2)^2 - 3 * (n1 * n2)) == n^4
-                    sumFourthDev +=
-                        (sumCubedDev - other.sumCubedDev) * halfDiffOfMean * 4 +
-                        (sumSquaredDev + other.sumSquaredDev) * (halfDiffOfMean * halfDiffOfMean) * 6 +
-                        pow4(halfDiffOfMean) * n1 * 2;
-                } else {
-                    final double n1n2 = n1 + n2;
-                    final double dm = 2 * (halfDiffOfMean / n1n2);
-                    // Use the rearrangement for parity with the accept method
-                    // n1*n1 - n1*n2 + n2*n2 == (n1+n2)^2 - 3*n1*n2
-                    sumFourthDev +=
-                        (sumCubedDev * n2 - other.sumCubedDev * n1) * dm * 4 +
-                        (n2 * n2 * sumSquaredDev + n1 * n1 * other.sumSquaredDev) * (dm * dm) * 6 +
-                        (n1 * n2) * (n1n2 * n1n2 - 3 * (n1 * n2)) * pow4(dm) * n1n2;
-                }
-            }
-        }
-        super.combine(other);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

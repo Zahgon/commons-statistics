@@ -40,8 +40,7 @@ import org.apache.commons.rng.sampling.distribution.InverseTransformContinuousSa
  * Child classes with a known median can override the default {@link #getMedian()}
  * method.
  */
-abstract class AbstractContinuousDistribution
-    implements ContinuousDistribution {
+abstract class AbstractContinuousDistribution implements ContinuousDistribution {
 
     // Notes on the inverse probability implementation:
     //
@@ -50,23 +49,32 @@ abstract class AbstractContinuousDistribution
     // iterated until there is a small difference between the upper
     // and lower bracket of the root, expressed as a combination of relative
     // and absolute thresholds.
-
-    /** BrentSolver relative accuracy.
+    /**
+     * BrentSolver relative accuracy.
      * This is used with {@code tol = 2 * relEps * abs(b) + absEps} so the minimum
-     * non-zero value with an effect is half of machine epsilon (2^-53). */
+     * non-zero value with an effect is half of machine epsilon (2^-53).
+     */
     private static final double SOLVER_RELATIVE_ACCURACY = 0x1.0p-53;
-    /** BrentSolver absolute accuracy.
+
+    /**
+     * BrentSolver absolute accuracy.
      * This is used with {@code tol = 2 * relEps * abs(b) + absEps} so set to MIN_VALUE
      * so that when the relative epsilon has no effect (as b is too small) the tolerance
-     * is at least 1 ULP for sub-normal numbers. */
+     * is at least 1 ULP for sub-normal numbers.
+     */
     private static final double SOLVER_ABSOLUTE_ACCURACY = Double.MIN_VALUE;
-    /** BrentSolver function value accuracy.
+
+    /**
+     * BrentSolver function value accuracy.
      * Determines if the Brent solver performs a search. It is not used during the search.
      * Set to a very low value to search using Brent's method unless
-     * the starting point is correct, or within 1 ULP for sub-normal probabilities. */
+     * the starting point is correct, or within 1 ULP for sub-normal probabilities.
+     */
     private static final double SOLVER_FUNCTION_VALUE_ACCURACY = Double.MIN_VALUE;
 
-    /** Cached value of the median. */
+    /**
+     * Cached value of the median.
+     */
     private double median = Double.NaN;
 
     /**
@@ -79,37 +87,15 @@ abstract class AbstractContinuousDistribution
      * @return the median
      */
     double getMedian() {
-        double m = median;
-        if (Double.isNaN(m)) {
-            m = inverseCumulativeProbability(0.5);
-            median = m;
-        }
-        return m;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public double probability(double x0,
-                              double x1) {
-        if (x0 > x1) {
-            throw new DistributionException(DistributionException.INVALID_RANGE_LOW_GT_HIGH, x0, x1);
-        }
-        // Use the survival probability when in the upper domain [3]:
-        //
-        //  lower          median         upper
-        //    |              |              |
-        // 1.     |------|
-        //        x0     x1
-        // 2.         |----------|
-        //            x0         x1
-        // 3.                  |--------|
-        //                     x0       x1
-
-        final double m = getMedian();
-        if (x0 >= m) {
-            return survivalProbability(x0) - survivalProbability(x1);
-        }
-        return cumulativeProbability(x1) - cumulativeProbability(x0);
+    public double probability(double x0, double x1) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -128,8 +114,7 @@ abstract class AbstractContinuousDistribution
      */
     @Override
     public double inverseCumulativeProbability(double p) {
-        ArgumentUtils.checkProbability(p);
-        return inverseProbability(p, 1 - p, false);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -148,8 +133,7 @@ abstract class AbstractContinuousDistribution
      */
     @Override
     public double inverseSurvivalProbability(double p) {
-        ArgumentUtils.checkProbability(p);
-        return inverseProbability(1 - p, p, true);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -191,7 +175,6 @@ abstract class AbstractContinuousDistribution
          * In the case of the survival probability the bracket can be set using the same
          * bound given that the argument p = 1 - q, with q the survival probability.
          */
-
         double lowerBound = getSupportLowerBound();
         if (p == 0) {
             return lowerBound;
@@ -200,20 +183,15 @@ abstract class AbstractContinuousDistribution
         if (q == 0) {
             return upperBound;
         }
-
         final double mu = getMean();
         final double sig = Math.sqrt(getVariance());
-        final boolean chebyshevApplies = Double.isFinite(mu) &&
-                                         ArgumentUtils.isFiniteStrictlyPositive(sig);
-
+        final boolean chebyshevApplies = Double.isFinite(mu) && ArgumentUtils.isFiniteStrictlyPositive(sig);
         if (lowerBound == Double.NEGATIVE_INFINITY) {
             lowerBound = createFiniteLowerBound(p, q, complement, upperBound, mu, sig, chebyshevApplies);
         }
-
         if (upperBound == Double.POSITIVE_INFINITY) {
             upperBound = createFiniteUpperBound(p, q, complement, lowerBound, mu, sig, chebyshevApplies);
         }
-
         // Here the bracket [lower, upper] uses finite values. If the support
         // is infinite the bracket can truncate the distribution and the target
         // probability can be outside the range of [lower, upper].
@@ -235,20 +213,10 @@ abstract class AbstractContinuousDistribution
                 return getSupportLowerBound();
             }
         }
-
-        final DoubleUnaryOperator fun = complement ?
-            arg -> survivalProbability(arg) - q :
-            arg -> cumulativeProbability(arg) - p;
+        final DoubleUnaryOperator fun = complement ? arg -> survivalProbability(arg) - q : arg -> cumulativeProbability(arg) - p;
         // Note the initial value is robust to overflow.
         // Do not use 0.5 * (lowerBound + upperBound).
-        final double x = new BrentSolver(SOLVER_RELATIVE_ACCURACY,
-                                         SOLVER_ABSOLUTE_ACCURACY,
-                                         SOLVER_FUNCTION_VALUE_ACCURACY)
-            .findRoot(fun,
-                      lowerBound,
-                      lowerBound + 0.5 * (upperBound - lowerBound),
-                      upperBound);
-
+        final double x = new BrentSolver(SOLVER_RELATIVE_ACCURACY, SOLVER_ABSOLUTE_ACCURACY, SOLVER_FUNCTION_VALUE_ACCURACY).findRoot(fun, lowerBound, lowerBound + 0.5 * (upperBound - lowerBound), upperBound);
         if (!isSupportConnected()) {
             return searchPlateau(complement, lowerBound, x);
         }
@@ -267,8 +235,7 @@ abstract class AbstractContinuousDistribution
      * @param chebyshevApplies True if the Chebyshev inequality applies (mean is finite and {@code sig > 0}}
      * @return the finite lower bound
      */
-    private double createFiniteLowerBound(final double p, final double q, boolean complement,
-        double upperBound, final double mu, final double sig, final boolean chebyshevApplies) {
+    private double createFiniteLowerBound(final double p, final double q, boolean complement, double upperBound, final double mu, final double sig, final boolean chebyshevApplies) {
         double lowerBound;
         if (chebyshevApplies) {
             lowerBound = mu - sig * Math.sqrt(q / p);
@@ -305,8 +272,7 @@ abstract class AbstractContinuousDistribution
      * @param chebyshevApplies True if the Chebyshev inequality applies (mean is finite and {@code sig > 0}}
      * @return the finite lower bound
      */
-    private double createFiniteUpperBound(final double p, final double q, boolean complement,
-        double lowerBound, final double mu, final double sig, final boolean chebyshevApplies) {
+    private double createFiniteUpperBound(final double p, final double q, boolean complement, double lowerBound, final double mu, final double sig, final boolean chebyshevApplies) {
         double upperBound;
         if (chebyshevApplies) {
             upperBound = mu + sig * Math.sqrt(p / q);
@@ -357,7 +323,7 @@ abstract class AbstractContinuousDistribution
      * @see <a href="https://issues.apache.org/jira/browse/MATH-699">MATH-699</a>
      */
     boolean isSupportConnected() {
-        return true;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -380,9 +346,7 @@ abstract class AbstractContinuousDistribution
         // than 1 ulp of x (e.g. dx=0 will infinite loop)
         final double dx = Math.max(SOLVER_ABSOLUTE_ACCURACY, Math.ulp(x));
         if (x - dx >= lower) {
-            final DoubleUnaryOperator fun = complement ?
-                this::survivalProbability :
-                this::cumulativeProbability;
+            final DoubleUnaryOperator fun = complement ? this::survivalProbability : this::cumulativeProbability;
             final double px = fun.applyAsDouble(x);
             if (fun.applyAsDouble(x - dx) == px) {
                 double upperBound = x;
@@ -390,9 +354,7 @@ abstract class AbstractContinuousDistribution
                 // Bisection search
                 // Require cdf(x) < px and sf(x) > px to move the lower bound
                 // to the midpoint.
-                final DoubleBinaryOperator cmp = complement ?
-                    (a, b) -> a > b ? -1 : 1 :
-                    (a, b) -> a < b ? -1 : 1;
+                final DoubleBinaryOperator cmp = complement ? (a, b) -> a > b ? -1 : 1 : (a, b) -> a < b ? -1 : 1;
                 while (upperBound - lowerBound > dx) {
                     final double midPoint = 0.5 * (lowerBound + upperBound);
                     if (cmp.applyAsDouble(fun.applyAsDouble(midPoint), px) < 0) {
@@ -407,10 +369,11 @@ abstract class AbstractContinuousDistribution
         return x;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ContinuousDistribution.Sampler createSampler(final UniformRandomProvider rng) {
-        // Inversion method distribution sampler.
-        return InverseTransformContinuousSampler.of(rng, this::inverseCumulativeProbability)::sample;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

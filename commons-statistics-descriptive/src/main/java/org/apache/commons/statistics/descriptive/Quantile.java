@@ -86,25 +86,50 @@ import org.apache.commons.numbers.arrays.Selection;
  * @since 1.1
  */
 public final class Quantile {
-    /** Message when the probability is not in the range {@code [0, 1]}. */
+
+    /**
+     * Message when the probability is not in the range {@code [0, 1]}.
+     */
     private static final String INVALID_PROBABILITY = "Invalid probability: ";
-    /** Message when no probabilities are provided for the varargs method. */
+
+    /**
+     * Message when no probabilities are provided for the varargs method.
+     */
     private static final String NO_PROBABILITIES_SPECIFIED = "No probabilities specified";
-    /** Message when the size is not valid. */
+
+    /**
+     * Message when the size is not valid.
+     */
     private static final String INVALID_SIZE = "Invalid size: ";
-    /** Message when the number of probabilities in a range is not valid. */
+
+    /**
+     * Message when the number of probabilities in a range is not valid.
+     */
     private static final String INVALID_NUMBER_OF_PROBABILITIES = "Invalid number of probabilities: ";
 
-    /** Default instance. Method 8 is recommended by Hyndman and Fan. */
+    /**
+     * Default instance. Method 8 is recommended by Hyndman and Fan.
+     */
     private static final Quantile DEFAULT = new Quantile(false, NaNPolicy.INCLUDE, EstimationMethod.HF8);
 
-    /** Flag to indicate if the data should be copied. */
+    /**
+     * Flag to indicate if the data should be copied.
+     */
     private final boolean copy;
-    /** NaN policy for floating point data. */
+
+    /**
+     * NaN policy for floating point data.
+     */
     private final NaNPolicy nanPolicy;
-    /** Transformer for NaN data. */
+
+    /**
+     * Transformer for NaN data.
+     */
     private final NaNTransformer nanTransformer;
-    /** Estimation type used to determine the value from the quantile. */
+
+    /**
+     * Estimation type used to determine the value from the quantile.
+     */
     private final EstimationMethod estimationType;
 
     /**
@@ -138,7 +163,7 @@ public final class Quantile {
      * @see #with(EstimationMethod)
      */
     public static Quantile withDefaults() {
-        return DEFAULT;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -150,7 +175,7 @@ public final class Quantile {
      * @return an instance
      */
     public Quantile withCopy(boolean v) {
-        return new Quantile(v, nanPolicy, estimationType);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -180,7 +205,7 @@ public final class Quantile {
      * @return an instance
      */
     public Quantile with(NaNPolicy v) {
-        return new Quantile(copy, Objects.requireNonNull(v), estimationType);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -190,7 +215,7 @@ public final class Quantile {
      * @return an instance
      */
     public Quantile with(EstimationMethod v) {
-        return new Quantile(copy, nanPolicy, Objects.requireNonNull(v));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -205,13 +230,7 @@ public final class Quantile {
      * @throws IllegalArgumentException if {@code n < 1}
      */
     public static double[] probabilities(int n) {
-        checkNumberOfProbabilities(n);
-        final double c1 = n + 1.0;
-        final double[] p = new double[n];
-        for (int i = 0; i < n; i++) {
-            p[i] = (i + 1.0) / c1;
-        }
-        return p;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -230,16 +249,7 @@ public final class Quantile {
      * range {@code [0, 1]}; or {@code p2 <= p1}.
      */
     public static double[] probabilities(int n, double p1, double p2) {
-        checkProbability(p1);
-        checkProbability(p2);
-        if (p2 <= p1) {
-            throw new IllegalArgumentException("Invalid range: [" + p1 + ", " + p2 + "]");
-        }
-        final double[] p = probabilities(n);
-        for (int i = 0; i < n; i++) {
-            p[i] = (1 - p[i]) * p1 + p[i] * p2;
-        }
-        return p;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -263,7 +273,7 @@ public final class Quantile {
      * @see #with(NaNPolicy)
      */
     public double evaluate(double[] values, double p) {
-        return compute(values, 0, values.length, p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -291,8 +301,7 @@ public final class Quantile {
      * @since 1.2
      */
     public double evaluateRange(double[] values, int from, int to, double p) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return compute(values, from, to, p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -317,14 +326,12 @@ public final class Quantile {
         if (n <= 1) {
             return n == 0 ? Double.NaN : x[start];
         }
-
         final double pos = estimationType.index(p, n);
         final int ip = (int) pos;
         final int i = start + ip;
-
         // Partition and compute
         if (pos > ip) {
-            Selection.select(x, start, end, new int[] {i, i + 1});
+            Selection.select(x, start, end, new int[] { i, i + 1 });
             return Interpolation.interpolate(x[i], x[i + 1], pos - ip);
         }
         Selection.select(x, start, end, i);
@@ -345,7 +352,7 @@ public final class Quantile {
      * @see #with(NaNPolicy)
      */
     public double[] evaluate(double[] values, double... p) {
-        return compute(values, 0, values.length, p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -366,8 +373,7 @@ public final class Quantile {
      * @since 1.2
      */
     public double[] evaluateRange(double[] values, int from, int to, double... p) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return compute(values, from, to, p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -395,13 +401,10 @@ public final class Quantile {
             Arrays.fill(q, n == 0 ? Double.NaN : x[start]);
             return q;
         }
-
         // Collect interpolation positions. We use the output q as storage.
         final int[] indices = computeIndices(n, p, q, start);
-
         // Partition
         Selection.select(x, start, end, indices);
-
         // Compute
         for (int k = 0; k < p.length; k++) {
             // ip in [0, n); i in [start, end)
@@ -435,7 +438,7 @@ public final class Quantile {
      * @see #evaluate(int[], double...)
      */
     public double evaluate(int[] values, double p) {
-        return compute(values, 0, values.length, p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -461,8 +464,7 @@ public final class Quantile {
      * @since 1.2
      */
     public double evaluateRange(int[] values, int from, int to, double p) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return compute(values, from, to, p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -482,7 +484,6 @@ public final class Quantile {
         if (n <= 1) {
             return n == 0 ? Double.NaN : values[from];
         }
-
         // Create the range
         final int[] x;
         final int start;
@@ -496,14 +497,12 @@ public final class Quantile {
             start = from;
             end = to;
         }
-
         final double pos = estimationType.index(p, n);
         final int ip = (int) pos;
         final int i = start + ip;
-
         // Partition and compute
         if (pos > ip) {
-            Selection.select(x, start, end, new int[] {i, i + 1});
+            Selection.select(x, start, end, new int[] { i, i + 1 });
             return Interpolation.interpolate((double) x[i], (double) x[i + 1], pos - ip);
         }
         Selection.select(x, start, end, i);
@@ -523,7 +522,7 @@ public final class Quantile {
      * or no probabilities are specified.
      */
     public double[] evaluate(int[] values, double... p) {
-        return compute(values, 0, values.length, p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -543,8 +542,7 @@ public final class Quantile {
      * @since 1.2
      */
     public double[] evaluateRange(int[] values, int from, int to, double... p) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return compute(values, from, to, p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -570,7 +568,6 @@ public final class Quantile {
             Arrays.fill(q, n == 0 ? Double.NaN : values[from]);
             return q;
         }
-
         // Create the range
         final int[] x;
         final int start;
@@ -584,13 +581,10 @@ public final class Quantile {
             start = from;
             end = to;
         }
-
         // Collect interpolation positions. We use the output q as storage.
         final int[] indices = computeIndices(n, p, q, start);
-
         // Partition
         Selection.select(x, start, end, indices);
-
         // Compute
         for (int k = 0; k < p.length; k++) {
             // ip in [0, n); i in [start, end)
@@ -626,7 +620,7 @@ public final class Quantile {
      * @since 1.3
      */
     public StatisticResult evaluate(long[] values, double p) {
-        return compute(values, 0, values.length, p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -652,8 +646,7 @@ public final class Quantile {
      * @since 1.3
      */
     public StatisticResult evaluateRange(long[] values, int from, int to, double p) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return compute(values, from, to, p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -672,11 +665,8 @@ public final class Quantile {
         final int n = to - from;
         // Special cases
         if (n <= 1) {
-            return n == 0 ?
-                () -> Double.NaN :
-                Statistics.createStatisticResult(values[from]);
+            return n == 0 ? () -> Double.NaN : Statistics.createStatisticResult(values[from]);
         }
-
         // Create the range
         final long[] x;
         final int start;
@@ -690,14 +680,12 @@ public final class Quantile {
             start = from;
             end = to;
         }
-
         final double pos = estimationType.index(p, n);
         final int ip = (int) pos;
         final int i = start + ip;
-
         // Partition and compute
         if (pos > ip) {
-            Selection.select(x, start, end, new int[] {i, i + 1});
+            Selection.select(x, start, end, new int[] { i, i + 1 });
             return Interpolation.interpolate(x[i], x[i + 1], pos - ip);
         }
         Selection.select(x, start, end, i);
@@ -718,7 +706,7 @@ public final class Quantile {
      * @since 1.3
      */
     public StatisticResult[] evaluate(long[] values, double... p) {
-        return compute(values, 0, values.length, p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -738,8 +726,7 @@ public final class Quantile {
      * @since 1.3
      */
     public StatisticResult[] evaluateRange(long[] values, int from, int to, double... p) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return compute(values, from, to, p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -762,13 +749,10 @@ public final class Quantile {
         // Special cases
         final StatisticResult[] result = new StatisticResult[p.length];
         if (n <= 1) {
-            final StatisticResult r = n == 0 ?
-                () -> Double.NaN :
-                Statistics.createStatisticResult(values[from]);
+            final StatisticResult r = n == 0 ? () -> Double.NaN : Statistics.createStatisticResult(values[from]);
             Arrays.fill(result, r);
             return result;
         }
-
         // Create the range
         final long[] x;
         final int start;
@@ -782,14 +766,11 @@ public final class Quantile {
             start = from;
             end = to;
         }
-
         // Collect interpolation positions
         final double[] q = new double[p.length];
         final int[] indices = computeIndices(n, p, q, start);
-
         // Partition
         Selection.select(x, start, end, indices);
-
         // Compute
         for (int k = 0; k < p.length; k++) {
             // ip in [0, n); i in [start, end)
@@ -832,20 +813,7 @@ public final class Quantile {
      * @see #evaluateAsLong(int, IntToLongFunction, double)
      */
     public double evaluate(int n, IntToDoubleFunction values, double p) {
-        checkSize(n);
-        checkProbability(p);
-        // Special case
-        if (n <= 1) {
-            return n == 0 ? Double.NaN : values.applyAsDouble(0);
-        }
-        final double pos = estimationType.index(p, n);
-        final int i = (int) pos;
-        final double v1 = values.applyAsDouble(i);
-        if (pos > i) {
-            final double v2 = values.applyAsDouble(i + 1);
-            return Interpolation.interpolate(v1, v2, pos - i);
-        }
-        return v1;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -876,26 +844,7 @@ public final class Quantile {
      * @see #evaluateAsLong(int, IntToLongFunction, double...)
      */
     public double[] evaluate(int n, IntToDoubleFunction values, double... p) {
-        checkSize(n);
-        checkProbabilities(p);
-        // Special case
-        final double[] q = new double[p.length];
-        if (n <= 1) {
-            Arrays.fill(q, n == 0 ? Double.NaN : values.applyAsDouble(0));
-            return q;
-        }
-        for (int k = 0; k < p.length; k++) {
-            final double pos = estimationType.index(p[k], n);
-            final int i = (int) pos;
-            final double v1 = values.applyAsDouble(i);
-            if (pos > i) {
-                final double v2 = values.applyAsDouble(i + 1);
-                q[k] = Interpolation.interpolate(v1, v2, pos - i);
-            } else {
-                q[k] = v1;
-            }
-        }
-        return q;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -923,22 +872,7 @@ public final class Quantile {
      * @since 1.3
      */
     public StatisticResult evaluateAsLong(int n, IntToLongFunction values, double p) {
-        checkSize(n);
-        checkProbability(p);
-        // Special case
-        if (n <= 1) {
-            return n == 0 ?
-                () -> Double.NaN :
-                Statistics.createStatisticResult(values.applyAsLong(0));
-        }
-        final double pos = estimationType.index(p, n);
-        final int i = (int) pos;
-        final long v1 = values.applyAsLong(i);
-        if (pos > i) {
-            final long v2 = values.applyAsLong(i + 1);
-            return Interpolation.interpolate(v1, v2, pos - i);
-        }
-        return Statistics.createStatisticResult(v1);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -966,29 +900,7 @@ public final class Quantile {
      * @since 1.3
      */
     public StatisticResult[] evaluateAsLong(int n, IntToLongFunction values, double... p) {
-        checkSize(n);
-        checkProbabilities(p);
-        // Special case
-        final StatisticResult[] result = new StatisticResult[p.length];
-        if (n <= 1) {
-            final StatisticResult r = n == 0 ?
-                () -> Double.NaN :
-                Statistics.createStatisticResult(values.applyAsLong(0));
-            Arrays.fill(result, r);
-            return result;
-        }
-        for (int k = 0; k < p.length; k++) {
-            final double pos = estimationType.index(p[k], n);
-            final int i = (int) pos;
-            final long v1 = values.applyAsLong(i);
-            if (pos > i) {
-                final long v2 = values.applyAsLong(i + 1);
-                result[k] = Interpolation.interpolate(v1, v2, pos - i);
-            } else {
-                result[k] = Statistics.createStatisticResult(v1);
-            }
-        }
-        return result;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1113,61 +1025,59 @@ public final class Quantile {
      * </ol>
      */
     public enum EstimationMethod {
+
         /**
          * Inverse of the empirical distribution function.
          *
          * <p>\( m = 0 \). \( \gamma = 0 \) if \( g = 0 \), and 1 otherwise.
          */
         HF1 {
+
             @Override
             double position0(double p, int n) {
-                // position = np + 0. This is 1-based so adjust to 0-based.
-                return Math.ceil(n * p) - 1;
+                throw new UnsupportedOperationException("STUB: not implemented");
             }
-        },
+        }
+        ,
         /**
          * Similar to {@link #HF1} with averaging at discontinuities.
          *
          * <p>\( m = 0 \). \( \gamma = 0.5 \) if \( g = 0 \), and 1 otherwise.
          */
         HF2 {
+
             @Override
             double position0(double p, int n) {
-                final double pos = n * p;
-                // Average at discontinuities
-                final int j = (int) pos;
-                final double g = pos - j;
-                if (g == 0) {
-                    return j - 0.5;
-                }
-                // As HF1 : ceil(j + g) - 1
-                return j;
+                throw new UnsupportedOperationException("STUB: not implemented");
             }
-        },
+        }
+        ,
         /**
          * The observation closest to \( np \). Ties are resolved to the nearest even order statistic.
          *
          * <p>\( m = -1/2 \). \( \gamma = 0 \) if \( g = 0 \) and \( j \) is even, and 1 otherwise.
          */
         HF3 {
+
             @Override
             double position0(double p, int n) {
-                // Let rint do the work for ties to even
-                return Math.rint(n * p) - 1;
+                throw new UnsupportedOperationException("STUB: not implemented");
             }
-        },
+        }
+        ,
         /**
          * Linear interpolation of the inverse of the empirical CDF.
          *
          * <p>\( m = 0 \). \( p_k = \frac{k}{n} \).
          */
         HF4 {
+
             @Override
             double position0(double p, int n) {
-                // np + 0 - 1
-                return n * p - 1;
+                throw new UnsupportedOperationException("STUB: not implemented");
             }
-        },
+        }
+        ,
         /**
          * A piecewise linear function where the knots are the values midway through the steps of
          * the empirical CDF. Proposed by Hazen (1914) and popular amongst hydrologists.
@@ -1175,12 +1085,13 @@ public final class Quantile {
          * <p>\( m = 1/2 \). \( p_k = \frac{k - 1/2}{n} \).
          */
         HF5 {
+
             @Override
             double position0(double p, int n) {
-                // np + 0.5 - 1
-                return n * p - 0.5;
+                throw new UnsupportedOperationException("STUB: not implemented");
             }
-        },
+        }
+        ,
         /**
          * Linear interpolation of the expectations for the order statistics for the uniform
          * distribution on [0,1]. Proposed by Weibull (1939).
@@ -1191,12 +1102,13 @@ public final class Quantile {
          * legacy implementation.
          */
         HF6 {
+
             @Override
             double position0(double p, int n) {
-                // np + p - 1
-                return (n + 1) * p - 1;
+                throw new UnsupportedOperationException("STUB: not implemented");
             }
-        },
+        }
+        ,
         /**
          * Linear interpolation of the modes for the order statistics for the uniform
          * distribution on [0,1]. Proposed by Gumbull (1939).
@@ -1204,12 +1116,13 @@ public final class Quantile {
          * <p>\( m = 1 - p \). \( p_k = \frac{k - 1}{n - 1} \).
          */
         HF7 {
+
             @Override
             double position0(double p, int n) {
-                // np + 1-p - 1
-                return (n - 1) * p;
+                throw new UnsupportedOperationException("STUB: not implemented");
             }
-        },
+        }
+        ,
         /**
          * Linear interpolation of the approximate medians for order statistics.
          *
@@ -1219,11 +1132,13 @@ public final class Quantile {
          * an approximate median-unbiased estimate regardless of distribution.
          */
         HF8 {
+
             @Override
             double position0(double p, int n) {
-                return n * p + (p + 1) / 3 - 1;
+                throw new UnsupportedOperationException("STUB: not implemented");
             }
-        },
+        }
+        ,
         /**
          * Quantile estimates are approximately unbiased for the expected order statistics if
          * \( x \) is normally distributed.
@@ -1231,12 +1146,13 @@ public final class Quantile {
          * <p>\( m = p/4 + 3/8 \). \( p_k = \frac{k - 3/8}{n + 1/4} \).
          */
         HF9 {
+
             @Override
             double position0(double p, int n) {
-                // np + p/4 + 3/8 - 1
-                return (n + 0.25) * p - 0.625;
+                throw new UnsupportedOperationException("STUB: not implemented");
             }
-        };
+        }
+        ;
 
         /**
          * Finds the real-valued position for calculation of the quantile.
@@ -1272,15 +1188,7 @@ public final class Quantile {
          * @return index (in [0, n-1])
          */
         final double index(double p, int n) {
-            final double pos = position0(p, n);
-            // Bounds check in [0, n-1]
-            if (pos < 0) {
-                return 0;
-            }
-            if (pos > n - 1.0) {
-                return n - 1.0;
-            }
-            return pos;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

@@ -29,30 +29,29 @@ import org.apache.commons.statistics.distribution.TDistribution;
  * @since 1.2
  */
 public enum NormalConfidenceInterval {
+
     /**
      * Create a confidence interval for the true mean of an unknown normally distributed population.
      */
     MEAN {
+
         @Override
         Interval create(double mean, double variance, long n, double alpha) {
-            final double c = TDistribution.of(n - 1).inverseSurvivalProbability(alpha * 0.5);
-            final double distance = c * Math.sqrt(variance / n);
-            return new BaseInterval(mean - distance, mean + distance);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
-    },
+    }
+    ,
     /**
      * Create a confidence interval for the true variance of an unknown normally distributed population.
      */
     VARIANCE {
+
         @Override
         Interval create(double mean, double variance, long n, double alpha) {
-            final ChiSquaredDistribution d = ChiSquaredDistribution.of(n - 1);
-            final double f = variance * (n - 1.0);
-            final double lower = f / d.inverseSurvivalProbability(alpha * 0.5);
-            final double upper = f / d.inverseCumulativeProbability(alpha * 0.5);
-            return new BaseInterval(lower, upper);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
-    };
+    }
+    ;
 
     /**
      * Create a confidence interval from an independent sample from an unknown normally
@@ -76,11 +75,7 @@ public enum NormalConfidenceInterval {
      * the open interval {@code (0, 1)}.
      */
     public Interval fromErrorRate(double mean, double variance, long n, double alpha) {
-        if (n <= 1) {
-            throw new IllegalArgumentException("Sample size is not above one: " + n);
-        }
-        ArgumentUtils.checkErrorRate(alpha);
-        return create(mean, variance, n, alpha);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**

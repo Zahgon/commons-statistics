@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.apache.commons.statistics.distribution;
 
 import org.apache.commons.rng.UniformRandomProvider;
@@ -42,13 +41,25 @@ import org.apache.commons.rng.UniformRandomProvider;
  * @see <a href="https://en.wikipedia.org/wiki/Trapezoidal_distribution">Trapezoidal distribution (Wikipedia)</a>
  */
 public abstract class TrapezoidalDistribution extends AbstractContinuousDistribution {
-    /** Lower limit of this distribution (inclusive). */
+
+    /**
+     * Lower limit of this distribution (inclusive).
+     */
     protected final double a;
-    /** Start of the trapezoid constant density. */
+
+    /**
+     * Start of the trapezoid constant density.
+     */
     protected final double b;
-    /** End of the trapezoid constant density. */
+
+    /**
+     * End of the trapezoid constant density.
+     */
     protected final double c;
-    /** Upper limit of this distribution (inclusive). */
+
+    /**
+     * Upper limit of this distribution (inclusive).
+     */
     protected final double d;
 
     /**
@@ -56,7 +67,10 @@ public abstract class TrapezoidalDistribution extends AbstractContinuousDistribu
      * to an alternative distribution.
      */
     private static class DelegatedTrapezoidalDistribution extends TrapezoidalDistribution {
-        /** Distribution delegate. */
+
+        /**
+         * Distribution delegate.
+         */
         private final ContinuousDistribution delegate;
 
         /**
@@ -66,60 +80,59 @@ public abstract class TrapezoidalDistribution extends AbstractContinuousDistribu
          * @param d Upper limit of this distribution (inclusive).
          * @param delegate Distribution delegate.
          */
-        DelegatedTrapezoidalDistribution(double a, double b, double c, double d,
-                                         ContinuousDistribution delegate) {
+        DelegatedTrapezoidalDistribution(double a, double b, double c, double d, ContinuousDistribution delegate) {
             super(a, b, c, d);
             this.delegate = delegate;
         }
 
         @Override
         public double density(double x) {
-            return delegate.density(x);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double probability(double x0, double x1) {
-            return delegate.probability(x0, x1);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double logDensity(double x) {
-            return delegate.logDensity(x);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double cumulativeProbability(double x) {
-            return delegate.cumulativeProbability(x);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double inverseCumulativeProbability(double p) {
-            return delegate.inverseCumulativeProbability(p);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double survivalProbability(double x) {
-            return delegate.survivalProbability(x);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double inverseSurvivalProbability(double p) {
-            return delegate.inverseSurvivalProbability(p);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double getMean() {
-            return delegate.getMean();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double getVariance() {
-            return delegate.getVariance();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public Sampler createSampler(UniformRandomProvider rng) {
-            return delegate.createSampler(rng);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -129,6 +142,7 @@ public abstract class TrapezoidalDistribution extends AbstractContinuousDistribu
      * <p>This delegates all methods to the triangular distribution.
      */
     private static class TriangularTrapezoidalDistribution extends DelegatedTrapezoidalDistribution {
+
         /**
          * @param a Lower limit of this distribution (inclusive).
          * @param b Start/end of the trapezoid constant density (mode).
@@ -145,6 +159,7 @@ public abstract class TrapezoidalDistribution extends AbstractContinuousDistribu
      * <p>This delegates all methods to the uniform distribution.
      */
     private static class UniformTrapezoidalDistribution extends DelegatedTrapezoidalDistribution {
+
         /**
          * @param a Lower limit of this distribution (inclusive).
          * @param d Upper limit of this distribution (inclusive).
@@ -158,19 +173,40 @@ public abstract class TrapezoidalDistribution extends AbstractContinuousDistribu
      * Regular implementation of the trapezoidal distribution.
      */
     private static class RegularTrapezoidalDistribution extends TrapezoidalDistribution {
-        /** Cached value (d + c - a - b). */
+
+        /**
+         * Cached value (d + c - a - b).
+         */
         private final double divisor;
-        /** Cached value (b - a). */
+
+        /**
+         * Cached value (b - a).
+         */
         private final double bma;
-        /** Cached value (d - c). */
+
+        /**
+         * Cached value (d - c).
+         */
         private final double dmc;
-        /** Cumulative probability at b. */
+
+        /**
+         * Cumulative probability at b.
+         */
         private final double cdfB;
-        /** Cumulative probability at c. */
+
+        /**
+         * Cumulative probability at c.
+         */
         private final double cdfC;
-        /** Survival probability at b. */
+
+        /**
+         * Survival probability at b.
+         */
         private final double sfB;
-        /** Survival probability at c. */
+
+        /**
+         * Survival probability at c.
+         */
         private final double sfC;
 
         /**
@@ -181,12 +217,10 @@ public abstract class TrapezoidalDistribution extends AbstractContinuousDistribu
          */
         RegularTrapezoidalDistribution(double a, double b, double c, double d) {
             super(a, b, c, d);
-
             // Sum positive terms
             divisor = (d - a) + (c - b);
             bma = b - a;
             dmc = d - c;
-
             cdfB = bma / divisor;
             sfB = 1 - cdfB;
             sfC = dmc / divisor;
@@ -195,123 +229,37 @@ public abstract class TrapezoidalDistribution extends AbstractContinuousDistribu
 
         @Override
         public double density(double x) {
-            // Note: x < a allows correct density where a == b
-            if (x < a) {
-                return 0;
-            }
-            if (x < b) {
-                final double divident = (x - a) / bma;
-                return 2 * (divident / divisor);
-            }
-            if (x < c) {
-                return 2 / divisor;
-            }
-            if (x < d) {
-                final double divident = (d - x) / dmc;
-                return 2 * (divident / divisor);
-            }
-            return 0;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
-        public double cumulativeProbability(double x)  {
-            if (x <= a) {
-                return 0;
-            }
-            if (x < b) {
-                final double divident = (x - a) * (x - a) / bma;
-                return divident / divisor;
-            }
-            if (x < c) {
-                final double divident = 2 * x - b - a;
-                return divident / divisor;
-            }
-            if (x < d) {
-                final double divident = (d - x) * (d - x) / dmc;
-                return 1 - divident / divisor;
-            }
-            return 1;
+        public double cumulativeProbability(double x) {
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
-        public double survivalProbability(double x)  {
-            // By symmetry:
-            if (x <= a) {
-                return 1;
-            }
-            if (x < b) {
-                final double divident = (x - a) * (x - a) / bma;
-                return 1 - divident / divisor;
-            }
-            if (x < c) {
-                final double divident = 2 * x - b - a;
-                return 1 - divident / divisor;
-            }
-            if (x < d) {
-                final double divident = (d - x) * (d - x) / dmc;
-                return divident / divisor;
-            }
-            return 0;
+        public double survivalProbability(double x) {
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double inverseCumulativeProbability(double p) {
-            ArgumentUtils.checkProbability(p);
-            if (p == 0) {
-                return a;
-            }
-            if (p == 1) {
-                return d;
-            }
-            if (p < cdfB) {
-                return a + Math.sqrt(p * divisor * bma);
-            }
-            if (p < cdfC) {
-                return 0.5 * ((p * divisor) + a + b);
-            }
-            return d - Math.sqrt((1 - p) * divisor * dmc);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double inverseSurvivalProbability(double p) {
-            // By symmetry:
-            ArgumentUtils.checkProbability(p);
-            if (p == 1) {
-                return a;
-            }
-            if (p == 0) {
-                return d;
-            }
-            if (p > sfB) {
-                return a + Math.sqrt((1 - p) * divisor * bma);
-            }
-            if (p > sfC) {
-                return 0.5 * (((1 - p) * divisor) + a + b);
-            }
-            return d - Math.sqrt(p * divisor * dmc);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double getMean() {
-            // Compute using a standardized distribution
-            // b' = (b-a) / (d-a)
-            // c' = (c-a) / (d-a)
-            final double scale = d - a;
-            final double bp = bma / scale;
-            final double cp = (c - a) / scale;
-            return nonCentralMoment(1, bp, cp) * scale + a;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double getVariance() {
-            // Compute using a standardized distribution
-            // b' = (b-a) / (d-a)
-            // c' = (c-a) / (d-a)
-            final double scale = d - a;
-            final double bp = bma / scale;
-            final double cp = (c - a) / scale;
-            final double mu = nonCentralMoment(1, bp, cp);
-            return (nonCentralMoment(2, bp, cp) - mu * mu) * scale * scale;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -376,31 +324,7 @@ public abstract class TrapezoidalDistribution extends AbstractContinuousDistribu
      * {@code c < b} or if {@code c > d}.
      */
     public static TrapezoidalDistribution of(double a, double b, double c, double d) {
-        if (a >= d) {
-            throw new DistributionException(DistributionException.INVALID_RANGE_LOW_GTE_HIGH,
-                                            a, d);
-        }
-        if (b < a) {
-            throw new DistributionException(DistributionException.TOO_SMALL,
-                                            b, a);
-        }
-        if (c < b) {
-            throw new DistributionException(DistributionException.TOO_SMALL,
-                                            c, b);
-        }
-        if (c > d) {
-            throw new DistributionException(DistributionException.TOO_LARGE,
-                                            c, d);
-        }
-        // For consistency, delegate to the appropriate simplified distribution.
-        // Note: Floating-point equality comparison is intentional.
-        if (b == c) {
-            return new TriangularTrapezoidalDistribution(a, b, d);
-        }
-        if (d - a == c - b) {
-            return new UniformTrapezoidalDistribution(a, d);
-        }
-        return new RegularTrapezoidalDistribution(a, b, c, d);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -437,7 +361,7 @@ public abstract class TrapezoidalDistribution extends AbstractContinuousDistribu
      * @return the first shape parameter {@code b}
      */
     public double getB() {
-        return b;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -448,7 +372,7 @@ public abstract class TrapezoidalDistribution extends AbstractContinuousDistribu
      * @return the second shape parameter {@code c}
      */
     public double getC() {
-        return c;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -459,7 +383,7 @@ public abstract class TrapezoidalDistribution extends AbstractContinuousDistribu
      */
     @Override
     public double getSupportLowerBound() {
-        return a;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -470,6 +394,6 @@ public abstract class TrapezoidalDistribution extends AbstractContinuousDistribu
      */
     @Override
     public double getSupportUpperBound() {
-        return d;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

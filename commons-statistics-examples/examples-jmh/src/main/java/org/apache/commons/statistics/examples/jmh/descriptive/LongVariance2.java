@@ -31,14 +31,24 @@ import java.util.function.LongConsumer;
  */
 final class LongVariance2 implements LongConsumer, DoubleSupplier {
 
-    /** Sum of the squared values. */
+    /**
+     * Sum of the squared values.
+     */
     private final UInt192 sumSq;
-    /** Sum of the values. */
+
+    /**
+     * Sum of the values.
+     */
     private final Int128 sum;
-    /** Count of values that have been added. */
+
+    /**
+     * Count of values that have been added.
+     */
     private long n;
 
-    /** Flag to control if the statistic is biased, or should use a bias correction. */
+    /**
+     * Flag to control if the statistic is biased, or should use a bias correction.
+     */
     private boolean biased;
 
     /**
@@ -69,7 +79,7 @@ final class LongVariance2 implements LongConsumer, DoubleSupplier {
      * @return {@code IntVariance} instance.
      */
     public static LongVariance2 create() {
-        return new LongVariance2();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -79,17 +89,7 @@ final class LongVariance2 implements LongConsumer, DoubleSupplier {
      * @return {@code IntVariance} instance.
      */
     public static LongVariance2 of(long... values) {
-        // Note: Arrays could be processed using specialised counts knowing the maximum
-        // limit
-        // for an array is 2^31 values. Requires a UInt160.
-
-        final Int128 s = Int128.create();
-        final UInt192 ss = UInt192.create();
-        for (final long x : values) {
-            s.add(x);
-            ss.addSquare2(x);
-        }
-        return new LongVariance2(ss, s, values.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -99,9 +99,7 @@ final class LongVariance2 implements LongConsumer, DoubleSupplier {
      */
     @Override
     public void accept(long value) {
-        sumSq.addSquare2(value);
-        sum.add(value);
-        n++;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -113,36 +111,7 @@ final class LongVariance2 implements LongConsumer, DoubleSupplier {
      */
     @Override
     public double getAsDouble() {
-        if (n == 0) {
-            return Double.NaN;
-        }
-        // Avoid a divide by zero
-        if (n == 1) {
-            return 0;
-        }
-        final long n0 = biased ? n : n - 1;
-
-        // Sum-of-squared deviations: sum(x^2) - sum(x)^2 / n
-        // Sum-of-squared deviations precursor: n * sum(x^2) - sum(x)^2
-        // The precursor is computed in integer precision.
-        // The divide uses double precision.
-        // This ensures we avoid cancellation in the difference and use a fast divide.
-        // The result is limited to max 4 ulp by the rounding in the double computation
-        // When n0*n is < 2^53 the max error is reduced to two roundings.
-
-        // Compute the term if possible using fast integer arithmetic.
-        // 192-bit sum(x^2) * n will be OK when the upper 32-bits are zero.
-        // 128-bit sum(x)^2 will be OK when the upper 64-bits are zero.
-        // The first is safe when n < 2^32 but we must check the sum high bits.
-        double diff;
-        if (((n >>> Integer.SIZE) | sum.hi64()) == 0) {
-            diff = sumSq.unsignedMultiply((int) n).subtract(sum.squareLow()).toDouble();
-        } else {
-            diff = sumSq.toBigInteger().multiply(BigInteger.valueOf(n))
-                .subtract(square(sum.toBigInteger())).doubleValue();
-        }
-        // Compute the divide in double precision
-        return diff / IntMath.unsignedMultiplyToDouble(n, n0);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -162,10 +131,7 @@ final class LongVariance2 implements LongConsumer, DoubleSupplier {
      * @return this instance
      */
     public LongVariance2 combine(LongVariance2 other) {
-        sumSq.add(other.sumSq);
-        sum.add(other.sum);
-        n += other.n;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -190,7 +156,6 @@ final class LongVariance2 implements LongConsumer, DoubleSupplier {
      * @return {@code this} instance
      */
     public LongVariance2 setBiased(boolean v) {
-        biased = v;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -34,59 +34,123 @@ import java.util.function.LongConsumer;
  * @since 1.1
  */
 public final class LongStatistics implements LongConsumer {
-    /** Error message for non configured statistics. */
+
+    /**
+     * Error message for non configured statistics.
+     */
     private static final String NO_CONFIGURED_STATISTICS = "No configured statistics";
-    /** Error message for an unsupported statistic. */
+
+    /**
+     * Error message for an unsupported statistic.
+     */
     private static final String UNSUPPORTED_STATISTIC = "Unsupported statistic: ";
 
-    /** Count of values recorded. */
+    /**
+     * Count of values recorded.
+     */
     private long count;
-    /** The consumer of values. */
+
+    /**
+     * The consumer of values.
+     */
     private final LongConsumer consumer;
-    /** The {@link LongMin} implementation. */
+
+    /**
+     * The {@link LongMin} implementation.
+     */
     private final LongMin min;
-    /** The {@link LongMax} implementation. */
+
+    /**
+     * The {@link LongMax} implementation.
+     */
     private final LongMax max;
-    /** The moment implementation. May be any instance of {@link FirstMoment}.
-     * This implementation uses only the third and fourth moments. */
+
+    /**
+     * The moment implementation. May be any instance of {@link FirstMoment}.
+     * This implementation uses only the third and fourth moments.
+     */
     private final FirstMoment moment;
-    /** The {@link LongSum} implementation. */
+
+    /**
+     * The {@link LongSum} implementation.
+     */
     private final LongSum sum;
-    /** The {@link Product} implementation. */
+
+    /**
+     * The {@link Product} implementation.
+     */
     private final Product product;
-    /** The {@link LongSumOfSquares} implementation. */
+
+    /**
+     * The {@link LongSumOfSquares} implementation.
+     */
     private final LongSumOfSquares sumOfSquares;
-    /** The {@link SumOfLogs} implementation. */
+
+    /**
+     * The {@link SumOfLogs} implementation.
+     */
     private final SumOfLogs sumOfLogs;
-    /** Configuration options for computation of statistics. */
+
+    /**
+     * Configuration options for computation of statistics.
+     */
     private StatisticsConfiguration config;
 
     /**
      * A builder for {@link LongStatistics}.
      */
     public static final class Builder {
-        /** An empty double array. */
+
+        /**
+         * An empty double array.
+         */
         private static final long[] NO_VALUES = {};
 
-        /** The {@link LongMin} constructor. */
+        /**
+         * The {@link LongMin} constructor.
+         */
         private RangeFunction<long[], LongMin> min;
-        /** The {@link LongMax} constructor. */
+
+        /**
+         * The {@link LongMax} constructor.
+         */
         private RangeFunction<long[], LongMax> max;
-        /** The moment constructor. May return any instance of {@link FirstMoment}. */
+
+        /**
+         * The moment constructor. May return any instance of {@link FirstMoment}.
+         */
         private RangeFunction<long[], FirstMoment> moment;
-        /** The {@link LongSum} constructor. */
+
+        /**
+         * The {@link LongSum} constructor.
+         */
         private RangeFunction<long[], LongSum> sum;
-        /** The {@link Product} constructor. */
+
+        /**
+         * The {@link Product} constructor.
+         */
         private RangeFunction<long[], Product> product;
-        /** The {@link LongSumOfSquares} constructor. */
+
+        /**
+         * The {@link LongSumOfSquares} constructor.
+         */
         private RangeFunction<long[], LongSumOfSquares> sumOfSquares;
-        /** The {@link SumOfLogs} constructor. */
+
+        /**
+         * The {@link SumOfLogs} constructor.
+         */
         private RangeFunction<long[], SumOfLogs> sumOfLogs;
-        /** The order of the moment. It corresponds to the power computed by the {@link FirstMoment}
+
+        /**
+         * The order of the moment. It corresponds to the power computed by the {@link FirstMoment}
          * instance constructed by {@link #moment}. This should only be increased from the default
-         * of zero (corresponding to no moment computation). */
+         * of zero (corresponding to no moment computation).
+         */
         private int momentOrder;
-        /** Configuration options for computation of statistics. */
+
+        /**
+         * Configuration options for computation of statistics.
+         */
         private StatisticsConfiguration config = StatisticsConfiguration.withDefaults();
 
         /**
@@ -103,41 +167,7 @@ public final class LongStatistics implements LongConsumer {
          * @return {@code this} instance
          */
         Builder add(Statistic statistic) {
-            // Exhaustive switch statement
-            switch (statistic) {
-            case GEOMETRIC_MEAN:
-            case SUM_OF_LOGS:
-                sumOfLogs = SumOfLogs::createFromRange;
-                break;
-            case KURTOSIS:
-                createMoment(4);
-                break;
-            case MAX:
-                max = LongMax::createFromRange;
-                break;
-            case MIN:
-                min = LongMin::createFromRange;
-                break;
-            case PRODUCT:
-                product = Product::createFromRange;
-                break;
-            case SKEWNESS:
-                createMoment(3);
-                break;
-            case STANDARD_DEVIATION:
-            case VARIANCE:
-                sum = LongSum::createFromRange;
-                sumOfSquares = LongSumOfSquares::createFromRange;
-                break;
-            case MEAN:
-            case SUM:
-                sum = LongSum::createFromRange;
-                break;
-            case SUM_OF_SQUARES:
-                sumOfSquares = LongSumOfSquares::createFromRange;
-                break;
-            }
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -166,8 +196,7 @@ public final class LongStatistics implements LongConsumer {
          * @throws NullPointerException if the value is null
          */
         public Builder setConfiguration(StatisticsConfiguration v) {
-            config = Objects.requireNonNull(v);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -176,7 +205,7 @@ public final class LongStatistics implements LongConsumer {
          * @return {@code LongStatistics} instance.
          */
         public LongStatistics build() {
-            return create(NO_VALUES, 0, 0);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -190,8 +219,7 @@ public final class LongStatistics implements LongConsumer {
          * @return {@code LongStatistics} instance.
          */
         public LongStatistics build(long... values) {
-            Objects.requireNonNull(values, "values");
-            return create(values, 0, values.length);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -209,8 +237,7 @@ public final class LongStatistics implements LongConsumer {
          * @since 1.2
          */
         public LongStatistics build(long[] values, int from, int to) {
-            Statistics.checkFromToIndex(from, to, values.length);
-            return create(values, from, to);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -228,16 +255,7 @@ public final class LongStatistics implements LongConsumer {
          * @return {@code LongStatistics} instance.
          */
         private LongStatistics create(long[] values, int from, int to) {
-            return new LongStatistics(
-                to - from,
-                create(min, values, from, to),
-                create(max, values, from, to),
-                create(moment, values, from, to),
-                create(sum, values, from, to),
-                create(product, values, from, to),
-                create(sumOfSquares, values, from, to),
-                create(sumOfLogs, values, from, to),
-                config);
+            return new LongStatistics(to - from, create(min, values, from, to), create(max, values, from, to), create(moment, values, from, to), create(sum, values, from, to), create(product, values, from, to), create(sumOfSquares, values, from, to), create(sumOfLogs, values, from, to), config);
         }
 
         /**
@@ -272,9 +290,7 @@ public final class LongStatistics implements LongConsumer {
      * @param sumOfLogs Sum of logs implementation.
      * @param config Statistics configuration.
      */
-    LongStatistics(long count, LongMin min, LongMax max, FirstMoment moment, LongSum sum,
-                  Product product, LongSumOfSquares sumOfSquares, SumOfLogs sumOfLogs,
-                  StatisticsConfiguration config) {
+    LongStatistics(long count, LongMin min, LongMax max, FirstMoment moment, LongSum sum, Product product, LongSumOfSquares sumOfSquares, SumOfLogs sumOfLogs, StatisticsConfiguration config) {
         this.count = count;
         this.min = min;
         this.max = max;
@@ -286,8 +302,7 @@ public final class LongStatistics implements LongConsumer {
         this.config = config;
         // The final consumer should never be null as the builder is created
         // with at least one statistic.
-        consumer = Statistics.composeLongConsumers(min, max, sum, sumOfSquares,
-                                                   composeAsLong(moment, product, sumOfLogs));
+        consumer = Statistics.composeLongConsumers(min, max, sum, sumOfSquares, composeAsLong(moment, product, sumOfLogs));
     }
 
     /**
@@ -316,7 +331,7 @@ public final class LongStatistics implements LongConsumer {
      * @throws IllegalArgumentException if there are no {@code statistics} to compute.
      */
     public static LongStatistics of(Statistic... statistics) {
-        return builder(statistics).build();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -338,12 +353,7 @@ public final class LongStatistics implements LongConsumer {
      * @throws IllegalArgumentException if there are no {@code statistics} to compute.
      */
     public static LongStatistics of(Set<Statistic> statistics, long... values) {
-        if (statistics.isEmpty()) {
-            throw new IllegalArgumentException(NO_CONFIGURED_STATISTICS);
-        }
-        final Builder b = new Builder();
-        statistics.forEach(b::add);
-        return b.build(values);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -370,12 +380,7 @@ public final class LongStatistics implements LongConsumer {
      * @since 1.2
      */
     public static LongStatistics ofRange(Set<Statistic> statistics, long[] values, int from, int to) {
-        if (statistics.isEmpty()) {
-            throw new IllegalArgumentException(NO_CONFIGURED_STATISTICS);
-        }
-        final Builder b = new Builder();
-        statistics.forEach(b::add);
-        return b.build(values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -428,14 +433,7 @@ public final class LongStatistics implements LongConsumer {
      * @throws IllegalArgumentException if there are no {@code statistics} to compute.
      */
     public static Builder builder(Statistic... statistics) {
-        if (statistics.length == 0) {
-            throw new IllegalArgumentException(NO_CONFIGURED_STATISTICS);
-        }
-        final Builder b = new Builder();
-        for (final Statistic s : statistics) {
-            b.add(s);
-        }
-        return b;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -445,8 +443,7 @@ public final class LongStatistics implements LongConsumer {
      */
     @Override
     public void accept(long value) {
-        count++;
-        consumer.accept(value);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -455,7 +452,7 @@ public final class LongStatistics implements LongConsumer {
      * @return the count of values
      */
     public long getCount() {
-        return count;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -469,33 +466,7 @@ public final class LongStatistics implements LongConsumer {
      * @see #getResult(Statistic)
      */
     public boolean isSupported(Statistic statistic) {
-        // Check for the appropriate underlying implementation
-        // Exhaustive switch statement
-        switch (statistic) {
-        case GEOMETRIC_MEAN:
-        case SUM_OF_LOGS:
-            return sumOfLogs != null;
-        case KURTOSIS:
-            return moment instanceof SumOfFourthDeviations;
-        case MAX:
-            return max != null;
-        case MIN:
-            return min != null;
-        case PRODUCT:
-            return product != null;
-        case SKEWNESS:
-            return moment instanceof SumOfCubedDeviations;
-        case STANDARD_DEVIATION:
-        case VARIANCE:
-            return sum != null && sumOfSquares != null;
-        case MEAN:
-        case SUM:
-            return sum != null;
-        case SUM_OF_SQUARES:
-            return sumOfSquares != null;
-        }
-        // Unreachable code
-        throw new IllegalArgumentException(UNSUPPORTED_STATISTIC + statistic);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -508,7 +479,7 @@ public final class LongStatistics implements LongConsumer {
      * @see #getResult(Statistic)
      */
     public double getAsDouble(Statistic statistic) {
-        return getResult(statistic).getAsDouble();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -529,7 +500,7 @@ public final class LongStatistics implements LongConsumer {
      * @see #getResult(Statistic)
      */
     public long getAsLong(Statistic statistic) {
-        return getResult(statistic).getAsLong();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -549,7 +520,7 @@ public final class LongStatistics implements LongConsumer {
      * @see #getResult(Statistic)
      */
     public BigInteger getAsBigInteger(Statistic statistic) {
-        return getResult(statistic).getAsBigInteger();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -570,55 +541,7 @@ public final class LongStatistics implements LongConsumer {
      * @see #getAsDouble(Statistic)
      */
     public StatisticResult getResult(Statistic statistic) {
-        // Locate the implementation.
-        // Statistics that wrap an underlying implementation are created in methods.
-        // The return argument should be an interface reference and not an instance
-        // of LongStatistic. This ensures the statistic implementation cannot
-        // be updated with new values by casting the result and calling accept(long).
-        StatisticResult stat = null;
-        // Exhaustive switch statement
-        switch (statistic) {
-        case GEOMETRIC_MEAN:
-            stat = getGeometricMean();
-            break;
-        case KURTOSIS:
-            stat = getKurtosis();
-            break;
-        case MAX:
-            stat = Statistics.getResultAsLongOrNull(max);
-            break;
-        case MEAN:
-            stat = getMean();
-            break;
-        case MIN:
-            stat = Statistics.getResultAsLongOrNull(min);
-            break;
-        case PRODUCT:
-            stat = Statistics.getResultAsDoubleOrNull(product);
-            break;
-        case SKEWNESS:
-            stat = getSkewness();
-            break;
-        case STANDARD_DEVIATION:
-            stat = getStandardDeviation();
-            break;
-        case SUM:
-            stat = Statistics.getResultAsBigIntegerOrNull(sum);
-            break;
-        case SUM_OF_LOGS:
-            stat = Statistics.getResultAsDoubleOrNull(sumOfLogs);
-            break;
-        case SUM_OF_SQUARES:
-            stat = Statistics.getResultAsBigIntegerOrNull(sumOfSquares);
-            break;
-        case VARIANCE:
-            stat = getVariance();
-            break;
-        }
-        if (stat != null) {
-            return stat;
-        }
-        throw new IllegalArgumentException(UNSUPPORTED_STATISTIC + statistic);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -641,8 +564,7 @@ public final class LongStatistics implements LongConsumer {
      */
     private StatisticResult getKurtosis() {
         if (moment instanceof SumOfFourthDeviations) {
-            return new Kurtosis((SumOfFourthDeviations) moment)
-                .setBiased(config.isBiased())::getAsDouble;
+            return new Kurtosis((SumOfFourthDeviations) moment).setBiased(config.isBiased())::getAsDouble;
         }
         return null;
     }
@@ -668,8 +590,7 @@ public final class LongStatistics implements LongConsumer {
      */
     private StatisticResult getSkewness() {
         if (moment instanceof SumOfCubedDeviations) {
-            return new Skewness((SumOfCubedDeviations) moment)
-                .setBiased(config.isBiased())::getAsDouble;
+            return new Skewness((SumOfCubedDeviations) moment).setBiased(config.isBiased())::getAsDouble;
         }
         return null;
     }
@@ -727,24 +648,7 @@ public final class LongStatistics implements LongConsumer {
      * @throws IllegalArgumentException if the {@code other} is not compatible
      */
     public LongStatistics combine(LongStatistics other) {
-        // Check compatibility
-        Statistics.checkCombineCompatible(min, other.min);
-        Statistics.checkCombineCompatible(max, other.max);
-        Statistics.checkCombineCompatible(sum, other.sum);
-        Statistics.checkCombineCompatible(product, other.product);
-        Statistics.checkCombineCompatible(sumOfSquares, other.sumOfSquares);
-        Statistics.checkCombineCompatible(sumOfLogs, other.sumOfLogs);
-        Statistics.checkCombineAssignable(moment, other.moment);
-        // Combine
-        count += other.count;
-        Statistics.combine(min, other.min);
-        Statistics.combine(max, other.max);
-        Statistics.combine(sum, other.sum);
-        Statistics.combine(product, other.product);
-        Statistics.combine(sumOfSquares, other.sumOfSquares);
-        Statistics.combine(sumOfLogs, other.sumOfLogs);
-        Statistics.combineMoment(moment, other.moment);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -763,7 +667,6 @@ public final class LongStatistics implements LongConsumer {
      * @see #getResult(Statistic)
      */
     public LongStatistics setConfiguration(StatisticsConfiguration v) {
-        config = Objects.requireNonNull(v);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

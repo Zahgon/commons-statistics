@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.apache.commons.statistics.examples.jmh.ranking;
 
 import java.util.Arrays;
@@ -45,34 +44,49 @@ import org.openjdk.jmh.annotations.Warmup;
 @Warmup(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 @Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 @State(Scope.Benchmark)
-@Fork(value = 1, jvmArgs = {"-server", "-Xms512M", "-Xmx512M"})
+@Fork(value = 1, jvmArgs = { "-server", "-Xms512M", "-Xmx512M" })
 public class NaturalRankingPerformance {
+
     /**
      * Source of {@code double} array data to rank.
      */
     @State(Scope.Benchmark)
     public static class DataSource {
-        /** Data length. */
-        @Param({"10000"})
+
+        /**
+         * Data length.
+         */
+        @Param({ "10000" })
         private int length;
-        /** Fraction of total length that has tied (equal) data. */
-        @Param({"0", "0.1", "0.5"})
+
+        /**
+         * Fraction of total length that has tied (equal) data.
+         */
+        @Param({ "0", "0.1", "0.5" })
         private double tieFraction;
-        /** Count of the number of distinct runs of tied (equal) data. */
-        @Param({"20"})
+
+        /**
+         * Count of the number of distinct runs of tied (equal) data.
+         */
+        @Param({ "20" })
         private int ties;
-        /** Concentration parameter for the distribution of tie lengths. */
-        @Param({"1"})
+
+        /**
+         * Concentration parameter for the distribution of tie lengths.
+         */
+        @Param({ "1" })
         private double alpha;
 
-        /** Data to rank. */
+        /**
+         * Data to rank.
+         */
         private double[] data;
 
         /**
          * @return the data
          */
         public double[] getData() {
-            return data;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -80,9 +94,7 @@ public class NaturalRankingPerformance {
          */
         @Setup(Level.Iteration)
         public void setup() {
-            // Data will be randomized per iteration
-            final UniformRandomProvider rng = RandomSource.XO_RO_SHI_RO_128_PP.create();
-            data = createData(rng, length, tieFraction, ties, alpha);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -96,51 +108,8 @@ public class NaturalRankingPerformance {
          * @param alpha Concentration parameter for the distribution of tie lengths.
          * @return the data
          */
-        static double[] createData(UniformRandomProvider rng,
-                                   int length,  double tieFraction, int ties, double alpha) {
-            assert length > 0 : "Invalid data length";
-            assert tieFraction <= 1 && tieFraction >= 0 : "Invalid tie fraction";
-            assert ties >= 0 : "Invalid number of ties";
-            assert alpha >= 0 : "Invalid concentration parameter";
-
-            // The data will contain n regions of data, each with the same value,
-            // then the rest is a sequence. This is then shuffled.
-            final double[] data = new double[length];
-            int count = 0;
-            int value = 0;
-
-            // Create tie regions
-            final int tiesLength = (int) Math.round(tieFraction * length);
-            if (ties > 0 && tiesLength > 0) {
-                // Cut the ties length into parts.
-                // Note that due to randomness some lengths may be <= 1 and therefore not a tie.
-                // This increasingly occurs as alpha -> 0.
-                // See: https://en.wikipedia.org/wiki/Dirichlet_distribution#String_cutting
-                final double[] tieFractions = DirichletSampler.symmetric(rng, ties, alpha).sample();
-                final int[] lengths = Arrays.stream(tieFractions)
-                                            .mapToInt(f -> (int) Math.round(f * tiesLength))
-                                            .toArray();
-                for (final int len : lengths) {
-                    ++value;
-                    // Lengths may sum to more than tiesLength due to rounding so
-                    // consume most we can
-                    for (int i = Math.min(len, tiesLength - count); i > 0; i--) {
-                        data[count++] = value;
-                    }
-                }
-            }
-
-            // Fill remaining values
-            while (count < data.length) {
-                data[count++] = ++value;
-            }
-
-            // Fisher-Yates shuffle
-            for (int i = data.length; i > 1; i--) {
-                swap(data, i - 1, rng.nextInt(i));
-            }
-
-            return data;
+        static double[] createData(UniformRandomProvider rng, int length, double tieFraction, int ties, double alpha) {
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -162,24 +131,38 @@ public class NaturalRankingPerformance {
      */
     @State(Scope.Benchmark)
     public static class RankingSource {
-        /** Name for baseline implementation. */
+
+        /**
+         * Name for baseline implementation.
+         */
         private static final String METHOD_BASELINE = "baseline";
-        /** Name for Commons Statistics implementation. */
+
+        /**
+         * Name for Commons Statistics implementation.
+         */
         private static final String METHOD_STATISTICS = "statistics";
-        /** Name for Commons Math3 implementation. */
+
+        /**
+         * Name for Commons Math3 implementation.
+         */
         private static final String METHOD_MATH3 = "math3";
-        /** The ranking method. */
-        @Param({"baseline", METHOD_STATISTICS, METHOD_MATH3})
+
+        /**
+         * The ranking method.
+         */
+        @Param({ "baseline", METHOD_STATISTICS, METHOD_MATH3 })
         private String ranking;
 
-        /** The ranking function. */
+        /**
+         * The ranking function.
+         */
         private UnaryOperator<double[]> fun;
 
         /**
          * @return the ranking function
          */
         public UnaryOperator<double[]> getFunction() {
-            return fun;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -187,7 +170,7 @@ public class NaturalRankingPerformance {
          */
         @Setup(Level.Iteration)
         public void setup() {
-            fun = createFunction(ranking);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -198,15 +181,7 @@ public class NaturalRankingPerformance {
          * @return the ranking function
          */
         static UnaryOperator<double[]> createFunction(String name) {
-            if (METHOD_BASELINE.equals(name)) {
-                return new SortRanking();
-            } else if (METHOD_STATISTICS.equals(name)) {
-                return new NaturalRanking();
-            } else if (METHOD_MATH3.equals(name)) {
-                return new org.apache.commons.math3.stat.ranking.NaturalRanking()::rank;
-            } else {
-                throw new IllegalStateException("Unknown method: " + name);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -216,8 +191,7 @@ public class NaturalRankingPerformance {
          * @return the function names
          */
         static String[] getFunctionNames() {
-            // Do not return the baseline method
-            return new String[] {METHOD_STATISTICS, METHOD_MATH3};
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -225,32 +199,29 @@ public class NaturalRankingPerformance {
          * resolve ties and is a baseline for the speed of {@link Arrays#sort(Object[])}.
          */
         private static final class SortRanking implements UnaryOperator<double[]> {
+
             @Override
             public double[] apply(double[] in) {
-                final DataPosition[] data = new DataPosition[in.length];
-                for (int i = 0; i < in.length; i++) {
-                    data[i] = new DataPosition(in[i], i);
-                }
-                Arrays.sort(data);
-                final double[] out = new double[in.length];
-                for (int i = 0; i < in.length; i++) {
-                    out[data[i].getPosition()] = i + 1.0;
-                }
-                return out;
+                throw new UnsupportedOperationException("STUB: not implemented");
             }
 
             // Copied from NaturalRanking for baseline equivalence.
-
             /**
              * Represents the position of a {@code double} value in a data array. The
              * Comparable interface is implemented so Arrays.sort can be used to sort an
              * array of data positions by value. Note that the implicitly defined natural
              * ordering is NOT consistent with equals.
              */
-            private static class DataPosition implements Comparable<DataPosition>  {
-                /** Data value. */
+            private static class DataPosition implements Comparable<DataPosition> {
+
+                /**
+                 * Data value.
+                 */
                 private final double value;
-                /** Data position. */
+
+                /**
+                 * Data position.
+                 */
                 private final int position;
 
                 /**
@@ -273,18 +244,17 @@ public class NaturalRankingPerformance {
                  */
                 @Override
                 public int compareTo(DataPosition other) {
-                    return Double.compare(value, other.value);
+                    throw new UnsupportedOperationException("STUB: not implemented");
                 }
 
                 // equals() and hashCode() are not implemented; see MATH-610 for discussion.
-
                 /**
                  * Returns the data position.
                  *
                  * @return position
                  */
                 int getPosition() {
-                    return position;
+                    throw new UnsupportedOperationException("STUB: not implemented");
                 }
             }
         }
@@ -299,6 +269,6 @@ public class NaturalRankingPerformance {
      */
     @Benchmark
     public double[] sample(DataSource source, RankingSource ranking) {
-        return ranking.getFunction().apply(source.getData());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

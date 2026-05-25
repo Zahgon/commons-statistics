@@ -31,27 +31,60 @@ import java.util.function.DoubleUnaryOperator;
  * @since 1.1
  */
 class BracketFinder {
-    /** Tolerance to avoid division by zero. */
+
+    /**
+     * Tolerance to avoid division by zero.
+     */
     private static final double EPS_MIN = 1e-21;
-    /** Golden section. */
+
+    /**
+     * Golden section.
+     */
     private static final double GOLD = 1.6180339887498948482;
-    /** Factor for expanding the interval. */
+
+    /**
+     * Factor for expanding the interval.
+     */
     private final double growLimit;
-    /**  Number of allowed function evaluations. */
+
+    /**
+     *  Number of allowed function evaluations.
+     */
     private final int maxEvaluations;
-    /** Number of function evaluations performed in the last search. */
+
+    /**
+     * Number of function evaluations performed in the last search.
+     */
     private int evaluations;
-    /** Lower bound of the bracket. */
+
+    /**
+     * Lower bound of the bracket.
+     */
     private double lo;
-    /** Higher bound of the bracket. */
+
+    /**
+     * Higher bound of the bracket.
+     */
     private double hi;
-    /** Point inside the bracket. */
+
+    /**
+     * Point inside the bracket.
+     */
     private double mid;
-    /** Function value at {@link #lo}. */
+
+    /**
+     * Function value at {@link #lo}.
+     */
     private double fLo;
-    /** Function value at {@link #hi}. */
+
+    /**
+     * Function value at {@link #hi}.
+     */
     private double fHi;
-    /** Function value at {@link #mid}. */
+
+    /**
+     * Function value at {@link #mid}.
+     */
     private double fMid;
 
     /**
@@ -103,129 +136,15 @@ class BracketFinder {
      * false if there is no local minima.
      * @throws IllegalStateException if the maximum number of evaluations is exceeded.
      */
-    boolean search(DoubleUnaryOperator func,
-                   double a, double b,
-                   double min, double max) {
-        evaluations = 0;
-
-        // Limit the range of x
-        final DoubleUnaryOperator range;
-        if (min < max) {
-            // Limit: min <= x <= max
-            range = x -> {
-                if (x > min) {
-                    return x < max ? x : max;
-                }
-                return min;
-            };
-        } else {
-            range = DoubleUnaryOperator.identity();
-        }
-
-        double xA = range.applyAsDouble(a);
-        double xB = range.applyAsDouble(b);
-        double fA = value(func, xA);
-        double fB = value(func, xB);
-        // Ensure fB <= fA
-        if (fA < fB) {
-            double tmp = xA;
-            xA = xB;
-            xB = tmp;
-            tmp = fA;
-            fA = fB;
-            fB = tmp;
-        }
-
-        double xC = range.applyAsDouble(xB + GOLD * (xB - xA));
-        double fC = value(func, xC);
-
-        // Note: When a [min, max] interval is provided and there is no minima then this
-        // loop will terminate when B == C and both are at the min/max bound.
-        while (fC < fB) {
-            final double tmp1 = (xB - xA) * (fB - fC);
-            final double tmp2 = (xB - xC) * (fB - fA);
-
-            final double val = tmp2 - tmp1;
-            // limit magnitude of val to a small value
-            final double denom = 2 * Math.copySign(Math.max(Math.abs(val), EPS_MIN), val);
-
-            double w = range.applyAsDouble(xB - ((xB - xC) * tmp2 - (xB - xA) * tmp1) / denom);
-            final double wLim = range.applyAsDouble(xB + growLimit * (xC - xB));
-
-            double fW;
-            if ((w - xC) * (xB - w) > 0) {
-                // xB < w < xC
-                fW = value(func, w);
-                if (fW < fC) {
-                    // minimum in [xB, xC]
-                    xA = xB;
-                    xB = w;
-                    fA = fB;
-                    fB = fW;
-                    break;
-                } else if (fW > fB) {
-                    // minimum in [xA, w]
-                    xC = w;
-                    fC = fW;
-                    break;
-                }
-                // continue downhill
-                w = range.applyAsDouble(xC + GOLD * (xC - xB));
-                fW = value(func, w);
-            } else if ((w - wLim) * (xC - w) > 0) {
-                // xC < w < limit
-                fW = value(func, w);
-                if (fW < fC) {
-                    // continue downhill
-                    xB = xC;
-                    xC = w;
-                    w = range.applyAsDouble(xC + GOLD * (xC - xB));
-                    fB = fC;
-                    fC = fW;
-                    fW = value(func, w);
-                }
-            } else if ((w - wLim) * (wLim - xC) >= 0) {
-                // xC <= limit <= w
-                w = wLim;
-                fW = value(func, w);
-            } else {
-                // possibly w == xC; reject w and take a default step
-                w = range.applyAsDouble(xC + GOLD * (xC - xB));
-                fW = value(func, w);
-            }
-
-            xA = xB;
-            fA = fB;
-            xB = xC;
-            fB = fC;
-            xC = w;
-            fC = fW;
-        }
-
-        mid = xB;
-        fMid = fB;
-
-        // Store the bracket: lo <= mid <= hi
-        if (xC < xA) {
-            lo = xC;
-            fLo = fC;
-            hi = xA;
-            fHi = fA;
-        } else {
-            lo = xA;
-            fLo = fA;
-            hi = xC;
-            fHi = fC;
-        }
-
-        return lo < mid && mid < hi;
+    boolean search(DoubleUnaryOperator func, double a, double b, double min, double max) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * @return the number of evaluations.
      */
     int getEvaluations() {
-        return evaluations;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -233,7 +152,7 @@ class BracketFinder {
      * @see #getFLo()
      */
     double getLo() {
-        return lo;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -241,7 +160,7 @@ class BracketFinder {
      * @return function value at {@link #getLo()}
      */
     double getFLo() {
-        return fLo;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -249,7 +168,7 @@ class BracketFinder {
      * @see #getFHi()
      */
     double getHi() {
-        return hi;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -257,7 +176,7 @@ class BracketFinder {
      * @return function value at {@link #getHi()}
      */
     double getFHi() {
-        return fHi;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -265,7 +184,7 @@ class BracketFinder {
      * @see #getFMid()
      */
     double getMid() {
-        return mid;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -273,7 +192,7 @@ class BracketFinder {
      * @return function value at {@link #getMid()}
      */
     double getFMid() {
-        return fMid;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**

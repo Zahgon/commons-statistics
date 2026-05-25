@@ -34,21 +34,32 @@ import org.apache.commons.rng.sampling.distribution.StableSampler;
  * @see <a href="https://mathworld.wolfram.com/CauchyDistribution.html">Cauchy distribution (MathWorld)</a>
  */
 public final class CauchyDistribution extends AbstractContinuousDistribution {
-    /** The location of this distribution. */
+
+    /**
+     * The location of this distribution.
+     */
     private final double location;
-    /** The scale of this distribution. */
+
+    /**
+     * The scale of this distribution.
+     */
     private final double scale;
-    /** Density factor (scale / pi). */
+
+    /**
+     * Density factor (scale / pi).
+     */
     private final double scaleOverPi;
-    /** Density factor (scale^2). */
+
+    /**
+     * Density factor (scale^2).
+     */
     private final double scale2;
 
     /**
      * @param location Location parameter.
      * @param scale Scale parameter.
      */
-    private CauchyDistribution(double location,
-                               double scale) {
+    private CauchyDistribution(double location, double scale) {
         this.scale = scale;
         this.location = location;
         scaleOverPi = scale / Math.PI;
@@ -63,12 +74,8 @@ public final class CauchyDistribution extends AbstractContinuousDistribution {
      * @return the distribution
      * @throws IllegalArgumentException if {@code scale <= 0}.
      */
-    public static CauchyDistribution of(double location,
-                                        double scale) {
-        if (scale <= 0) {
-            throw new DistributionException(DistributionException.NOT_STRICTLY_POSITIVE, scale);
-        }
-        return new CauchyDistribution(location, scale);
+    public static CauchyDistribution of(double location, double scale) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -77,7 +84,7 @@ public final class CauchyDistribution extends AbstractContinuousDistribution {
      * @return the location parameter.
      */
     public double getLocation() {
-        return location;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -86,26 +93,31 @@ public final class CauchyDistribution extends AbstractContinuousDistribution {
      * @return the scale parameter.
      */
     public double getScale() {
-        return scale;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double density(double x) {
-        final double dev = x - location;
-        return scaleOverPi / (dev * dev + scale2);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double cumulativeProbability(double x) {
-        return cdf((x - location) / scale);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double survivalProbability(double x) {
-        return cdf(-(x - location) / scale);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -125,13 +137,7 @@ public final class CauchyDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double inverseCumulativeProbability(double p) {
-        ArgumentUtils.checkProbability(p);
-        if (p == 0) {
-            return Double.NEGATIVE_INFINITY;
-        } else  if (p == 1) {
-            return Double.POSITIVE_INFINITY;
-        }
-        return location + scale * Math.tan(Math.PI * (p - 0.5));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -142,13 +148,7 @@ public final class CauchyDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double inverseSurvivalProbability(double p) {
-        ArgumentUtils.checkProbability(p);
-        if (p == 1) {
-            return Double.NEGATIVE_INFINITY;
-        } else  if (p == 0) {
-            return Double.POSITIVE_INFINITY;
-        }
-        return location - scale * Math.tan(Math.PI * (p - 0.5));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -160,7 +160,7 @@ public final class CauchyDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getMean() {
-        return Double.NaN;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -172,7 +172,7 @@ public final class CauchyDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getVariance() {
-        return Double.NaN;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -184,7 +184,7 @@ public final class CauchyDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getSupportLowerBound() {
-        return Double.NEGATIVE_INFINITY;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -196,22 +196,22 @@ public final class CauchyDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getSupportUpperBound() {
-        return Double.POSITIVE_INFINITY;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     double getMedian() {
-        // Overridden for the probability(double, double) method.
-        // This is intentionally not a public method.
-        return location;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ContinuousDistribution.Sampler createSampler(final UniformRandomProvider rng) {
-        // Cauchy distribution =
-        // Stable distribution with alpha=1, beta=0, gamma=scale, delta=location
-        return StableSampler.of(rng, 1, 0, getScale(), getLocation())::sample;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

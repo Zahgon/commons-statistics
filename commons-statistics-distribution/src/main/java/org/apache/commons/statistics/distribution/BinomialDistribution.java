@@ -37,24 +37,37 @@ import org.apache.commons.numbers.gamma.RegularizedBeta;
  * @see <a href="https://mathworld.wolfram.com/BinomialDistribution.html">Binomial distribution (MathWorld)</a>
  */
 public final class BinomialDistribution extends AbstractDiscreteDistribution {
-    /** 1/2. */
+
+    /**
+     * 1/2.
+     */
     private static final float HALF = 0.5f;
 
-    /** The number of trials. */
+    /**
+     * The number of trials.
+     */
     private final int numberOfTrials;
-    /** The probability of success. */
+
+    /**
+     * The probability of success.
+     */
     private final double probabilityOfSuccess;
-    /** Cached value for pmf(x=0). */
+
+    /**
+     * Cached value for pmf(x=0).
+     */
     private final double pmf0;
-    /** Cached value for pmf(x=n). */
+
+    /**
+     * Cached value for pmf(x=n).
+     */
     private final double pmfn;
 
     /**
      * @param trials Number of trials.
      * @param p Probability of success.
      */
-    private BinomialDistribution(int trials,
-                                 double p) {
+    private BinomialDistribution(int trials, double p) {
         probabilityOfSuccess = p;
         numberOfTrials = trials;
         // Special pmf cases where the power function is more accurate:
@@ -78,15 +91,8 @@ public final class BinomialDistribution extends AbstractDiscreteDistribution {
      * @throws IllegalArgumentException if {@code trials < 0}, or if {@code p < 0}
      * or {@code p > 1}.
      */
-    public static BinomialDistribution of(int trials,
-                                          double p) {
-        if (trials < 0) {
-            throw new DistributionException(DistributionException.NEGATIVE,
-                                            trials);
-        }
-        ArgumentUtils.checkProbability(p);
-        // Avoid p = -0.0 to avoid returning -0.0 for some probability computations.
-        return new BinomialDistribution(trials, Math.abs(p));
+    public static BinomialDistribution of(int trials, double p) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -95,7 +101,7 @@ public final class BinomialDistribution extends AbstractDiscreteDistribution {
      * @return the number of trials.
      */
     public int getNumberOfTrials() {
-        return numberOfTrials;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -104,65 +110,39 @@ public final class BinomialDistribution extends AbstractDiscreteDistribution {
      * @return the probability of success.
      */
     public double getProbabilityOfSuccess() {
-        return probabilityOfSuccess;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double probability(int x) {
-        if (x < 0 || x > numberOfTrials) {
-            return 0;
-        } else if (x == 0) {
-            return pmf0;
-        } else if (x == numberOfTrials) {
-            return pmfn;
-        }
-        return Math.exp(SaddlePointExpansionUtils.logBinomialProbability(x,
-                        numberOfTrials, probabilityOfSuccess,
-                        1.0 - probabilityOfSuccess));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} **/
+    /**
+     * {@inheritDoc} *
+     */
     @Override
     public double logProbability(int x) {
-        if (numberOfTrials == 0) {
-            return (x == 0) ? 0.0 : Double.NEGATIVE_INFINITY;
-        } else if (x < 0 || x > numberOfTrials) {
-            return Double.NEGATIVE_INFINITY;
-        }
-        // Special cases for x=0, x=n
-        // are handled in the saddle point expansion
-        return SaddlePointExpansionUtils.logBinomialProbability(x,
-                numberOfTrials, probabilityOfSuccess,
-                1.0 - probabilityOfSuccess);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double cumulativeProbability(int x) {
-        if (x < 0) {
-            return 0.0;
-        } else if (x >= numberOfTrials) {
-            return 1.0;
-        } else if (x == 0) {
-            return pmf0;
-        }
-        return RegularizedBeta.complement(probabilityOfSuccess,
-                                          x + 1.0, (double) numberOfTrials - x);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double survivalProbability(int x) {
-        if (x < 0) {
-            return 1.0;
-        } else if (x >= numberOfTrials) {
-            return 0.0;
-        } else if (x == numberOfTrials - 1) {
-            return pmfn;
-        }
-        return RegularizedBeta.value(probabilityOfSuccess,
-                                     x + 1.0, (double) numberOfTrials - x);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -172,7 +152,7 @@ public final class BinomialDistribution extends AbstractDiscreteDistribution {
      */
     @Override
     public double getMean() {
-        return numberOfTrials * probabilityOfSuccess;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -182,8 +162,7 @@ public final class BinomialDistribution extends AbstractDiscreteDistribution {
      */
     @Override
     public double getVariance() {
-        final double p = probabilityOfSuccess;
-        return numberOfTrials * p * (1 - p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -196,7 +175,7 @@ public final class BinomialDistribution extends AbstractDiscreteDistribution {
      */
     @Override
     public int getSupportLowerBound() {
-        return probabilityOfSuccess < 1.0 ? 0 : numberOfTrials;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -209,16 +188,14 @@ public final class BinomialDistribution extends AbstractDiscreteDistribution {
      */
     @Override
     public int getSupportUpperBound() {
-        return probabilityOfSuccess > 0.0 ? numberOfTrials : 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     int getMedian() {
-        // Overridden for the probability(int, int) method.
-        // This is intentionally not a public method.
-        // Can be floor or ceiling of np. For the probability in a range use the floor
-        // as this only used for values >= median+1.
-        return (int) (numberOfTrials * probabilityOfSuccess);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

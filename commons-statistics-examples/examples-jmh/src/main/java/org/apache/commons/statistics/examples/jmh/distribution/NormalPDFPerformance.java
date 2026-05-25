@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.apache.commons.statistics.examples.jmh.distribution;
 
 import java.util.concurrent.TimeUnit;
@@ -45,7 +44,7 @@ import org.openjdk.jmh.annotations.Warmup;
 @Warmup(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 @Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 @State(Scope.Benchmark)
-@Fork(value = 1, jvmArgs = {"-server", "-Xms512M", "-Xmx512M"})
+@Fork(value = 1, jvmArgs = { "-server", "-Xms512M", "-Xmx512M" })
 public class NormalPDFPerformance {
 
     /**
@@ -54,18 +53,23 @@ public class NormalPDFPerformance {
      */
     @State(Scope.Benchmark)
     public abstract static class Source {
-        /** The method. */
-        @Param({"baseline", "std", "hp"})
+
+        /**
+         * The method.
+         */
+        @Param({ "baseline", "std", "hp" })
         private String method;
 
-        /** The generator to supply the next density value. */
+        /**
+         * The generator to supply the next density value.
+         */
         private DoubleSupplier gen;
 
         /**
          * @return the next value
          */
         public double next() {
-            return gen.getAsDouble();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -74,29 +78,7 @@ public class NormalPDFPerformance {
          */
         @Setup
         public void setup() {
-            // Note:
-            // These exist to exercise the full the density function.
-            // If these are different from a standard normal distribution N(0, 1)
-            // then the supplier of values may not provide a suitable distribution
-            // of random X deviates.
-            final double mean = 0;
-            final double sd = 1;
-
-            DoubleUnaryOperator fun;
-            if ("baseline".equals(method)) {
-                // No density function. This tests baseline speed of generating the X deviate.
-                fun = x -> x;
-            } else if ("std".equals(method)) {
-                // Standard precision implementation
-                fun = new StandardNormalDistribution(mean, sd)::density;
-            } else if ("hp".equals(method)) {
-                // High-precision implementation in the NormalDistribution class
-                fun = NormalDistribution.of(mean, sd)::density;
-            } else {
-                throw new IllegalStateException("Unknown method: " + method);
-            }
-            final DoubleSupplier nextValue = createValues();
-            gen = () -> fun.applyAsDouble(nextValue.getAsDouble());
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -110,11 +92,20 @@ public class NormalPDFPerformance {
          * Implementation of the normal distribution using standard precision.
          */
         private static class StandardNormalDistribution {
-            /** The mean. */
+
+            /**
+             * The mean.
+             */
             private final double mean;
-            /** The standard deviation. */
+
+            /**
+             * The standard deviation.
+             */
             private final double sd;
-            /** Density factor sd * sqrt(2 pi). */
+
+            /**
+             * Density factor sd * sqrt(2 pi).
+             */
             private final double sdSqrt2pi;
 
             /**
@@ -134,8 +125,7 @@ public class NormalPDFPerformance {
              * @return pdf(x)
              */
             double density(double x) {
-                final double z = (x - mean) / sd;
-                return Math.exp(-0.5 * z * z) / sdSqrt2pi;
+                throw new UnsupportedOperationException("STUB: not implemented");
             }
         }
     }
@@ -145,9 +135,13 @@ public class NormalPDFPerformance {
      */
     @State(Scope.Benchmark)
     public static class UniformSource extends Source {
-        /** The lower bound. */
-        @Param({"0"})
+
+        /**
+         * The lower bound.
+         */
+        @Param({ "0" })
         private double low;
+
         /**
          * The higher bound.
          *
@@ -158,13 +152,15 @@ public class NormalPDFPerformance {
          * for the distribution to choose a standard or high precision can be created using a
          * range of [0, 2 * sqrt(2)], or [0, 2.828].
          */
-        @Param({"1", "2.828", "4", "16", "64"})
+        @Param({ "1", "2.828", "4", "16", "64" })
         private double high;
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         @Override
         protected DoubleSupplier createValues() {
-            return ContinuousUniformSampler.of(RandomSource.XO_RO_SHI_RO_128_PP.create(), low, high)::sample;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -173,10 +169,13 @@ public class NormalPDFPerformance {
      */
     @State(Scope.Benchmark)
     public static class NormalSource extends Source {
-        /** {@inheritDoc} */
+
+        /**
+         * {@inheritDoc}
+         */
         @Override
         protected DoubleSupplier createValues() {
-            return ZigguratSampler.NormalizedGaussian.of(RandomSource.XO_RO_SHI_RO_128_PP.create())::sample;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -188,7 +187,7 @@ public class NormalPDFPerformance {
      */
     @Benchmark
     public double uniform(UniformSource source) {
-        return source.next();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -199,6 +198,6 @@ public class NormalPDFPerformance {
      */
     @Benchmark
     public double normal(NormalSource source) {
-        return source.next();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

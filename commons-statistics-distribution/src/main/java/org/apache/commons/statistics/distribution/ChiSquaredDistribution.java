@@ -33,7 +33,10 @@ import org.apache.commons.rng.UniformRandomProvider;
  * @see <a href="https://mathworld.wolfram.com/Chi-SquaredDistribution.html">Chi-squared distribution (MathWorld)</a>
  */
 public final class ChiSquaredDistribution extends AbstractContinuousDistribution {
-    /** Internal Gamma distribution. */
+
+    /**
+     * Internal Gamma distribution.
+     */
     private final GammaDistribution gamma;
 
     /**
@@ -51,7 +54,7 @@ public final class ChiSquaredDistribution extends AbstractContinuousDistribution
      * @throws IllegalArgumentException if {@code degreesOfFreedom <= 0}.
      */
     public static ChiSquaredDistribution of(double degreesOfFreedom) {
-        return new ChiSquaredDistribution(degreesOfFreedom);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -60,10 +63,11 @@ public final class ChiSquaredDistribution extends AbstractContinuousDistribution
      * @return the degrees of freedom.
      */
     public double getDegreesOfFreedom() {
-        return gamma.getShape() * 2;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
      *
      * <p>Returns the limit when {@code x = 0}:
      * <ul>
@@ -74,10 +78,11 @@ public final class ChiSquaredDistribution extends AbstractContinuousDistribution
      */
     @Override
     public double density(double x) {
-        return gamma.density(x);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
      *
      * <p>Returns the limit when {@code x = 0}:
      * <ul>
@@ -88,31 +93,39 @@ public final class ChiSquaredDistribution extends AbstractContinuousDistribution
      */
     @Override
     public double logDensity(double x) {
-        return gamma.logDensity(x);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public double cumulativeProbability(double x)  {
-        return gamma.cumulativeProbability(x);
+    public double cumulativeProbability(double x) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double survivalProbability(double x) {
-        return gamma.survivalProbability(x);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double inverseCumulativeProbability(double p) {
-        return gamma.inverseCumulativeProbability(p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double inverseSurvivalProbability(double p) {
-        return gamma.inverseSurvivalProbability(p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -122,7 +135,7 @@ public final class ChiSquaredDistribution extends AbstractContinuousDistribution
      */
     @Override
     public double getMean() {
-        return getDegreesOfFreedom();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -132,7 +145,7 @@ public final class ChiSquaredDistribution extends AbstractContinuousDistribution
      */
     @Override
     public double getVariance() {
-        return 2 * getDegreesOfFreedom();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -144,7 +157,7 @@ public final class ChiSquaredDistribution extends AbstractContinuousDistribution
      */
     @Override
     public double getSupportLowerBound() {
-        return 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -156,12 +169,14 @@ public final class ChiSquaredDistribution extends AbstractContinuousDistribution
      */
     @Override
     public double getSupportUpperBound() {
-        return Double.POSITIVE_INFINITY;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ContinuousDistribution.Sampler createSampler(final UniformRandomProvider rng) {
-        return gamma.createSampler(rng);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

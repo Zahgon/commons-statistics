@@ -33,6 +33,7 @@ import org.apache.commons.statistics.distribution.NormalDistribution;
  * @since 1.2
  */
 public enum BinomialConfidenceInterval {
+
     /**
      * Implements the normal approximation method for creating a binomial proportion
      * confidence interval.
@@ -44,15 +45,13 @@ public enum BinomialConfidenceInterval {
      * Normal approximation interval (Wikipedia)</a>
      */
     NORMAL_APPROXIMATION {
+
         @Override
         Interval create(int n, int x, double alpha) {
-            final double z = NORMAL_DISTRIBUTION.inverseSurvivalProbability(alpha * 0.5);
-            final double p = (double) x / n;
-            final double distance = z * Math.sqrt(p * (1 - p) / n);
-            // This may exceed the interval [0, 1]
-            return new BaseInterval(clip(p - distance), clip(p + distance));
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
-    },
+    }
+    ,
     /**
      * Implements the Wilson score method for creating a binomial proportion confidence
      * interval.
@@ -62,17 +61,13 @@ public enum BinomialConfidenceInterval {
      * Normal approximation interval (Wikipedia)</a>
      */
     WILSON_SCORE {
+
         @Override
         Interval create(int n, int x, double alpha) {
-            final double z = NORMAL_DISTRIBUTION.inverseSurvivalProbability(alpha * 0.5);
-            final double z2 = z * z;
-            final double p = (double) x / n;
-            final double denom = 1 + z2 / n;
-            final double centre = (p + 0.5 * z2 / n) / denom;
-            final double distance = z * Math.sqrt(p * (1 - p) / n + z2 / (4.0 * n * n)) / denom;
-            return new BaseInterval(centre - distance, centre + distance);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
-    },
+    }
+    ,
     /**
      * Implements the Jeffreys method for creating a binomial proportion confidence
      * interval.
@@ -86,14 +81,13 @@ public enum BinomialConfidenceInterval {
      * Jeffreys interval (Wikipedia)</a>
      */
     JEFFREYS {
+
         @Override
         Interval create(int n, int x, double alpha) {
-            final BetaDistribution d = BetaDistribution.of(x + 0.5, n - x + 0.5);
-            final double lower = x == 0 ? 0 : d.inverseCumulativeProbability(alpha * 0.5);
-            final double upper = x == n ? 1 : d.inverseSurvivalProbability(alpha * 0.5);
-            return new BaseInterval(lower, upper);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
-    },
+    }
+    ,
     /**
      * Implements the Clopper-Pearson method for creating a binomial proportion confidence
      * interval.
@@ -103,22 +97,13 @@ public enum BinomialConfidenceInterval {
      * Clopper-Pearson interval (Wikipedia)</a>
      */
     CLOPPER_PEARSON {
+
         @Override
         Interval create(int n, int x, double alpha) {
-            double lower = 0;
-            double upper = 1;
-            // Use closed form expressions
-            if (x == 0) {
-                upper = 1 - Math.pow(alpha * 0.5, 1.0 / n);
-            } else if (x == n) {
-                lower = Math.pow(alpha * 0.5, 1.0 / n);
-            } else {
-                lower = BetaDistribution.of(x, n - x + 1).inverseCumulativeProbability(alpha * 0.5);
-                upper = BetaDistribution.of(x + 1, n - x).inverseSurvivalProbability(alpha * 0.5);
-            }
-            return new BaseInterval(lower, upper);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
-    },
+    }
+    ,
     /**
      * Implements the Agresti-Coull method for creating a binomial proportion confidence
      * interval.
@@ -130,19 +115,17 @@ public enum BinomialConfidenceInterval {
      * Agresti-Coull interval (Wikipedia)</a>
      */
     AGRESTI_COULL {
+
         @Override
         Interval create(int n, int x, double alpha) {
-            final double z = NORMAL_DISTRIBUTION.inverseSurvivalProbability(alpha * 0.5);
-            final double zSquared = z * z;
-            final double nc = n + zSquared;
-            final double p = (x + 0.5 * zSquared) / nc;
-            final double distance = z * Math.sqrt(p * (1 - p) / nc);
-            // This may exceed the interval [0, 1]
-            return new BaseInterval(clip(p - distance), clip(p + distance));
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
-    };
+    }
+    ;
 
-    /** The standard normal distribution. */
+    /**
+     * The standard normal distribution.
+     */
     static final NormalDistribution NORMAL_DISTRIBUTION = NormalDistribution.of(0, 1);
 
     /**
@@ -166,19 +149,7 @@ public enum BinomialConfidenceInterval {
      * {@code alpha} is not in the open interval {@code (0, 1)}.
      */
     public Interval fromErrorRate(int numberOfTrials, int numberOfSuccesses, double alpha) {
-        if (numberOfTrials <= 0) {
-            throw new IllegalArgumentException("Number of trials is not strictly positive: " + numberOfTrials);
-        }
-        if (numberOfSuccesses < 0) {
-            throw new IllegalArgumentException("Number of successes is not positive: " + numberOfSuccesses);
-        }
-        if (numberOfSuccesses > numberOfTrials) {
-            throw new IllegalArgumentException(
-                String.format("Number of successes (%d) must be less than or equal to number of trials (%d)",
-                    numberOfSuccesses, numberOfTrials));
-        }
-        ArgumentUtils.checkErrorRate(alpha);
-        return create(numberOfTrials, numberOfSuccesses, alpha);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -200,6 +171,6 @@ public enum BinomialConfidenceInterval {
      * @return the probability in [0, 1]
      */
     static double clip(double p) {
-        return Math.min(1, Math.max(0, p));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

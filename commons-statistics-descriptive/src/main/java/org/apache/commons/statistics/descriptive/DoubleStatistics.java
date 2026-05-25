@@ -33,58 +33,122 @@ import java.util.function.Function;
  * @since 1.1
  */
 public final class DoubleStatistics implements DoubleConsumer {
-    /** Error message for non configured statistics. */
+
+    /**
+     * Error message for non configured statistics.
+     */
     private static final String NO_CONFIGURED_STATISTICS = "No configured statistics";
-    /** Error message for an unsupported statistic. */
+
+    /**
+     * Error message for an unsupported statistic.
+     */
     private static final String UNSUPPORTED_STATISTIC = "Unsupported statistic: ";
 
-    /** Count of values recorded. */
+    /**
+     * Count of values recorded.
+     */
     private long count;
-    /** The consumer of values. */
+
+    /**
+     * The consumer of values.
+     */
     private final DoubleConsumer consumer;
-    /** The {@link Min} implementation. */
+
+    /**
+     * The {@link Min} implementation.
+     */
     private final Min min;
-    /** The {@link Max} implementation. */
+
+    /**
+     * The {@link Max} implementation.
+     */
     private final Max max;
-    /** The moment implementation. May be any instance of {@link FirstMoment}. */
+
+    /**
+     * The moment implementation. May be any instance of {@link FirstMoment}.
+     */
     private final FirstMoment moment;
-    /** The {@link Sum} implementation. */
+
+    /**
+     * The {@link Sum} implementation.
+     */
     private final Sum sum;
-    /** The {@link Product} implementation. */
+
+    /**
+     * The {@link Product} implementation.
+     */
     private final Product product;
-    /** The {@link SumOfSquares} implementation. */
+
+    /**
+     * The {@link SumOfSquares} implementation.
+     */
     private final SumOfSquares sumOfSquares;
-    /** The {@link SumOfLogs} implementation. */
+
+    /**
+     * The {@link SumOfLogs} implementation.
+     */
     private final SumOfLogs sumOfLogs;
-    /** Configuration options for computation of statistics. */
+
+    /**
+     * Configuration options for computation of statistics.
+     */
     private StatisticsConfiguration config;
 
     /**
      * A builder for {@link DoubleStatistics}.
      */
     public static final class Builder {
-        /** An empty double array. */
+
+        /**
+         * An empty double array.
+         */
         private static final double[] NO_VALUES = {};
 
-        /** The {@link Min} constructor. */
+        /**
+         * The {@link Min} constructor.
+         */
         private RangeFunction<double[], Min> min;
-        /** The {@link Max} constructor. */
+
+        /**
+         * The {@link Max} constructor.
+         */
         private RangeFunction<double[], Max> max;
-        /** The moment constructor. May return any instance of {@link FirstMoment}. */
+
+        /**
+         * The moment constructor. May return any instance of {@link FirstMoment}.
+         */
         private RangeBiFunction<org.apache.commons.numbers.core.Sum, double[], FirstMoment> moment;
-        /** The {@link Sum} constructor. */
+
+        /**
+         * The {@link Sum} constructor.
+         */
         private Function<org.apache.commons.numbers.core.Sum, Sum> sum;
-        /** The {@link Product} constructor. */
+
+        /**
+         * The {@link Product} constructor.
+         */
         private RangeFunction<double[], Product> product;
-        /** The {@link SumOfSquares} constructor. */
+
+        /**
+         * The {@link SumOfSquares} constructor.
+         */
         private RangeFunction<double[], SumOfSquares> sumOfSquares;
-        /** The {@link SumOfLogs} constructor. */
+
+        /**
+         * The {@link SumOfLogs} constructor.
+         */
         private RangeFunction<double[], SumOfLogs> sumOfLogs;
-        /** The order of the moment. It corresponds to the power computed by the {@link FirstMoment}
+
+        /**
+         * The order of the moment. It corresponds to the power computed by the {@link FirstMoment}
          * instance constructed by {@link #moment}. This should only be increased from the default
-         * of zero (corresponding to no moment computation). */
+         * of zero (corresponding to no moment computation).
+         */
         private int momentOrder;
-        /** Configuration options for computation of statistics. */
+
+        /**
+         * Configuration options for computation of statistics.
+         */
         private StatisticsConfiguration config = StatisticsConfiguration.withDefaults();
 
         /**
@@ -101,42 +165,7 @@ public final class DoubleStatistics implements DoubleConsumer {
          * @return {@code this} instance
          */
         Builder add(Statistic statistic) {
-            // Exhaustive switch statement
-            switch (statistic) {
-            case GEOMETRIC_MEAN:
-            case SUM_OF_LOGS:
-                sumOfLogs = SumOfLogs::createFromRange;
-                break;
-            case KURTOSIS:
-                createMoment(4);
-                break;
-            case MAX:
-                max = Max::createFromRange;
-                break;
-            case MEAN:
-                createMoment(1);
-                break;
-            case MIN:
-                min = Min::createFromRange;
-                break;
-            case PRODUCT:
-                product = Product::createFromRange;
-                break;
-            case SKEWNESS:
-                createMoment(3);
-                break;
-            case STANDARD_DEVIATION:
-            case VARIANCE:
-                createMoment(2);
-                break;
-            case SUM:
-                sum = Sum::new;
-                break;
-            case SUM_OF_SQUARES:
-                sumOfSquares = SumOfSquares::createFromRange;
-                break;
-            }
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -169,8 +198,7 @@ public final class DoubleStatistics implements DoubleConsumer {
          * @throws NullPointerException if the value is null
          */
         public Builder setConfiguration(StatisticsConfiguration v) {
-            config = Objects.requireNonNull(v);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -179,7 +207,7 @@ public final class DoubleStatistics implements DoubleConsumer {
          * @return {@code DoubleStatistics} instance.
          */
         public DoubleStatistics build() {
-            return create(NO_VALUES, 0, 0);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -193,8 +221,7 @@ public final class DoubleStatistics implements DoubleConsumer {
          * @return {@code DoubleStatistics} instance.
          */
         public DoubleStatistics build(double... values) {
-            Objects.requireNonNull(values, "values");
-            return create(values, 0, values.length);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -212,8 +239,7 @@ public final class DoubleStatistics implements DoubleConsumer {
          * @since 1.2
          */
         public DoubleStatistics build(double[] values, int from, int to) {
-            Statistics.checkFromToIndex(from, to, values.length);
-            return create(values, from, to);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -239,16 +265,7 @@ public final class DoubleStatistics implements DoubleConsumer {
                 m = create(moment, s, values, from, to);
                 sumStat = create(sum, s);
             }
-            return new DoubleStatistics(
-                to - from,
-                create(min, values, from, to),
-                create(max, values, from, to),
-                m,
-                sumStat,
-                create(product, values, from, to),
-                create(sumOfSquares, values, from, to),
-                create(sumOfLogs, values, from, to),
-                config);
+            return new DoubleStatistics(to - from, create(min, values, from, to), create(max, values, from, to), m, sumStat, create(product, values, from, to), create(sumOfSquares, values, from, to), create(sumOfLogs, values, from, to), config);
         }
 
         /**
@@ -319,9 +336,7 @@ public final class DoubleStatistics implements DoubleConsumer {
      * @param sumOfLogs Sum of logs implementation.
      * @param config Statistics configuration.
      */
-    DoubleStatistics(long count, Min min, Max max, FirstMoment moment, Sum sum,
-                     Product product, SumOfSquares sumOfSquares, SumOfLogs sumOfLogs,
-                     StatisticsConfiguration config) {
+    DoubleStatistics(long count, Min min, Max max, FirstMoment moment, Sum sum, Product product, SumOfSquares sumOfSquares, SumOfLogs sumOfLogs, StatisticsConfiguration config) {
         this.count = count;
         this.min = min;
         this.max = max;
@@ -331,8 +346,7 @@ public final class DoubleStatistics implements DoubleConsumer {
         this.sumOfSquares = sumOfSquares;
         this.sumOfLogs = sumOfLogs;
         this.config = config;
-        consumer = Statistics.composeDoubleConsumers(min, max, moment, sum, product,
-                                                     sumOfSquares, sumOfLogs);
+        consumer = Statistics.composeDoubleConsumers(min, max, moment, sum, product, sumOfSquares, sumOfLogs);
     }
 
     /**
@@ -346,7 +360,7 @@ public final class DoubleStatistics implements DoubleConsumer {
      * @throws IllegalArgumentException if there are no {@code statistics} to compute.
      */
     public static DoubleStatistics of(Statistic... statistics) {
-        return builder(statistics).build();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -368,12 +382,7 @@ public final class DoubleStatistics implements DoubleConsumer {
      * @throws IllegalArgumentException if there are no {@code statistics} to compute.
      */
     public static DoubleStatistics of(Set<Statistic> statistics, double... values) {
-        if (statistics.isEmpty()) {
-            throw new IllegalArgumentException(NO_CONFIGURED_STATISTICS);
-        }
-        final Builder b = new Builder();
-        statistics.forEach(b::add);
-        return b.build(values);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -400,12 +409,7 @@ public final class DoubleStatistics implements DoubleConsumer {
      * @since 1.2
      */
     public static DoubleStatistics ofRange(Set<Statistic> statistics, double[] values, int from, int to) {
-        if (statistics.isEmpty()) {
-            throw new IllegalArgumentException(NO_CONFIGURED_STATISTICS);
-        }
-        final Builder b = new Builder();
-        statistics.forEach(b::add);
-        return b.build(values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -458,14 +462,7 @@ public final class DoubleStatistics implements DoubleConsumer {
      * @throws IllegalArgumentException if there are no {@code statistics} to compute.
      */
     public static Builder builder(Statistic... statistics) {
-        if (statistics.length == 0) {
-            throw new IllegalArgumentException(NO_CONFIGURED_STATISTICS);
-        }
-        final Builder b = new Builder();
-        for (final Statistic s : statistics) {
-            b.add(s);
-        }
-        return b;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -475,8 +472,7 @@ public final class DoubleStatistics implements DoubleConsumer {
      */
     @Override
     public void accept(double value) {
-        count++;
-        consumer.accept(value);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -485,7 +481,7 @@ public final class DoubleStatistics implements DoubleConsumer {
      * @return the count of values
      */
     public long getCount() {
-        return count;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -499,34 +495,7 @@ public final class DoubleStatistics implements DoubleConsumer {
      * @see #getAsDouble(Statistic)
      */
     public boolean isSupported(Statistic statistic) {
-        // Check for the appropriate underlying implementation
-        // Exhaustive switch statement
-        switch (statistic) {
-        case GEOMETRIC_MEAN:
-        case SUM_OF_LOGS:
-            return sumOfLogs != null;
-        case KURTOSIS:
-            return moment instanceof SumOfFourthDeviations;
-        case MAX:
-            return max != null;
-        case MEAN:
-            return moment != null;
-        case MIN:
-            return min != null;
-        case PRODUCT:
-            return product != null;
-        case SKEWNESS:
-            return moment instanceof SumOfCubedDeviations;
-        case STANDARD_DEVIATION:
-        case VARIANCE:
-            return moment instanceof SumOfSquaredDeviations;
-        case SUM:
-            return sum != null;
-        case SUM_OF_SQUARES:
-            return sumOfSquares != null;
-        }
-        // Unreachable code
-        throw new IllegalArgumentException(UNSUPPORTED_STATISTIC + statistic);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -539,7 +508,7 @@ public final class DoubleStatistics implements DoubleConsumer {
      * @see #getResult(Statistic)
      */
     public double getAsDouble(Statistic statistic) {
-        return getResult(statistic).getAsDouble();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -560,57 +529,7 @@ public final class DoubleStatistics implements DoubleConsumer {
      * @see #getAsDouble(Statistic)
      */
     public StatisticResult getResult(Statistic statistic) {
-        // Locate the implementation.
-        // Statistics that wrap an underlying implementation are created in methods.
-        // The return argument should be a method reference and not an instance
-        // of DoubleStatistic. This ensures the statistic implementation cannot
-        // be updated with new values by casting the result and calling accept(double).
-        StatisticResult stat = null;
-        // Exhaustive switch statement
-        switch (statistic) {
-        case GEOMETRIC_MEAN:
-            stat = getGeometricMean();
-            break;
-        case KURTOSIS:
-            stat = getKurtosis();
-            break;
-        case MAX:
-            stat = max;
-            break;
-        case MEAN:
-            stat = getMean();
-            break;
-        case MIN:
-            stat = min;
-            break;
-        case PRODUCT:
-            stat = product;
-            break;
-        case SKEWNESS:
-            stat = getSkewness();
-            break;
-        case STANDARD_DEVIATION:
-            stat = getStandardDeviation();
-            break;
-        case SUM:
-            stat = sum;
-            break;
-        case SUM_OF_LOGS:
-            stat = sumOfLogs;
-            break;
-        case SUM_OF_SQUARES:
-            stat = sumOfSquares;
-            break;
-        case VARIANCE:
-            stat = getVariance();
-            break;
-        }
-        if (stat != null) {
-            return stat instanceof DoubleStatistic ?
-                ((DoubleStatistic) stat)::getAsDouble :
-                stat;
-        }
-        throw new IllegalArgumentException(UNSUPPORTED_STATISTIC + statistic);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -633,8 +552,7 @@ public final class DoubleStatistics implements DoubleConsumer {
      */
     private StatisticResult getKurtosis() {
         if (moment instanceof SumOfFourthDeviations) {
-            return new Kurtosis((SumOfFourthDeviations) moment)
-                .setBiased(config.isBiased())::getAsDouble;
+            return new Kurtosis((SumOfFourthDeviations) moment).setBiased(config.isBiased())::getAsDouble;
         }
         return null;
     }
@@ -659,8 +577,7 @@ public final class DoubleStatistics implements DoubleConsumer {
      */
     private StatisticResult getSkewness() {
         if (moment instanceof SumOfCubedDeviations) {
-            return new Skewness((SumOfCubedDeviations) moment)
-                .setBiased(config.isBiased())::getAsDouble;
+            return new Skewness((SumOfCubedDeviations) moment).setBiased(config.isBiased())::getAsDouble;
         }
         return null;
     }
@@ -672,8 +589,7 @@ public final class DoubleStatistics implements DoubleConsumer {
      */
     private StatisticResult getStandardDeviation() {
         if (moment instanceof SumOfSquaredDeviations) {
-            return new StandardDeviation((SumOfSquaredDeviations) moment)
-                .setBiased(config.isBiased())::getAsDouble;
+            return new StandardDeviation((SumOfSquaredDeviations) moment).setBiased(config.isBiased())::getAsDouble;
         }
         return null;
     }
@@ -685,8 +601,7 @@ public final class DoubleStatistics implements DoubleConsumer {
      */
     private StatisticResult getVariance() {
         if (moment instanceof SumOfSquaredDeviations) {
-            return new Variance((SumOfSquaredDeviations) moment)
-                .setBiased(config.isBiased())::getAsDouble;
+            return new Variance((SumOfSquaredDeviations) moment).setBiased(config.isBiased())::getAsDouble;
         }
         return null;
     }
@@ -709,24 +624,7 @@ public final class DoubleStatistics implements DoubleConsumer {
      * @throws IllegalArgumentException if the {@code other} is not compatible
      */
     public DoubleStatistics combine(DoubleStatistics other) {
-        // Check compatibility
-        Statistics.checkCombineCompatible(min, other.min);
-        Statistics.checkCombineCompatible(max, other.max);
-        Statistics.checkCombineCompatible(sum, other.sum);
-        Statistics.checkCombineCompatible(product, other.product);
-        Statistics.checkCombineCompatible(sumOfSquares, other.sumOfSquares);
-        Statistics.checkCombineCompatible(sumOfLogs, other.sumOfLogs);
-        Statistics.checkCombineAssignable(moment, other.moment);
-        // Combine
-        count += other.count;
-        Statistics.combine(min, other.min);
-        Statistics.combine(max, other.max);
-        Statistics.combine(sum, other.sum);
-        Statistics.combine(product, other.product);
-        Statistics.combine(sumOfSquares, other.sumOfSquares);
-        Statistics.combine(sumOfLogs, other.sumOfLogs);
-        Statistics.combineMoment(moment, other.moment);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -745,7 +643,6 @@ public final class DoubleStatistics implements DoubleConsumer {
      * @see #getResult(Statistic)
      */
     public DoubleStatistics setConfiguration(StatisticsConfiguration v) {
-        config = Objects.requireNonNull(v);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -38,13 +38,17 @@ import org.apache.commons.rng.sampling.distribution.InverseTransformDiscreteSamp
  * Child classes with a known median can override the default {@link #getMedian()}
  * method.
  */
-abstract class AbstractDiscreteDistribution
-    implements DiscreteDistribution {
-    /** Marker value for no median.
-     * This is a long to be outside the value of any possible int valued median. */
+abstract class AbstractDiscreteDistribution implements DiscreteDistribution {
+
+    /**
+     * Marker value for no median.
+     * This is a long to be outside the value of any possible int valued median.
+     */
     private static final long NO_MEDIAN = Long.MIN_VALUE;
 
-    /** Cached value of the median. */
+    /**
+     * Cached value of the median.
+     */
     private long median = NO_MEDIAN;
 
     /**
@@ -57,45 +61,15 @@ abstract class AbstractDiscreteDistribution
      * @return the median
      */
     int getMedian() {
-        long m = median;
-        if (m == NO_MEDIAN) {
-            m = inverseCumulativeProbability(0.5);
-            median = m;
-        }
-        return (int) m;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public double probability(int x0,
-                              int x1) {
-        if (x0 > x1) {
-            throw new DistributionException(DistributionException.INVALID_RANGE_LOW_GT_HIGH, x0, x1);
-        }
-        // As per the default interface method handle special cases:
-        // x0     = x1 : return 0
-        // x0 + 1 = x1 : return probability(x1)
-        // Long addition avoids overflow
-        if (x0 + 1L >= x1) {
-            return x0 == x1 ? 0.0 : probability(x1);
-        }
-
-        // Use the survival probability when in the upper domain [3]:
-        //
-        //  lower          median         upper
-        //    |              |              |
-        // 1.     |------|
-        //        x0     x1
-        // 2.         |----------|
-        //            x0         x1
-        // 3.                  |--------|
-        //                     x0       x1
-
-        final double m = getMedian();
-        if (x0 >= m) {
-            return survivalProbability(x0) - survivalProbability(x1);
-        }
-        return cumulativeProbability(x1) - cumulativeProbability(x0);
+    public double probability(int x0, int x1) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -114,8 +88,7 @@ abstract class AbstractDiscreteDistribution
      */
     @Override
     public int inverseCumulativeProbability(double p) {
-        ArgumentUtils.checkProbability(p);
-        return inverseProbability(p, 1 - p, false);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -134,8 +107,7 @@ abstract class AbstractDiscreteDistribution
      */
     @Override
     public int inverseSurvivalProbability(double p) {
-        ArgumentUtils.checkProbability(p);
-        return inverseProbability(1 - p, p, true);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -147,7 +119,6 @@ abstract class AbstractDiscreteDistribution
      * @return the value
      */
     private int inverseProbability(double p, double q, boolean complement) {
-
         int lower = getSupportLowerBound();
         if (p == 0) {
             return lower;
@@ -156,7 +127,6 @@ abstract class AbstractDiscreteDistribution
         if (q == 0) {
             return upper;
         }
-
         // The binary search sets the upper value to the mid-point
         // based on fun(x) >= 0. The upper value is returned.
         //
@@ -164,10 +134,7 @@ abstract class AbstractDiscreteDistribution
         // lowered if:
         // cdf(x) >= p
         // sf(x)  <= q
-        final IntUnaryOperator fun = complement ?
-            x -> Double.compare(q, survivalProbability(x)) :
-            x -> Double.compare(cumulativeProbability(x), p);
-
+        final IntUnaryOperator fun = complement ? x -> Double.compare(q, survivalProbability(x)) : x -> Double.compare(cumulativeProbability(x), p);
         if (lower == Integer.MIN_VALUE) {
             if (fun.applyAsInt(lower) >= 0) {
                 return lower;
@@ -179,14 +146,11 @@ abstract class AbstractDiscreteDistribution
             // which is important for the solving step
             lower -= 1;
         }
-
         // use the one-sided Chebyshev inequality to narrow the bracket
         // cf. AbstractContinuousDistribution.inverseCumulativeProbability(double)
         final double mu = getMean();
         final double sig = Math.sqrt(getVariance());
-        final boolean chebyshevApplies = Double.isFinite(mu) &&
-                                         ArgumentUtils.isFiniteStrictlyPositive(sig);
-
+        final boolean chebyshevApplies = Double.isFinite(mu) && ArgumentUtils.isFiniteStrictlyPositive(sig);
         if (chebyshevApplies) {
             double tmp = mu - sig * Math.sqrt(q / p);
             if (tmp > lower) {
@@ -197,7 +161,6 @@ abstract class AbstractDiscreteDistribution
                 upper = ((int) Math.ceil(tmp)) - 1;
             }
         }
-
         return solveInverseProbability(fun, lower, upper);
     }
 
@@ -213,9 +176,7 @@ abstract class AbstractDiscreteDistribution
      * @param upperBound Value satisfying {@code fun(upper) >= 0}.
      * @return the smallest x
      */
-    private static int solveInverseProbability(IntUnaryOperator fun,
-                                               int lowerBound,
-                                               int upperBound) {
+    private static int solveInverseProbability(IntUnaryOperator fun, int lowerBound, int upperBound) {
         // Use long to prevent overflow during computation of the middle
         long lower = lowerBound;
         long upper = upperBound;
@@ -233,10 +194,11 @@ abstract class AbstractDiscreteDistribution
         return (int) upper;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public DiscreteDistribution.Sampler createSampler(final UniformRandomProvider rng) {
-        // Inversion method distribution sampler.
-        return InverseTransformDiscreteSampler.of(rng, this::inverseCumulativeProbability)::sample;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

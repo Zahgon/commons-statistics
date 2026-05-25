@@ -27,55 +27,52 @@ import picocli.CommandLine.Option;
 /**
  * Command for the {@link HypergeometricDistribution}.
  */
-@Command(name = "hypergeometric",
-         aliases = {"hyge"},
-         description = "Hypergeometric distribution.",
-         subcommands = {
-             HypergeometricCommand.Check.class,
-             HypergeometricCommand.PMF.class,
-             HypergeometricCommand.LPMF.class,
-             HypergeometricCommand.CDF.class,
-             HypergeometricCommand.SF.class,
-             HypergeometricCommand.ICDF.class,
-             HypergeometricCommand.ISF.class,
-         })
+@Command(name = "hypergeometric", aliases = { "hyge" }, description = "Hypergeometric distribution.", subcommands = { HypergeometricCommand.Check.class, HypergeometricCommand.PMF.class, HypergeometricCommand.LPMF.class, HypergeometricCommand.CDF.class, HypergeometricCommand.SF.class, HypergeometricCommand.ICDF.class, HypergeometricCommand.ISF.class })
 class HypergeometricCommand extends AbstractDistributionCommand {
 
-    /** Base command for the distribution that defines the parameters. */
+    /**
+     * Base command for the distribution that defines the parameters.
+     */
     private abstract static class BaseCommand extends AbstractDiscreteDistributionCommand {
-        /** Distribution parameters. */
+
+        /**
+         * Distribution parameters.
+         */
         @ArgGroup(validate = false, heading = "Distribution parameters:%n", order = 1)
         private Params params = new Params();
 
-        /** Parameters class. */
+        /**
+         * Parameters class.
+         */
         static class Params {
-            /** The distribution N. */
-            @Option(names = {"-N", "--population-size"},
-                    paramLabel = "N",
-                    arity = "1..*",
-                    split = ",",
-                    description = {"population size (default: ${DEFAULT-VALUE})."})
-            private int[] popSize = {500};
 
-            /** The distribution successes. */
-            @Option(names = {"-K", "--number-of-successes"},
-                    paramLabel = "K",
-                    arity = "1..*",
-                    split = ",",
-                    description = {"number of successes (default: ${DEFAULT-VALUE})."})
-            private int[] successes = {50, 60, 70};
+            /**
+             * The distribution N.
+             */
+            @Option(names = { "-N", "--population-size" }, paramLabel = "N", arity = "1..*", split = ",", description = { "population size (default: ${DEFAULT-VALUE})." })
+            private int[] popSize = { 500 };
 
-            /** The distribution n. */
-            @Option(names = {"-n", "--sample-size"},
-                    arity = "1..*",
-                    split = ",",
-                    description = {"sample size (default: ${DEFAULT-VALUE})."})
-            private int[] n = {100, 200, 300};
+            /**
+             * The distribution successes.
+             */
+            @Option(names = { "-K", "--number-of-successes" }, paramLabel = "K", arity = "1..*", split = ",", description = { "number of successes (default: ${DEFAULT-VALUE})." })
+            private int[] successes = { 50, 60, 70 };
+
+            /**
+             * The distribution n.
+             */
+            @Option(names = { "-n", "--sample-size" }, arity = "1..*", split = ",", description = { "sample size (default: ${DEFAULT-VALUE})." })
+            private int[] n = { 100, 200, 300 };
         }
 
-        /** Extend the options to set the default values for this distribution. */
+        /**
+         * Extend the options to set the default values for this distribution.
+         */
         static final class Options extends DiscreteDistributionOptions {
-            /** Set defaults. */
+
+            /**
+             * Set defaults.
+             */
             private Options() {
                 min = 0;
                 max = 60;
@@ -84,84 +81,90 @@ class HypergeometricCommand extends AbstractDistributionCommand {
 
         @Override
         protected List<Distribution<DiscreteDistribution>> getDistributions() {
-            int[] popSize = params.popSize;
-            int[] successes = params.successes;
-            int[] n = params.n;
-            final int max = DistributionUtils.validateLengths(popSize.length, successes.length);
-
-            popSize = DistributionUtils.expandToLength(popSize, max);
-            successes = DistributionUtils.expandToLength(successes, max);
-            n = DistributionUtils.expandToLength(n, max);
-
-            // Create distributions
-            final ArrayList<Distribution<DiscreteDistribution>> list = new ArrayList<>();
-            for (int i = 0; i < max; i++) {
-                final DiscreteDistribution d = HypergeometricDistribution.of(popSize[i], successes[i], n[i]);
-                list.add(new Distribution<>(d, "N=" + popSize[i] + ",K=" + successes[i] + ",n=" + n[i]));
-            }
-            return list;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    /** Base command for the distribution that defines the parameters. */
+    /**
+     * Base command for the distribution that defines the parameters.
+     */
     private abstract static class ProbabilityCommand extends BaseCommand {
-        /** The distribution options. */
+
+        /**
+         * The distribution options.
+         */
         @ArgGroup(validate = false, heading = "Evaluation options:%n", order = 2)
         private Options distributionOptions = new Options();
 
         @Override
         protected DistributionOptions getDistributionOptions() {
-            return distributionOptions;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    /** Base command for the distribution that defines the parameters for inverse probability functions. */
+    /**
+     * Base command for the distribution that defines the parameters for inverse probability functions.
+     */
     private abstract static class InverseProbabilityCommand extends BaseCommand {
-        /** The distribution options. */
+
+        /**
+         * The distribution options.
+         */
         @ArgGroup(validate = false, heading = "Evaluation options:%n", order = 2)
         private InverseDiscreteDistributionOptions distributionOptions = new InverseDiscreteDistributionOptions();
 
         @Override
         protected DistributionOptions getDistributionOptions() {
-            return distributionOptions;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    /** Verification checks command. */
-    @Command(name = "check",
-             hidden = true,
-             description = "Hypergeometric distribution verification checks.")
-    static class Check extends ProbabilityCommand {}
+    /**
+     * Verification checks command.
+     */
+    @Command(name = "check", hidden = true, description = "Hypergeometric distribution verification checks.")
+    static class Check extends ProbabilityCommand {
+    }
 
-    /** PMF command. */
-    @Command(name = "pmf",
-             aliases = {"pdf"},
-             description = "Hypergeometric distribution PMF.")
-    static class PMF extends ProbabilityCommand {}
+    /**
+     * PMF command.
+     */
+    @Command(name = "pmf", aliases = { "pdf" }, description = "Hypergeometric distribution PMF.")
+    static class PMF extends ProbabilityCommand {
+    }
 
-    /** LPMF command. */
-    @Command(name = "lpmf",
-             aliases = {"lpdf"},
-             description = "Hypergeometric distribution natural logarithm of the PMF.")
-    static class LPMF extends ProbabilityCommand {}
+    /**
+     * LPMF command.
+     */
+    @Command(name = "lpmf", aliases = { "lpdf" }, description = "Hypergeometric distribution natural logarithm of the PMF.")
+    static class LPMF extends ProbabilityCommand {
+    }
 
-    /** CDF command. */
-    @Command(name = "cdf",
-             description = "Hypergeometric distribution CDF.")
-    static class CDF extends ProbabilityCommand {}
+    /**
+     * CDF command.
+     */
+    @Command(name = "cdf", description = "Hypergeometric distribution CDF.")
+    static class CDF extends ProbabilityCommand {
+    }
 
-    /** SF command. */
-    @Command(name = "sf",
-             description = "Hypergeometric distribution survival probability.")
-    static class SF extends ProbabilityCommand {}
+    /**
+     * SF command.
+     */
+    @Command(name = "sf", description = "Hypergeometric distribution survival probability.")
+    static class SF extends ProbabilityCommand {
+    }
 
-    /** ICDF command. */
-    @Command(name = "icdf",
-             description = "Hypergeometric distribution inverse CDF.")
-    static class ICDF extends InverseProbabilityCommand {}
+    /**
+     * ICDF command.
+     */
+    @Command(name = "icdf", description = "Hypergeometric distribution inverse CDF.")
+    static class ICDF extends InverseProbabilityCommand {
+    }
 
-    /** ISF command. */
-    @Command(name = "isf",
-             description = "Hypergeometric distribution inverse SF.")
-    static class ISF extends InverseProbabilityCommand {}
+    /**
+     * ISF command.
+     */
+    @Command(name = "isf", description = "Hypergeometric distribution inverse SF.")
+    static class ISF extends InverseProbabilityCommand {
+    }
 }

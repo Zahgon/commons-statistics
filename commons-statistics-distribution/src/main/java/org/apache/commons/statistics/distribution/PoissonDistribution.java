@@ -37,9 +37,15 @@ import org.apache.commons.rng.sampling.distribution.ZigguratSampler;
  * @see <a href="https://mathworld.wolfram.com/PoissonDistribution.html">Poisson distribution (MathWorld)</a>
  */
 public final class PoissonDistribution extends AbstractDiscreteDistribution {
-    /** Upper bound on the mean to use the PoissonSampler. */
+
+    /**
+     * Upper bound on the mean to use the PoissonSampler.
+     */
     private static final double MAX_MEAN = 0.5 * Integer.MAX_VALUE;
-    /** Mean of the distribution. */
+
+    /**
+     * Mean of the distribution.
+     */
     private final double mean;
 
     /**
@@ -58,58 +64,47 @@ public final class PoissonDistribution extends AbstractDiscreteDistribution {
      * @throws IllegalArgumentException if {@code mean <= 0}.
      */
     public static PoissonDistribution of(double mean) {
-        if (mean <= 0) {
-            throw new DistributionException(DistributionException.NOT_STRICTLY_POSITIVE, mean);
-        }
-        return new PoissonDistribution(mean);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double probability(int x) {
-        return Math.exp(logProbability(x));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double logProbability(int x) {
-        if (x < 0) {
-            return Double.NEGATIVE_INFINITY;
-        } else if (x == 0) {
-            return -mean;
-        }
-        return -SaddlePointExpansionUtils.getStirlingError(x) -
-              SaddlePointExpansionUtils.getDeviancePart(x, mean) -
-              Constants.HALF_LOG_TWO_PI - 0.5 * Math.log(x);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double cumulativeProbability(int x) {
-        if (x < 0) {
-            return 0;
-        } else if (x == 0) {
-            return Math.exp(-mean);
-        }
-        return RegularizedGamma.Q.value((double) x + 1, mean);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double survivalProbability(int x) {
-        if (x < 0) {
-            return 1;
-        } else if (x == 0) {
-            // 1 - exp(-mean)
-            return -Math.expm1(-mean);
-        }
-        return RegularizedGamma.P.value((double) x + 1, mean);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double getMean() {
-        return mean;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -119,7 +114,7 @@ public final class PoissonDistribution extends AbstractDiscreteDistribution {
      */
     @Override
     public double getVariance() {
-        return getMean();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -131,7 +126,7 @@ public final class PoissonDistribution extends AbstractDiscreteDistribution {
      */
     @Override
     public int getSupportLowerBound() {
-        return 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -143,27 +138,14 @@ public final class PoissonDistribution extends AbstractDiscreteDistribution {
      */
     @Override
     public int getSupportUpperBound() {
-        return Integer.MAX_VALUE;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public DiscreteDistribution.Sampler createSampler(final UniformRandomProvider rng) {
-        // Poisson distribution sampler.
-        // Large means are not supported.
-        // See STATISTICS-35.
-        final double mu = getMean();
-        if (mu < MAX_MEAN) {
-            return PoissonSampler.of(rng, mu)::sample;
-        }
-        // Switch to a Gaussian approximation.
-        // Use a 0.5 shift to round samples to the correct integer.
-        final SharedStateContinuousSampler s =
-            GaussianSampler.of(ZigguratSampler.NormalizedGaussian.of(rng),
-                               mu + 0.5, Math.sqrt(mu));
-        return () -> {
-            final double x = s.sample();
-            return Math.max(0, (int) x);
-        };
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

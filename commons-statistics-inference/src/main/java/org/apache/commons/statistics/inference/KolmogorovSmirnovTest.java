@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.apache.commons.statistics.inference;
 
 import java.util.Arrays;
@@ -70,43 +69,83 @@ import org.apache.commons.rng.UniformRandomProvider;
  * @since 1.1
  */
 public final class KolmogorovSmirnovTest {
-    /** Name for sample 1. */
+
+    /**
+     * Name for sample 1.
+     */
     private static final String SAMPLE_1_NAME = "Sample 1";
-    /** Name for sample 2. */
+
+    /**
+     * Name for sample 2.
+     */
     private static final String SAMPLE_2_NAME = "Sample 2";
-    /** When the largest sample size exceeds this value, 2-sample test AUTO p-value
-     * uses an asymptotic distribution to compute the p-value. */
+
+    /**
+     * When the largest sample size exceeds this value, 2-sample test AUTO p-value
+     * uses an asymptotic distribution to compute the p-value.
+     */
     private static final int LARGE_SAMPLE = 10000;
-    /** Maximum finite factorial. */
+
+    /**
+     * Maximum finite factorial.
+     */
     private static final int MAX_FACTORIAL = 170;
-    /** Maximum length of an array. This is used to determine if two arrays can be concatenated
+
+    /**
+     * Maximum length of an array. This is used to determine if two arrays can be concatenated
      * to create a sampler from the joint distribution. The limit is copied from the limit
-     * of java.util.ArrayList. */
+     * of java.util.ArrayList.
+     */
     private static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
-    /** The maximum least common multiple (lcm) to attempt the exact p-value computation.
+
+    /**
+     * The maximum least common multiple (lcm) to attempt the exact p-value computation.
      * The integral d value is in [0, n*m] in steps of the greatest common denominator (gcd),
      * thus lcm = n*m/gcd is the number of possible different p-values.
      * Some methods have a lower limit due to computation limits. This should be larger
      * than LARGE_SAMPLE^2 so all AUTO p-values attempt an exact computation, i.e.
-     * at least 10000^2 ~ 2^26.56. */
+     * at least 10000^2 ~ 2^26.56.
+     */
     private static final long MAX_LCM_TWO_SAMPLE_EXACT_P = 1L << 31;
-    /** Placeholder to use for the two-sample sign array when the value can be ignored. */
-    private static final int[] IGNORED_SIGN = new int[1];
-    /** Placeholder to use for the two-sample ties D array when the value can be ignored. */
-    private static final long[] IGNORED_D = new long[2];
-    /** Default instance. */
-    private static final KolmogorovSmirnovTest DEFAULT = new KolmogorovSmirnovTest(
-        AlternativeHypothesis.TWO_SIDED, PValueMethod.AUTO, false, null, 1000);
 
-    /** Alternative hypothesis. */
+    /**
+     * Placeholder to use for the two-sample sign array when the value can be ignored.
+     */
+    private static final int[] IGNORED_SIGN = new int[1];
+
+    /**
+     * Placeholder to use for the two-sample ties D array when the value can be ignored.
+     */
+    private static final long[] IGNORED_D = new long[2];
+
+    /**
+     * Default instance.
+     */
+    private static final KolmogorovSmirnovTest DEFAULT = new KolmogorovSmirnovTest(AlternativeHypothesis.TWO_SIDED, PValueMethod.AUTO, false, null, 1000);
+
+    /**
+     * Alternative hypothesis.
+     */
     private final AlternativeHypothesis alternative;
-    /** Method to compute the p-value. */
+
+    /**
+     * Method to compute the p-value.
+     */
     private final PValueMethod pValueMethod;
-    /** Use a strict inequality for the two-sample exact p-value. */
+
+    /**
+     * Use a strict inequality for the two-sample exact p-value.
+     */
     private final boolean strictInequality;
-    /** Source of randomness. */
+
+    /**
+     * Source of randomness.
+     */
     private final UniformRandomProvider rng;
-    /** Number of iterations . */
+
+    /**
+     * Number of iterations .
+     */
     private final int iterations;
 
     /**
@@ -117,7 +156,10 @@ public final class KolmogorovSmirnovTest {
      * @since 1.1
      */
     public static class OneResult extends BaseSignificanceResult {
-        /** Sign of the statistic. */
+
+        /**
+         * Sign of the statistic.
+         */
         private final int sign;
 
         /**
@@ -140,7 +182,7 @@ public final class KolmogorovSmirnovTest {
          * @return the sign
          */
         public int getSign() {
-            return sign;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -152,14 +194,23 @@ public final class KolmogorovSmirnovTest {
      * @since 1.1
      */
     public static final class TwoResult extends OneResult {
-        /** Flag to indicate there were significant ties.
+
+        /**
+         * Flag to indicate there were significant ties.
          * Note that in extreme cases there may be significant ties despite {@code upperD == D}
          * due to rounding when converting the integral statistic to a double. For this
-         * reason the presence of ties is stored as a flag. */
+         * reason the presence of ties is stored as a flag.
+         */
         private final boolean significantTies;
-        /** Upper bound of the D statistic from all possible paths through regions with ties. */
+
+        /**
+         * Upper bound of the D statistic from all possible paths through regions with ties.
+         */
         private final double upperD;
-        /** The p-value of the upper D value. */
+
+        /**
+         * The p-value of the upper D value.
+         */
         private final double upperP;
 
         /**
@@ -207,8 +258,7 @@ public final class KolmogorovSmirnovTest {
          */
         @Override
         public double getStatistic() {
-            // Note: This method is here for documentation
-            return super.getStatistic();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -234,7 +284,7 @@ public final class KolmogorovSmirnovTest {
          * @see #getUpperD()
          */
         public boolean hasSignificantTies() {
-            return significantTies;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -246,7 +296,7 @@ public final class KolmogorovSmirnovTest {
          * @see #hasSignificantTies()
          */
         public double getUpperD() {
-            return upperD;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -270,7 +320,7 @@ public final class KolmogorovSmirnovTest {
          * @see #getUpperD()
          */
         public double getUpperPValue() {
-            return upperP;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -281,8 +331,7 @@ public final class KolmogorovSmirnovTest {
      * @param rng Source of randomness.
      * @param iterations Number of iterations.
      */
-    private KolmogorovSmirnovTest(AlternativeHypothesis alternative, PValueMethod method, boolean strict,
-        UniformRandomProvider rng, int iterations) {
+    private KolmogorovSmirnovTest(AlternativeHypothesis alternative, PValueMethod method, boolean strict, UniformRandomProvider rng, int iterations) {
         this.alternative = alternative;
         this.pValueMethod = method;
         this.strictInequality = strict;
@@ -304,7 +353,7 @@ public final class KolmogorovSmirnovTest {
      * @return default instance
      */
     public static KolmogorovSmirnovTest withDefaults() {
-        return DEFAULT;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -314,7 +363,7 @@ public final class KolmogorovSmirnovTest {
      * @return an instance
      */
     public KolmogorovSmirnovTest with(AlternativeHypothesis v) {
-        return new KolmogorovSmirnovTest(Objects.requireNonNull(v), pValueMethod, strictInequality, rng, iterations);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -333,7 +382,7 @@ public final class KolmogorovSmirnovTest {
      * @see #with(UniformRandomProvider)
      */
     public KolmogorovSmirnovTest with(PValueMethod v) {
-        return new KolmogorovSmirnovTest(alternative, Objects.requireNonNull(v), strictInequality, rng, iterations);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -348,8 +397,7 @@ public final class KolmogorovSmirnovTest {
      * @return an instance
      */
     public KolmogorovSmirnovTest with(Inequality v) {
-        return new KolmogorovSmirnovTest(alternative, pValueMethod,
-            Objects.requireNonNull(v) == Inequality.STRICT, rng, iterations);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -368,8 +416,7 @@ public final class KolmogorovSmirnovTest {
      * @see #with(PValueMethod)
      */
     public KolmogorovSmirnovTest with(UniformRandomProvider v) {
-        return new KolmogorovSmirnovTest(alternative, pValueMethod, strictInequality,
-            Objects.requireNonNull(v), iterations);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -388,8 +435,7 @@ public final class KolmogorovSmirnovTest {
      * @throws IllegalArgumentException if the number of iterations is not strictly positive
      */
     public KolmogorovSmirnovTest withIterations(int v) {
-        return new KolmogorovSmirnovTest(alternative, pValueMethod, strictInequality, rng,
-            Arguments.checkStrictlyPositive(v));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -421,7 +467,7 @@ public final class KolmogorovSmirnovTest {
      * @see #test(double[], DoubleUnaryOperator)
      */
     public double statistic(double[] x, DoubleUnaryOperator cdf) {
-        return computeStatistic(x, cdf, IGNORED_SIGN);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -445,13 +491,7 @@ public final class KolmogorovSmirnovTest {
      * @see #test(double[], double[])
      */
     public double statistic(double[] x, double[] y) {
-        final int n = checkArrayLength(x);
-        final int m = checkArrayLength(y);
-        // Clone to avoid destructive modification of input
-        final long dnm = computeIntegralKolmogorovSmirnovStatistic(x.clone(), y.clone(),
-                IGNORED_SIGN, IGNORED_D);
-        // Re-use the method to compute D in [0, 1] for consistency
-        return computeD(dnm, n, m, ArithmeticUtils.gcd(n, m));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -486,27 +526,7 @@ public final class KolmogorovSmirnovTest {
      * @see #statistic(double[], DoubleUnaryOperator)
      */
     public OneResult test(double[] x, DoubleUnaryOperator cdf) {
-        final int[] sign = {0};
-        final double d = computeStatistic(x, cdf, sign);
-        final double p;
-        if (alternative == AlternativeHypothesis.TWO_SIDED) {
-            PValueMethod method = pValueMethod;
-            if (method == PValueMethod.AUTO) {
-                // No switch to the asymptotic for large n
-                method = PValueMethod.EXACT;
-            }
-            if (method == PValueMethod.ASYMPTOTIC) {
-                // Kolmogorov's asymptotic formula using z = sqrt(n) * d
-                p = KolmogorovSmirnovDistribution.ksSum(Math.sqrt(x.length) * d);
-            } else {
-                // exact
-                p = KolmogorovSmirnovDistribution.Two.sf(d, x.length);
-            }
-        } else {
-            // one-sided: always use exact
-            p = KolmogorovSmirnovDistribution.One.sf(d, x.length);
-        }
-        return new OneResult(d, sign[0], p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -573,52 +593,7 @@ public final class KolmogorovSmirnovTest {
      * @see #statistic(double[], double[])
      */
     public TwoResult test(double[] x, double[] y) {
-        final int n = checkArrayLength(x);
-        final int m = checkArrayLength(y);
-        PValueMethod method = pValueMethod;
-        final int[] sign = {0};
-        final long[] tiesD = {0, 0};
-
-        final double[] sx = x.clone();
-        final double[] sy = y.clone();
-        final long dnm = computeIntegralKolmogorovSmirnovStatistic(sx, sy, sign, tiesD);
-
-        // Compute p-value. Note that the p-value is not invalidated by ties; it is the
-        // D statistic that could be invalidated by resolution of the ties. So compute
-        // the exact p even if ties are present.
-        if (method == PValueMethod.AUTO) {
-            // Use exact for small samples
-            method = Math.max(n, m) < LARGE_SAMPLE ?
-                PValueMethod.EXACT :
-                PValueMethod.ASYMPTOTIC;
-        }
-        final int gcd = ArithmeticUtils.gcd(n, m);
-        final double d = computeD(dnm, n, m, gcd);
-        final boolean significantTies = tiesD[1] > dnm;
-        final double d2 = significantTies ? computeD(tiesD[1], n, m, gcd) : d;
-
-        final double p;
-        final double p2;
-
-        // Allow bootstrap estimation of the p-value
-        if (method == PValueMethod.ESTIMATE) {
-            p = estimateP(sx, sy, dnm);
-            p2 = Double.NaN;
-        } else {
-            final boolean exact = method == PValueMethod.EXACT;
-            p = twoSampleP(dnm, n, m, gcd, d, exact);
-            if (significantTies) {
-                // Compute the upper bound on D.
-                // The p-value is also computed. The alternative is to save the options
-                // in the result with (upper dnm, n, m) and compute it on-demand.
-                // Note detection of whether the exact P computation is possible is based on
-                // n and m, thus this will use the same computation.
-                p2 = twoSampleP(tiesD[1], n, m, gcd, d2, exact);
-            } else {
-                p2 = p;
-            }
-        }
-        return new TwoResult(d, sign[0], p, significantTies, d2, p2);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -647,10 +622,8 @@ public final class KolmogorovSmirnovTest {
         if (rng == null) {
             throw new IllegalStateException("No source of randomness");
         }
-
         // Test if the random statistic is greater (strict), or greater or equal to d
         final long d = strictInequality ? dnm : dnm - 1;
-
         final long plus;
         final long minus;
         if (alternative == AlternativeHypothesis.GREATER_THAN) {
@@ -664,13 +637,11 @@ public final class KolmogorovSmirnovTest {
             plus = d;
             minus = -d;
         }
-
         // Test dnm=0. This occurs for example when x == y.
         if (0 < minus || 0 > plus) {
             // Edge case where all possible d will be outside the inclusive bounds
             return 1;
         }
-
         // Sample randomly with replacement from the combined distribution.
         final DoubleSupplier gen = createSampler(x, y, rng);
         int count = 0;
@@ -790,7 +761,6 @@ public final class KolmogorovSmirnovTest {
         sort(y, SAMPLE_2_NAME);
         final int n = x.length;
         final int m = y.length;
-
         // CDFs range from 0 to 1 using increments of 1/n and 1/m for x and y respectively.
         // Scale by n*m to use increments of m and n for x and y.
         // Find the max difference between cdf_x and cdf_y.
@@ -911,7 +881,6 @@ public final class KolmogorovSmirnovTest {
         Arrays.sort(y);
         final int n = x.length;
         final int m = y.length;
-
         // CDFs range from 0 to 1 using increments of 1/n and 1/m for x and y respectively.
         // Scale by n*m to use increments of m and n for x and y.
         // Find the any difference that exceeds the specified bounds.
@@ -970,8 +939,7 @@ public final class KolmogorovSmirnovTest {
      * @param rng Source of randomness.
      * @return the sampler
      */
-    private static DoubleSupplier createSampler(double[] x, double[] y,
-                                                UniformRandomProvider rng) {
+    private static DoubleSupplier createSampler(double[] x, double[] y, UniformRandomProvider rng) {
         return createSampler(x, y, rng, MAX_ARRAY_SIZE);
     }
 
@@ -985,38 +953,8 @@ public final class KolmogorovSmirnovTest {
      * @param maxArraySize Maximum size of a single array.
      * @return the sampler
      */
-    static DoubleSupplier createSampler(double[] x, double[] y,
-                                        UniformRandomProvider rng,
-                                        int maxArraySize) {
-        final int n = x.length;
-        final int m = y.length;
-        final int len = n + m;
-        // Overflow safe: len > maxArraySize
-        if (len - maxArraySize > 0) {
-            // Support sampling with maximum length arrays
-            // (where a concatenated array is not possible)
-            // by choosing one or the other.
-            // - generate i in [-n, m)
-            // - return i < 0 ? x[n + i] : y[i]
-            // The sign condition is a 50-50 branch.
-            // Perform branchless by extracting the sign bit to pick the array.
-            // Copy the source data.
-            final double[] xx = x.clone();
-            final double[] yy = y.clone();
-            final IntToDoubleFunction nextX = i -> xx[n + i];
-            final IntToDoubleFunction nextY = i -> yy[i];
-            // Arrange function which accepts the negative index at position [1]
-            final IntToDoubleFunction[] next = {nextY, nextX};
-            return () -> {
-                final int i = rng.nextInt(-n, m);
-                return next[i >>> 31].applyAsDouble(i);
-            };
-        }
-        // Concatenate arrays
-        final double[] z = new double[len];
-        System.arraycopy(x, 0, z, 0, n);
-        System.arraycopy(y, 0, z, n, m);
-        return () -> z[rng.nextInt(len)];
+    static DoubleSupplier createSampler(double[] x, double[] y, UniformRandomProvider rng, int maxArraySize) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1083,40 +1021,7 @@ public final class KolmogorovSmirnovTest {
      *         greater than (resp. greater than or equal to) {@code d} (or -1)
      */
     static double twoSampleExactP(long dnm, int n, int m, int gcd, boolean strict, boolean twoSided) {
-        // Create the statistic in [0, lcm]
-        // For strict inequality D > d the result is the same if we compute for D >= (d+1)
-        final long d = dnm / gcd + (strict ? 1 : 0);
-
-        // P-value methods compute for d <= lcm (least common multiple)
-        final long lcm = (long) n * (m / gcd);
-        if (d > lcm) {
-            return 0;
-        }
-
-        // Note: Some methods require m >= n, others n >= m
-        final int a = Math.min(n, m);
-        final int b = Math.max(n, m);
-
-        if (twoSided) {
-            // Any two-sided statistic dnm cannot be less than min(n, m) in the absence of ties.
-            if (d * gcd <= a) {
-                return 1;
-            }
-            // Here d in [2, lcm]
-            if (n == m) {
-                return twoSampleTwoSidedPOutsideSquare(d, n);
-            }
-            return twoSampleTwoSidedPStabilizedInner(d, b, a, gcd);
-        }
-        // Any one-sided statistic cannot be less than 0
-        if (d <= 0) {
-            return 1;
-        }
-        // Here d in [1, lcm]
-        if (n == m) {
-            return twoSampleOneSidedPOutsideSquare(d, n);
-        }
-        return twoSampleOneSidedPOutside(d, a, b, gcd);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1145,13 +1050,11 @@ public final class KolmogorovSmirnovTest {
         if ((long) n * (m / gcd) > MAX_LCM_TWO_SAMPLE_EXACT_P) {
             return -1;
         }
-
         // This could be updated to use d in [1, lcm].
         // Currently it uses d in [gcd, n*m].
         // Largest intermediate value is (dnm + im + n) which is within 2^63
         // if n and m are 2^31-1, i = n, dnm = n*m: (2^31-1)^2 + (2^31-1)^2 + 2^31-1 < 2^63
         final long dnm = d * gcd;
-
         // Viehmann (2021): Updated for i in [0, n], j in [0, m]
         // C_i,j = 1                                      if |i/n - j/m| >= d
         //       = 0                                      if |i/n - j/m| < d and (i=0 or j=0)
@@ -1167,11 +1070,9 @@ public final class KolmogorovSmirnovTest {
         // j = floor((im - dnm) / n) + 1      in [0, m]
         // endJ where: jn - im >= dnm
         // j = ceil((dnm + im) / n)           in [0, m+1]
-
         // First iteration with i = 0
         // j = ceil(dnm / n)
         int endJ = Math.min(m + 1, (int) ((dnm + n - 1) / n));
-
         // Only require 1 array to store C_i-1,j as the startJ only ever increases
         // and we update lower indices using higher ones.
         // The maximum value *written* is j=m or less using j/m <= 2*d : j = ceil(2*d*m)
@@ -1181,7 +1082,6 @@ public final class KolmogorovSmirnovTest {
         // which occurs if m <= n, i.e. the window only slides 0 or 1 in j for each increment i
         // and we can maintain Cij as 1 larger than ceil(2*d*m) + 1.
         final double[] cij = new double[Math.min(m + 1, 2 * endJ + 2)];
-
         // Each iteration fills C_i,j with values and the remaining values are
         // kept as 1 for |i/n - j/m| >= d
         //assert (endJ - 1) * (long) n < dnm : "jn >= dnm for j < endJ";
@@ -1189,7 +1089,6 @@ public final class KolmogorovSmirnovTest {
             //assert j * (long) n >= dnm : "jn < dnm for j >= endJ";
             cij[j] = 1;
         }
-
         int startJ = 0;
         int length = endJ;
         double val = -1;
@@ -1197,23 +1096,18 @@ public final class KolmogorovSmirnovTest {
         for (int i = 1; i <= n; i++) {
             im += m;
             final int lastStartJ = startJ;
-
             // Compute C_i,j for startJ <= j < endJ
             // startJ = floor((im - dnm) / n) + 1      in [0, m]
             // endJ   = ceil((dnm + im) / n)           in [0, m+1]
             startJ = im < dnm ? 0 : Math.min(m, (int) ((im - dnm) / n) + 1);
             endJ = Math.min(m + 1, (int) ((dnm + im + n - 1) / n));
-
             if (startJ >= endJ) {
                 // No possible paths inside the boundary
                 return 1;
             }
-
             //assert startJ - lastStartJ <= 1 : "startJ - lastStartJ > 1";
-
             // Initialize previous value C_i,j-1
             val = startJ == 0 ? 0 : 1;
-
             //assert startJ == 0 || Math.abs(im - (startJ - 1) * (long) n) >= dnm : "|im - jn| < dnm for j < startJ";
             //assert endJ > m || Math.abs(im - endJ * (long) n) >= dnm : "|im - jn| < dnm for j >= endJ";
             for (int j = startJ; j < endJ; j++) {
@@ -1225,7 +1119,6 @@ public final class KolmogorovSmirnovTest {
                 val = (cij[j - lastStartJ] * i + val * j) / ((double) i + j);
                 cij[j - startJ] = val;
             }
-
             // Must keep the remaining values in C_i,j as 1 to allow
             // cij[j - lastStartJ] * i == i when (j - lastStartJ) > lastLength
             final int lastLength = length;
@@ -1263,7 +1156,6 @@ public final class KolmogorovSmirnovTest {
         // B(x, y) = binom(x+y, y) - [number of ways which previously reached the boundary]
         // Total paths:
         // sum_y { B(x, y) binom(m+n-x-y, n-y) }
-
         // Normalized by binom(m+n, n). Check this is possible.
         final long lm = m;
         if (n + lm > Integer.MAX_VALUE) {
@@ -1273,11 +1165,9 @@ public final class KolmogorovSmirnovTest {
         if (binom == Double.POSITIVE_INFINITY) {
             return -1;
         }
-
         // This could be updated to use d in [1, lcm].
         // Currently it uses d in [gcd, n*m].
         final long dnm = d * gcd;
-
         // Visit all x in [0, m] where (nx - my) >= d for each increasing y in [0, n].
         // x = ceil( (d + my) / n ) = (d + my + n - 1) / n
         // y = ceil( (nx - d) / m ) = (nx - d + m - 1) / m
@@ -1337,7 +1227,6 @@ public final class KolmogorovSmirnovTest {
         // p = binom(2n, n-a) / binom(2n, n)
         // a in [1, n] == d * n == dnm / n
         final int a = (int) d;
-
         // Rearrange:
         // p = ( 2n! / ((n-a)! (n+a)!) ) / ( 2n! / (n! n!) )
         //   = n! n! / ( (n-a)! (n+a)! )
@@ -1352,7 +1241,6 @@ public final class KolmogorovSmirnovTest {
         //       n * (n-1) * ... * (n-a+1)
         //   = -----------------------------
         //     (n+a) * (n+a-1) * ... * (n+1)
-
         double p = 1;
         for (int i = 0; i < a && p != 0; i++) {
             p *= (n - i) / (1.0 + n + i);
@@ -1376,7 +1264,6 @@ public final class KolmogorovSmirnovTest {
         // Hodges (1958) Eq. 2.4:
         // p = 2 [ binom(2n, n-a) - binom(2n, n-2a) + binom(2n, n-3a) - ... ] / binom(2n, n)
         // a in [1, n] == d * n == dnm / n
-
         // As per twoSampleOneSidedPOutsideSquare, divide by binom(2n, n) and each term
         // can be expressed as a product:
         //         (             n - i                    n - i                   n - i         )
@@ -1386,7 +1273,6 @@ public final class KolmogorovSmirnovTest {
         // Avoid repeat computation of terms by extracting common products:
         // p = 2 * ( p0a * (1 - p1a * (1 - p2a * (1 - ... ))) )
         // where each term pja is prod_i={ja}^{ja+a} for all j in [1, n / a]
-
         // The first term is the one-sided p.
         final double p0a = twoSampleOneSidedPOutsideSquare(d, n);
         if (p0a == 0) {
@@ -1440,19 +1326,7 @@ public final class KolmogorovSmirnovTest {
      *         \(D_{n,m}\) greater than {@code d}
      */
     static double twoSampleApproximateP(double d, int n, int m, boolean twoSided) {
-        final double nn = Math.min(n, m);
-        final double mm = Math.max(n, m);
-        if (twoSided) {
-            // Smirnov's asymptotic formula:
-            // P(sqrt(N) D_n > x)
-            // N = m*n/(m+n)
-            return KolmogorovSmirnovDistribution.Two.sf(d, (int) Math.round(mm * nn / (mm + nn)));
-        }
-        // one-sided
-        // Use Hodges Eq 5.3. Requires m >= n
-        // Correct for m=n, m an integral multiple of n, and 'on the average' for m nearly equal to n
-        final double z = d * Math.sqrt(nn * mm / (nn + mm));
-        return Math.exp(-2 * z * z - 2 * z * (mm + 2 * nn) / Math.sqrt(mm * nn * (mm + nn)) / 3);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**

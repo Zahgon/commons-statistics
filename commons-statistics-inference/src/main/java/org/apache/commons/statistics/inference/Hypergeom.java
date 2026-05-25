@@ -29,26 +29,50 @@ import org.apache.commons.statistics.distribution.HypergeometricDistribution;
  * @since 1.1
  */
 class Hypergeom {
-    /** 1/2. */
+
+    /**
+     * 1/2.
+     */
     private static final double HALF = 0.5;
-    /** The lower bound of the support (inclusive). */
+
+    /**
+     * The lower bound of the support (inclusive).
+     */
     private final int lowerBound;
-    /** The upper bound of the support (inclusive). */
+
+    /**
+     * The upper bound of the support (inclusive).
+     */
     private final int upperBound;
-    /** Cached probability values. This holds values from x=0 even though the supported
+
+    /**
+     * Cached probability values. This holds values from x=0 even though the supported
      * lower bound may be above x=0. This allows x to be used as an index without offsetting
-     * using the lower bound. */
+     * using the lower bound.
+     */
     private final double[] prob;
-    /** Cached midpoint, m, of the CDF/SF. This is not the true median. It is the value where
+
+    /**
+     * Cached midpoint, m, of the CDF/SF. This is not the true median. It is the value where
      * the CDF is closest to 0.5; as such the CDF(m) may be below 0.5 if the next value
-     * CDF(m+1) is further from 0.5. Used for the cumulative probability functions. */
+     * CDF(m+1) is further from 0.5. Used for the cumulative probability functions.
+     */
     private final int m;
-    /** Cached CDF of the midpoint.
-     * Used for the cumulative probability functions. */
+
+    /**
+     * Cached CDF of the midpoint.
+     * Used for the cumulative probability functions.
+     */
     private final double midCDF;
-    /** Lower mode. */
+
+    /**
+     * Lower mode.
+     */
     private final int m1;
-    /** Upper mode. */
+
+    /**
+     * Upper mode.
+     */
     private final int m2;
 
     /**
@@ -56,24 +80,17 @@ class Hypergeom {
      * @param numberOfSuccesses Number of successes in the population.
      * @param sampleSize Sample size.
      */
-    Hypergeom(int populationSize,
-              int numberOfSuccesses,
-              int sampleSize) {
-        final HypergeometricDistribution dist =
-            HypergeometricDistribution.of(populationSize, numberOfSuccesses, sampleSize);
-
+    Hypergeom(int populationSize, int numberOfSuccesses, int sampleSize) {
+        final HypergeometricDistribution dist = HypergeometricDistribution.of(populationSize, numberOfSuccesses, sampleSize);
         // Cache all values required to compute the cumulative probability functions
-
         // Bounds
         lowerBound = dist.getSupportLowerBound();
         upperBound = dist.getSupportUpperBound();
-
         // PMF values
         prob = new double[upperBound + 1];
         for (int x = lowerBound; x <= upperBound; x++) {
             prob[x] = dist.probability(x);
         }
-
         // Compute mid-point for CDF/SF computation
         // Find the closest sum(PDF) to 0.5.
         int x = lowerBound;
@@ -94,7 +111,6 @@ class Hypergeom {
         }
         m = x;
         midCDF = p1;
-
         // Compute the mode (lower != upper in the case where v is integer).
         // This value is used by the UnconditionedExactTest and is cached here for convenience.
         final double v = ((double) numberOfSuccesses + 1) * ((double) sampleSize + 1) / (populationSize + 2.0);
@@ -108,7 +124,7 @@ class Hypergeom {
      * @return lower bound
      */
     int getSupportLowerBound() {
-        return lowerBound;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -117,7 +133,7 @@ class Hypergeom {
      * @return upper bound
      */
     int getSupportUpperBound() {
-        return upperBound;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -126,7 +142,7 @@ class Hypergeom {
      * @return lower mode
      */
     int getLowerMode() {
-        return m1;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -135,7 +151,7 @@ class Hypergeom {
      * @return upper mode
      */
     int getUpperMode() {
-        return m2;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -146,7 +162,7 @@ class Hypergeom {
      * @throws IndexOutOfBoundsException if the value {@code x} is not in the supported domain.
      */
     double pmf(int x) {
-        return prob[x];
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -156,18 +172,7 @@ class Hypergeom {
      * @return P(X <= x)
      */
     double cdf(int x) {
-        if (x < lowerBound) {
-            return 0.0;
-        } else if (x >= upperBound) {
-            return 1.0;
-        }
-        if (x < m) {
-            return innerCumulativeProbability(lowerBound, x);
-        } else if (x > m) {
-            return 1 - innerCumulativeProbability(upperBound, x + 1);
-        }
-        // cdf(x)
-        return midCDF;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -178,18 +183,7 @@ class Hypergeom {
      * @return P(X > x)
      */
     double sf(int x) {
-        if (x < lowerBound) {
-            return 1.0;
-        } else if (x >= upperBound) {
-            return 0.0;
-        }
-        if (x < m) {
-            return 1 - innerCumulativeProbability(lowerBound, x);
-        } else if (x > m) {
-            return innerCumulativeProbability(upperBound, x + 1);
-        }
-        // 1 - cdf(x)
-        return 1 - midCDF;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**

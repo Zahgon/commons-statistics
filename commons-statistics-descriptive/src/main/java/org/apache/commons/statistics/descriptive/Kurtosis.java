@@ -91,12 +91,18 @@ package org.apache.commons.statistics.descriptive;
  * @since 1.1
  */
 public final class Kurtosis implements DoubleStatistic, StatisticAccumulator<Kurtosis> {
-    /** 2, the length limit where the biased skewness is undefined.
+
+    /**
+     * 2, the length limit where the biased skewness is undefined.
      * This limit effectively imposes the result m4 / m2^2 = 0 / 0 = NaN when 1 value
      * has been added. Note that when more samples are added and the variance
-     * approaches zero the result is also returned as NaN. */
+     * approaches zero the result is also returned as NaN.
+     */
     private static final int LENGTH_TWO = 2;
-    /** 4, the length limit where the kurtosis is undefined. */
+
+    /**
+     * 4, the length limit where the kurtosis is undefined.
+     */
     private static final int LENGTH_FOUR = 4;
 
     /**
@@ -105,7 +111,9 @@ public final class Kurtosis implements DoubleStatistic, StatisticAccumulator<Kur
      */
     private final SumOfFourthDeviations sq;
 
-    /** Flag to control if the statistic is biased, or should use a bias correction. */
+    /**
+     * Flag to control if the statistic is biased, or should use a bias correction.
+     */
     private boolean biased;
 
     /**
@@ -132,7 +140,7 @@ public final class Kurtosis implements DoubleStatistic, StatisticAccumulator<Kur
      * @return {@code Kurtosis} instance.
      */
     public static Kurtosis create() {
-        return new Kurtosis();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -145,7 +153,7 @@ public final class Kurtosis implements DoubleStatistic, StatisticAccumulator<Kur
      * @return {@code Kurtosis} instance.
      */
     public static Kurtosis of(double... values) {
-        return new Kurtosis(SumOfFourthDeviations.of(values));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -162,8 +170,7 @@ public final class Kurtosis implements DoubleStatistic, StatisticAccumulator<Kur
      * @since 1.2
      */
     public static Kurtosis ofRange(double[] values, int from, int to) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return new Kurtosis(SumOfFourthDeviations.ofRange(values, from, to));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -176,7 +183,7 @@ public final class Kurtosis implements DoubleStatistic, StatisticAccumulator<Kur
      * @return {@code Kurtosis} instance.
      */
     public static Kurtosis of(int... values) {
-        return new Kurtosis(SumOfFourthDeviations.of(values));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -193,8 +200,7 @@ public final class Kurtosis implements DoubleStatistic, StatisticAccumulator<Kur
      * @since 1.2
      */
     public static Kurtosis ofRange(int[] values, int from, int to) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return new Kurtosis(SumOfFourthDeviations.ofRange(values, from, to));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -207,7 +213,7 @@ public final class Kurtosis implements DoubleStatistic, StatisticAccumulator<Kur
      * @return {@code Kurtosis} instance.
      */
     public static Kurtosis of(long... values) {
-        return new Kurtosis(SumOfFourthDeviations.of(values));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -224,8 +230,7 @@ public final class Kurtosis implements DoubleStatistic, StatisticAccumulator<Kur
      * @since 1.2
      */
     public static Kurtosis ofRange(long[] values, int from, int to) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return new Kurtosis(SumOfFourthDeviations.ofRange(values, from, to));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -235,7 +240,7 @@ public final class Kurtosis implements DoubleStatistic, StatisticAccumulator<Kur
      */
     @Override
     public void accept(double value) {
-        sq.accept(value);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -247,38 +252,12 @@ public final class Kurtosis implements DoubleStatistic, StatisticAccumulator<Kur
      */
     @Override
     public double getAsDouble() {
-        // This method checks the sum of squared or fourth deviations is finite
-        // to provide a consistent NaN when the computation is not possible.
-
-        if (sq.n < (biased ? LENGTH_TWO : LENGTH_FOUR)) {
-            return Double.NaN;
-        }
-        final double x2 = sq.getSumOfSquaredDeviations();
-        if (!Double.isFinite(x2)) {
-            return Double.NaN;
-        }
-        final double x4 = sq.getSumOfFourthDeviations();
-        if (!Double.isFinite(x4)) {
-            return Double.NaN;
-        }
-        // Avoid a divide by zero; for a negligible variance return NaN.
-        // Note: Commons Math returns zero if variance is < 1e-19.
-        final double m2 = x2 / sq.n;
-        if (Statistics.zeroVariance(sq.getFirstMoment(), m2)) {
-            return Double.NaN;
-        }
-        final double m4 = x4 / sq.n;
-        if (biased) {
-            return m4 / (m2 * m2) - 3;
-        }
-        final double n = sq.n;
-        return ((n * n - 1) * m4 / (m2 * m2) - 3 * (n - 1) * (n - 1)) / ((n - 2) * (n - 3));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Kurtosis combine(Kurtosis other) {
-        sq.combine(other.sq);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -293,7 +272,6 @@ public final class Kurtosis implements DoubleStatistic, StatisticAccumulator<Kur
      * @return {@code this} instance
      */
     public Kurtosis setBiased(boolean v) {
-        biased = v;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

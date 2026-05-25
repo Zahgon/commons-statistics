@@ -64,12 +64,20 @@ import java.util.function.DoubleConsumer;
  * @since 1.1
  */
 class FirstMoment implements DoubleConsumer {
-    /** The downscale constant. Used to avoid overflow for all finite input. */
+
+    /**
+     * The downscale constant. Used to avoid overflow for all finite input.
+     */
     private static final double DOWNSCALE = 0.5;
-    /** The rescale constant. */
+
+    /**
+     * The rescale constant.
+     */
     private static final double RESCALE = 2;
 
-    /** Count of values that have been added. */
+    /**
+     * Count of values that have been added.
+     */
     protected long n;
 
     /**
@@ -95,9 +103,11 @@ class FirstMoment implements DoubleConsumer {
      */
     protected double nDev;
 
-    /** First moment of values that have been added.
+    /**
+     * First moment of values that have been added.
      * This is stored as a half value to prevent overflow for any finite input.
-     * Benchmarks show this has negligible performance impact. */
+     * Benchmarks show this has negligible performance impact.
+     */
     private double m1;
 
     /**
@@ -148,12 +158,7 @@ class FirstMoment implements DoubleConsumer {
      * @return {@code FirstMoment} instance.
      */
     static FirstMoment of(double... values) {
-        if (values.length == 0) {
-            return new FirstMoment();
-        }
-        // In the typical use-case a sum of values will not overflow and
-        // is faster than the rolling algorithm
-        return createFromRange(org.apache.commons.numbers.core.Sum.of(values), values, 0, values.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -172,10 +177,7 @@ class FirstMoment implements DoubleConsumer {
      * @since 1.2
      */
     static FirstMoment ofRange(double[] values, int from, int to) {
-        if (from == to) {
-            return new FirstMoment();
-        }
-        return createFromRange(Statistics.sum(values, from, to), values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -195,37 +197,8 @@ class FirstMoment implements DoubleConsumer {
      * @param to Exclusive end of the range.
      * @return {@code FirstMoment} instance.
      */
-    static FirstMoment createFromRange(org.apache.commons.numbers.core.Sum sum,
-                                       double[] values, int from, int to) {
-        // Protect against empty values
-        if (from == to) {
-            return new FirstMoment();
-        }
-
-        final double s = sum.getAsDouble();
-        if (Double.isFinite(s)) {
-            return new FirstMoment(s / (to - from), to - from);
-        }
-
-        // "Corrected two-pass algorithm"
-
-        // First pass
-        final FirstMoment m1 = create(values, from, to);
-        final double xbar = m1.getFirstMoment();
-        if (!Double.isFinite(xbar)) {
-            return m1;
-        }
-        // Second pass
-        double correction = 0;
-        for (int i = from; i < to; i++) {
-            correction += values[i] - xbar;
-        }
-        // Note: Correction may be infinite
-        if (Double.isFinite(correction)) {
-            // Down scale the correction to the half representation
-            m1.m1 += DOWNSCALE * correction / m1.n;
-        }
-        return m1;
+    static FirstMoment createFromRange(org.apache.commons.numbers.core.Sum sum, double[] values, int from, int to) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -285,20 +258,7 @@ class FirstMoment implements DoubleConsumer {
      */
     @Override
     public void accept(double value) {
-        // "Updating one-pass algorithm"
-        // See: Chan et al (1983) Equation 1.3a
-        // m_{i+1} = m_i + (x - m_i) / (i + 1)
-        // This is modified with scaling to avoid overflow for all finite input.
-        // Scaling the input down by a factor of two ensures that the scaling is lossless.
-        // Sub-classes must alter their scaling factors when using the computed deviations.
-
-        // Note: Maintain the correct non-finite result.
-        // Scaling down values prevents overflow of finites.
-        nonFiniteValue += value * Double.MIN_NORMAL;
-        // Scale down the input
-        dev = value * DOWNSCALE - m1;
-        nDev = dev / ++n;
-        m1 += nDev;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -311,13 +271,7 @@ class FirstMoment implements DoubleConsumer {
      *         {@code NaN} otherwise.
      */
     double getFirstMoment() {
-        // Scale back to the original magnitude
-        final double m = m1 * RESCALE;
-        if (Double.isFinite(m)) {
-            return n == 0 ? Double.NaN : m;
-        }
-        // A non-finite value must have been encountered, return nonFiniteValue which represents m1.
-        return nonFiniteValue;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -327,23 +281,7 @@ class FirstMoment implements DoubleConsumer {
      * @return {@code this} instance after combining {@code other}.
      */
     FirstMoment combine(FirstMoment other) {
-        nonFiniteValue += other.nonFiniteValue;
-        final double mu1 = this.m1;
-        final double mu2 = other.m1;
-        final long n1 = n;
-        final long n2 = other.n;
-        n = n1 + n2;
-        // Adjust the mean with the weighted difference:
-        // m1 = m1 + (m2 - m1) * n2 / (n1 + n2)
-        // The half-representation ensures the difference of means is at most MAX_VALUE
-        // so the combine can avoid scaling.
-        if (n1 == n2) {
-            // Optimisation for equal sizes: m1 = (m1 + m2) / 2
-            m1 = (mu1 + mu2) * 0.5;
-        } else {
-            m1 = combine(mu1, mu2, n1, n2);
-        }
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -359,9 +297,7 @@ class FirstMoment implements DoubleConsumer {
     private static double combine(double m1, double m2, long n1, long n2) {
         // Note: If either size is zero the weighted difference is zero and
         // the other moment is unchanged.
-        return n2 < n1 ?
-            m1 + (m2 - m1) * ((double) n2 / (n1 + n2)) :
-            m2 + (m1 - m2) * ((double) n1 / (n1 + n2));
+        return n2 < n1 ? m1 + (m2 - m1) * ((double) n2 / (n1 + n2)) : m2 + (m1 - m2) * ((double) n1 / (n1 + n2));
     }
 
     /**
@@ -372,8 +308,7 @@ class FirstMoment implements DoubleConsumer {
      * @return the difference
      */
     double getFirstMomentDifference(FirstMoment other) {
-        // Scale back to the original magnitude
-        return (m1 - other.m1) * RESCALE;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -384,6 +319,6 @@ class FirstMoment implements DoubleConsumer {
      * @return the difference
      */
     double getFirstMomentHalfDifference(FirstMoment other) {
-        return m1 - other.m1;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

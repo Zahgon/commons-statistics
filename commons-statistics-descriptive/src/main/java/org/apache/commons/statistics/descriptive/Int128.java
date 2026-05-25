@@ -36,14 +36,25 @@ import org.apache.commons.numbers.core.DD;
  * @since 1.1
  */
 final class Int128 {
-    /** Mask for the lower 32-bits of a long. */
+
+    /**
+     * Mask for the lower 32-bits of a long.
+     */
     private static final long MASK32 = 0xffff_ffffL;
-    /** 2^53. */
+
+    /**
+     * 2^53.
+     */
     private static final long TWO_POW_53 = 1L << 53;
 
-    /** low 64-bits. */
+    /**
+     * low 64-bits.
+     */
     private long lo;
-    /** high 64-bits. */
+
+    /**
+     * high 64-bits.
+     */
     private long hi;
 
     /**
@@ -80,7 +91,7 @@ final class Int128 {
      * @return the instance
      */
     static Int128 create() {
-        return new Int128();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -90,7 +101,7 @@ final class Int128 {
      * @return the instance
      */
     static Int128 of(long x) {
-        return new Int128(x);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -99,17 +110,7 @@ final class Int128 {
      * @param x Value.
      */
     void add(long x) {
-        final long y = lo;
-        final long r = y + x;
-        // Overflow if the result has the opposite sign of both arguments
-        // (+,+) -> -
-        // (-,-) -> +
-        // Detect opposite sign:
-        if (((y ^ r) & (x ^ r)) < 0) {
-            // Carry overflow bit
-            hi += x < 0 ? -1 : 1;
-        }
-        lo = r;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -118,11 +119,7 @@ final class Int128 {
      * @param x Value.
      */
     void add(Int128 x) {
-        // Avoid issues adding to itself
-        final long l = x.lo;
-        final long h = x.hi;
-        add(l);
-        hi += h;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -133,9 +130,7 @@ final class Int128 {
      * @return the square
      */
     UInt128 squareLow() {
-        final long x = lo;
-        final long upper = IntMath.squareHigh(x);
-        return new UInt128(upper, x * x);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -144,57 +139,7 @@ final class Int128 {
      * @return the value
      */
     BigInteger toBigInteger() {
-        long h = hi;
-        long l = lo;
-        // Special cases
-        if (h == 0) {
-            return BigInteger.valueOf(l);
-        }
-        if (l == 0) {
-            return BigInteger.valueOf(h).shiftLeft(64);
-        }
-
-        // The representation is 2^64 * hi64 + lo64.
-        // Here we avoid evaluating the addition:
-        // BigInteger.valueOf(l).add(BigInteger.valueOf(h).shiftLeft(64))
-        // It is faster to create from bytes.
-        // BigInteger bytes are an unsigned integer in BigEndian format, plus a sign.
-        // If both values are positive we can use the values unchanged.
-        // Otherwise selective negation is used to create a positive magnitude
-        // and we track the sign.
-        // Note: Negation of -2^63 is valid to create an unsigned 2^63.
-
-        int sign = 1;
-        if ((h ^ l) < 0) {
-            // Opposite signs and lo64 is not zero.
-            // The lo64 bits are an adjustment to the magnitude of hi64
-            // to make it smaller.
-            // Here we rearrange to [2^64 * (hi64-1)] + [2^64 - lo64].
-            // The second term [2^64 - lo64] can use lo64 as an unsigned 64-bit integer.
-            // The first term [2^64 * (hi64-1)] does not work if low is zero.
-            // It would work if zero was detected and we carried the overflow
-            // bit up to h to make it equal to: (h - 1) + 1 == h.
-            // Instead lo64 == 0 is handled as a special case above.
-
-            if (h >= 0) {
-                // Treat (unchanged) low as an unsigned add
-                h = h - 1;
-            } else {
-                // As above with negation
-                h = ~h; // -h - 1
-                l = -l;
-                sign = -1;
-            }
-        } else if (h < 0) {
-            // Invert negative values to create the equivalent positive magnitude.
-            h = -h;
-            l = -l;
-            sign = -1;
-        }
-
-        return new BigInteger(sign,
-            ByteBuffer.allocate(Long.BYTES * 2)
-                .putLong(h).putLong(l).array());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -203,36 +148,7 @@ final class Int128 {
      * @return the value
      */
     double toDouble() {
-        long h = hi;
-        long l = lo;
-        // Special cases
-        if (h == 0) {
-            return l;
-        }
-        if (l == 0) {
-            return h * 0x1.0p64;
-        }
-        // Both h and l are non-zero and can be negated to a positive magnitude.
-        // Use the same logic as toBigInteger to create magnitude (h, l) and a sign.
-        int sign = 1;
-        if ((h ^ l) < 0) {
-            // Here we rearrange to [2^64 * (hi64-1)] + [2^64 - lo64].
-            if (h >= 0) {
-                h = h - 1;
-            } else {
-                // As above with negation
-                h = ~h; // -h - 1
-                l = -l;
-                sign = -1;
-            }
-        } else if (h < 0) {
-            // Invert negative values to create the equivalent positive magnitude.
-            h = -h;
-            l = -l;
-            sign = -1;
-        }
-        final double x = IntMath.uint128ToDouble(h, l);
-        return sign < 0 ? -x : x;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -241,14 +157,7 @@ final class Int128 {
      * @return the value
      */
     DD toDD() {
-        // Don't combine two 64-bit DD numbers:
-        // DD.of(hi).scalb(64).add(DD.of(lo))
-        // It is more accurate to create a 96-bit number and add the final 32-bits.
-        // Sum low to high.
-        // Note: Masking a negative hi number will create a small positive magnitude
-        // to add to a larger negative number:
-        // e.g. x = (x & 0xff) + ((x >> 8) << 8)
-        return DD.of(lo).add((hi & MASK32) * 0x1.0p64).add((hi >> Integer.SIZE) * 0x1.0p96);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -258,13 +167,7 @@ final class Int128 {
      * @return the quotient
      */
     double divideToDouble(long n) {
-        final DD a = toDD();
-        if (n < TWO_POW_53) {
-            // n is a representable double
-            return a.divide(n).doubleValue();
-        }
-        // Extended precision divide when n > 2^53
-        return a.divide(DD.of(n)).doubleValue();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -275,7 +178,7 @@ final class Int128 {
      * @see Math#toIntExact(long)
      */
     int toIntExact() {
-        return Math.toIntExact(toLongExact());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -285,10 +188,7 @@ final class Int128 {
      * @throws ArithmeticException if the value overflows a {@code long}.
      */
     long toLongExact() {
-        if (hi != 0) {
-            throw new ArithmeticException("long integer overflow");
-        }
-        return lo;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -302,7 +202,7 @@ final class Int128 {
      * @return the low 64-bits
      */
     long lo64() {
-        return lo;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -312,6 +212,6 @@ final class Int128 {
      * @see #lo64()
      */
     long hi64() {
-        return hi;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -47,7 +47,9 @@ package org.apache.commons.statistics.descriptive;
  */
 public final class Max implements DoubleStatistic, StatisticAccumulator<Max> {
 
-    /** Current maximum. */
+    /**
+     * Current maximum.
+     */
     private double maximum = Double.NEGATIVE_INFINITY;
 
     /**
@@ -65,7 +67,7 @@ public final class Max implements DoubleStatistic, StatisticAccumulator<Max> {
      * @return {@code Max} instance.
      */
     public static Max create() {
-        return new Max();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -80,7 +82,7 @@ public final class Max implements DoubleStatistic, StatisticAccumulator<Max> {
      * @return {@code Max} instance.
      */
     public static Max of(double... values) {
-        return Statistics.add(new Max(), values);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -99,8 +101,7 @@ public final class Max implements DoubleStatistic, StatisticAccumulator<Max> {
      * @since 1.2
      */
     public static Max ofRange(double[] values, int from, int to) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return createFromRange(values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -114,7 +115,7 @@ public final class Max implements DoubleStatistic, StatisticAccumulator<Max> {
      * @return {@code Max} instance.
      */
     static Max createFromRange(double[] values, int from, int to) {
-        return Statistics.add(new Max(), values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -124,7 +125,7 @@ public final class Max implements DoubleStatistic, StatisticAccumulator<Max> {
      */
     @Override
     public void accept(double value) {
-        maximum = Math.max(maximum, value);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -137,12 +138,11 @@ public final class Max implements DoubleStatistic, StatisticAccumulator<Max> {
      */
     @Override
     public double getAsDouble() {
-        return maximum;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Max combine(Max other) {
-        accept(other.getAsDouble());
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

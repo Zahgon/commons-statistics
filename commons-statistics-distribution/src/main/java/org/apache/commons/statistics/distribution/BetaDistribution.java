@@ -42,23 +42,37 @@ import org.apache.commons.rng.sampling.distribution.ChengBetaSampler;
  * @see <a href="https://mathworld.wolfram.com/BetaDistribution.html">Beta distribution (MathWorld)</a>
  */
 public final class BetaDistribution extends AbstractContinuousDistribution {
-    /** First shape parameter. */
+
+    /**
+     * First shape parameter.
+     */
     private final double alpha;
-    /** Second shape parameter. */
+
+    /**
+     * Second shape parameter.
+     */
     private final double beta;
-    /** Normalizing factor used in log density computations. log(beta(a, b)). */
+
+    /**
+     * Normalizing factor used in log density computations. log(beta(a, b)).
+     */
     private final double logBeta;
-    /** Cached value for inverse probability function. */
+
+    /**
+     * Cached value for inverse probability function.
+     */
     private final double mean;
-    /** Cached value for inverse probability function. */
+
+    /**
+     * Cached value for inverse probability function.
+     */
     private final double variance;
 
     /**
      * @param alpha First shape parameter (must be positive).
      * @param beta Second shape parameter (must be positive).
      */
-    private BetaDistribution(double alpha,
-                             double beta) {
+    private BetaDistribution(double alpha, double beta) {
         this.alpha = alpha;
         this.beta = beta;
         logBeta = LogBeta.value(alpha, beta);
@@ -75,15 +89,8 @@ public final class BetaDistribution extends AbstractContinuousDistribution {
      * @return the distribution
      * @throws IllegalArgumentException if {@code alpha <= 0} or {@code beta <= 0}.
      */
-    public static BetaDistribution of(double alpha,
-                                      double beta) {
-        if (alpha <= 0) {
-            throw new DistributionException(DistributionException.NOT_STRICTLY_POSITIVE, alpha);
-        }
-        if (beta <= 0) {
-            throw new DistributionException(DistributionException.NOT_STRICTLY_POSITIVE, beta);
-        }
-        return new BetaDistribution(alpha, beta);
+    public static BetaDistribution of(double alpha, double beta) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -92,7 +99,7 @@ public final class BetaDistribution extends AbstractContinuousDistribution {
      * @return the first shape parameter.
      */
     public double getAlpha() {
-        return alpha;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -101,85 +108,45 @@ public final class BetaDistribution extends AbstractContinuousDistribution {
      * @return the second shape parameter.
      */
     public double getBeta() {
-        return beta;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
      *
      * <p>The density is not defined when {@code x = 0, alpha < 1}, or {@code x = 1, beta < 1}.
      * In this case the limit of infinity is returned.
      */
     @Override
     public double density(double x) {
-        if (x < 0 || x > 1) {
-            return 0;
-        }
-        return RegularizedBeta.derivative(x, alpha, beta);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
      *
      * <p>The density is not defined when {@code x = 0, alpha < 1}, or {@code x = 1, beta < 1}.
      * In this case the limit of infinity is returned.
      */
     @Override
     public double logDensity(double x) {
-        if (x < 0 || x > 1) {
-            return Double.NEGATIVE_INFINITY;
-        } else if (x == 0) {
-            if (alpha < 1) {
-                // Distribution is not valid when x=0, alpha<1
-                // due to a divide by zero error.
-                // Do not raise an exception and return the limit.
-                return Double.POSITIVE_INFINITY;
-            }
-            // Special case of cancellation: x^(a-1) (1-x)^(b-1) / B(a, b) = 1 / B(a, b)
-            if (alpha == 1) {
-                return -logBeta;
-            }
-            return Double.NEGATIVE_INFINITY;
-        } else if (x == 1) {
-            if (beta < 1) {
-                // Distribution is not valid when x=1, beta<1
-                // due to a divide by zero error.
-                // Do not raise an exception and return the limit.
-                return Double.POSITIVE_INFINITY;
-            }
-            // Special case of cancellation: x^(a-1) (1-x)^(b-1) / B(a, b) = 1 / B(a, b)
-            if (beta == 1) {
-                return -logBeta;
-            }
-            return Double.NEGATIVE_INFINITY;
-        }
-
-        // Log computation
-        final double logX = Math.log(x);
-        final double log1mX = Math.log1p(-x);
-        return (alpha - 1) * logX + (beta - 1) * log1mX - logBeta;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public double cumulativeProbability(double x)  {
-        if (x <= 0) {
-            return 0;
-        } else if (x >= 1) {
-            return 1;
-        } else {
-            return RegularizedBeta.value(x, alpha, beta);
-        }
+    public double cumulativeProbability(double x) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double survivalProbability(double x) {
-        if (x <= 0) {
-            return 1;
-        } else if (x >= 1) {
-            return 0;
-        } else {
-            return RegularizedBeta.complement(x, alpha, beta);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -192,7 +159,7 @@ public final class BetaDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getMean() {
-        return mean;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -205,7 +172,7 @@ public final class BetaDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getVariance() {
-        return variance;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -217,7 +184,7 @@ public final class BetaDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getSupportLowerBound() {
-        return 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -229,13 +196,14 @@ public final class BetaDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getSupportUpperBound() {
-        return 1;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ContinuousDistribution.Sampler createSampler(final UniformRandomProvider rng) {
-        // Beta distribution sampler.
-        return ChengBetaSampler.of(rng, alpha, beta)::sample;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

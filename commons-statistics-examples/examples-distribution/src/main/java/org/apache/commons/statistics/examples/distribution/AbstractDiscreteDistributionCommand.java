@@ -35,41 +35,16 @@ import picocli.CommandLine.Mixin;
  * evaluation.
  */
 abstract class AbstractDiscreteDistributionCommand implements Callable<Void> {
-    /** The standard options. */
+
+    /**
+     * The standard options.
+     */
     @Mixin
     private StandardOptions standardOptions;
 
     @Override
     public Void call() {
-        final List<Distribution<DiscreteDistribution>> distributions = getDistributions();
-        final DistributionOptions distributionOptions = getDistributionOptions();
-        // Set the function based on the class name
-        final String name = getClass().getSimpleName();
-
-        // Special handling of sub-classes which do not evaluate a function of the distribution.
-        // This is done here to avoid duplicating an overridden 'call()' method for each instance.
-        // Currently this applies to a hidden 'check' command that performs verification checks
-        // on the distribution.
-        if ("Check".equals(name)) {
-            // This is not an evaluation of a single function.
-            DistributionUtils.check(distributions,
-                (DiscreteDistributionOptions) distributionOptions);
-            return null;
-        }
-
-        // Assume an evaluation of a distribution function
-        distributionOptions.distributionFunction = DistributionFunction.valueOf(name);
-        // Assume there are only two types of options:
-        // Forward functions: x (int) -> p-value
-        // Inverse functions: p-value -> x (int)
-        if (distributionOptions instanceof InverseDiscreteDistributionOptions) {
-            DistributionUtils.evaluate(distributions,
-                (InverseDiscreteDistributionOptions) distributionOptions);
-        } else {
-            DistributionUtils.evaluate(distributions,
-                (DiscreteDistributionOptions) distributionOptions);
-        }
-        return null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**

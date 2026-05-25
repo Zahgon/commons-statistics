@@ -27,65 +27,68 @@ import picocli.CommandLine.Option;
 /**
  * Command for the {@link TruncatedNormalDistribution}.
  */
-@Command(name = "truncatednormal",
-         aliases = {"tnorm"},
-         description = "Truncated normal distribution.",
-         subcommands = {
-             TruncatedNormalCommand.Check.class,
-             TruncatedNormalCommand.PDF.class,
-             TruncatedNormalCommand.LPDF.class,
-             TruncatedNormalCommand.CDF.class,
-             TruncatedNormalCommand.SF.class,
-             TruncatedNormalCommand.ICDF.class,
-             TruncatedNormalCommand.ISF.class,
-         })
+@Command(name = "truncatednormal", aliases = { "tnorm" }, description = "Truncated normal distribution.", subcommands = { TruncatedNormalCommand.Check.class, TruncatedNormalCommand.PDF.class, TruncatedNormalCommand.LPDF.class, TruncatedNormalCommand.CDF.class, TruncatedNormalCommand.SF.class, TruncatedNormalCommand.ICDF.class, TruncatedNormalCommand.ISF.class })
 class TruncatedNormalCommand extends AbstractDistributionCommand {
 
-    /** Base command for the distribution that defines the parameters. */
+    /**
+     * Base command for the distribution that defines the parameters.
+     */
     private abstract static class BaseCommand extends AbstractContinuousDistributionCommand {
-        /** The default minimum for x. */
+
+        /**
+         * The default minimum for x.
+         */
         static final double MIN = -10;
-        /** The default maximum for x. */
+
+        /**
+         * The default maximum for x.
+         */
         static final double MAX = 10;
 
-        /** Distribution parameters. */
+        /**
+         * Distribution parameters.
+         */
         @ArgGroup(validate = false, heading = "Distribution parameters:%n", order = 1)
         private Params params = new Params();
 
-        /** Parameters class. */
+        /**
+         * Parameters class.
+         */
         static class Params {
-            /** The distribution mean. */
-            @Option(names = {"-m", "--mu", "--mean"},
-                    arity = "1..*",
-                    split = ",",
-                    description = {"mean (default: ${DEFAULT-VALUE})."})
-            private double[] mu = {-8, 0, 9, 0};
 
-            /** The distribution sigma. */
-            @Option(names = {"-s", "--sigma"},
-                    arity = "1..*",
-                    split = ",",
-                    description = {"standard deviation (default: ${DEFAULT-VALUE})."})
-            private double[] sigma = {2, 2, 10, 10};
+            /**
+             * The distribution mean.
+             */
+            @Option(names = { "-m", "--mu", "--mean" }, arity = "1..*", split = ",", description = { "mean (default: ${DEFAULT-VALUE})." })
+            private double[] mu = { -8, 0, 9, 0 };
 
-            /** The distribution lower limit. */
-            @Option(names = {"-l", "--lower"},
-                    arity = "1..*",
-                    split = ",",
-                    description = {"lower bound (default: ${DEFAULT-VALUE})."})
-            private double[] lower = {MIN};
+            /**
+             * The distribution sigma.
+             */
+            @Option(names = { "-s", "--sigma" }, arity = "1..*", split = ",", description = { "standard deviation (default: ${DEFAULT-VALUE})." })
+            private double[] sigma = { 2, 2, 10, 10 };
 
-            /** The distribution upper limit. */
-            @Option(names = {"-u", "--upper"},
-                    arity = "1..*",
-                    split = ",",
-                    description = {"upper bound (default: ${DEFAULT-VALUE})."})
-            private double[] upper = {MAX};
+            /**
+             * The distribution lower limit.
+             */
+            @Option(names = { "-l", "--lower" }, arity = "1..*", split = ",", description = { "lower bound (default: ${DEFAULT-VALUE})." })
+            private double[] lower = { MIN };
+
+            /**
+             * The distribution upper limit.
+             */
+            @Option(names = { "-u", "--upper" }, arity = "1..*", split = ",", description = { "upper bound (default: ${DEFAULT-VALUE})." })
+            private double[] upper = { MAX };
         }
 
-        /** Extend the options to set the default values for this distribution. */
+        /**
+         * Extend the options to set the default values for this distribution.
+         */
         static final class Options extends ContinuousDistributionOptions {
-            /** Set defaults. */
+
+            /**
+             * Set defaults.
+             */
             private Options() {
                 min = MIN;
                 max = MAX;
@@ -94,85 +97,90 @@ class TruncatedNormalCommand extends AbstractDistributionCommand {
 
         @Override
         protected List<Distribution<ContinuousDistribution>> getDistributions() {
-            double[] mean = params.mu;
-            double[] sigma = params.sigma;
-            double[] lower = params.lower;
-            double[] upper = params.upper;
-            final int n = DistributionUtils.validateLengths(mean.length, sigma.length, lower.length, upper.length);
-
-            mean = DistributionUtils.expandToLength(mean, n);
-            sigma = DistributionUtils.expandToLength(sigma, n);
-            lower = DistributionUtils.expandToLength(lower, n);
-            upper = DistributionUtils.expandToLength(upper, n);
-
-            // Create distributions
-            final ArrayList<Distribution<ContinuousDistribution>> list = new ArrayList<>();
-            for (int i = 0; i < n; i++) {
-                final ContinuousDistribution d = TruncatedNormalDistribution.of(mean[i], sigma[i], lower[i], upper[i]);
-                list.add(new Distribution<>(d, "mu=" + mean[i] + ",sigma=" + sigma[i] +
-                                               ",lower=" + lower[i] + ",upper=" + upper[i]));
-            }
-            return list;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    /** Base command for the distribution that defines the parameters. */
+    /**
+     * Base command for the distribution that defines the parameters.
+     */
     private abstract static class ProbabilityCommand extends BaseCommand {
-        /** The distribution options. */
+
+        /**
+         * The distribution options.
+         */
         @ArgGroup(validate = false, heading = "Evaluation options:%n", order = 2)
         private Options distributionOptions = new Options();
 
         @Override
         protected DistributionOptions getDistributionOptions() {
-            return distributionOptions;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    /** Base command for the distribution that defines the parameters for inverse probability functions. */
+    /**
+     * Base command for the distribution that defines the parameters for inverse probability functions.
+     */
     private abstract static class InverseProbabilityCommand extends BaseCommand {
-        /** The distribution options. */
+
+        /**
+         * The distribution options.
+         */
         @ArgGroup(validate = false, heading = "Evaluation options:%n", order = 2)
         private InverseContinuousDistributionOptions distributionOptions = new InverseContinuousDistributionOptions();
 
         @Override
         protected DistributionOptions getDistributionOptions() {
-            return distributionOptions;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    /** Verification checks command. */
-    @Command(name = "check",
-             hidden = true,
-             description = "Truncated normal distribution verification checks.")
-    static class Check extends ProbabilityCommand {}
+    /**
+     * Verification checks command.
+     */
+    @Command(name = "check", hidden = true, description = "Truncated normal distribution verification checks.")
+    static class Check extends ProbabilityCommand {
+    }
 
-    /** PDF command. */
-    @Command(name = "pdf",
-             description = "Truncated normal distribution PDF.")
-    static class PDF extends ProbabilityCommand {}
+    /**
+     * PDF command.
+     */
+    @Command(name = "pdf", description = "Truncated normal distribution PDF.")
+    static class PDF extends ProbabilityCommand {
+    }
 
-    /** LPDF command. */
-    @Command(name = "lpdf",
-             description = "Truncated normal distribution natural logarithm of the PDF.")
-    static class LPDF extends ProbabilityCommand {}
+    /**
+     * LPDF command.
+     */
+    @Command(name = "lpdf", description = "Truncated normal distribution natural logarithm of the PDF.")
+    static class LPDF extends ProbabilityCommand {
+    }
 
-    /** CDF command. */
-    @Command(name = "cdf",
-             description = "Truncated normal distribution CDF.")
-    static class CDF extends ProbabilityCommand {}
+    /**
+     * CDF command.
+     */
+    @Command(name = "cdf", description = "Truncated normal distribution CDF.")
+    static class CDF extends ProbabilityCommand {
+    }
 
-    /** SF command. */
-    @Command(name = "sf",
-             description = "Truncated normal distribution survival probability.")
-    static class SF extends ProbabilityCommand {}
+    /**
+     * SF command.
+     */
+    @Command(name = "sf", description = "Truncated normal distribution survival probability.")
+    static class SF extends ProbabilityCommand {
+    }
 
-    /** ICDF command. */
-    @Command(name = "icdf",
-             description = "Truncated normal distribution inverse CDF.")
-    static class ICDF extends InverseProbabilityCommand {}
+    /**
+     * ICDF command.
+     */
+    @Command(name = "icdf", description = "Truncated normal distribution inverse CDF.")
+    static class ICDF extends InverseProbabilityCommand {
+    }
 
-    /** ISF command. */
-    @Command(name = "isf",
-             description = "Truncated normal distribution inverse SF.")
-    static class ISF extends InverseProbabilityCommand {}
+    /**
+     * ISF command.
+     */
+    @Command(name = "isf", description = "Truncated normal distribution inverse SF.")
+    static class ISF extends InverseProbabilityCommand {
+    }
 }

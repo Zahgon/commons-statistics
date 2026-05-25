@@ -27,6 +27,7 @@ package org.apache.commons.statistics.inference;
  * @since 1.1
  */
 final class SquareMatrixSupport {
+
     /**
      * Define a real-valued square matrix.
      *
@@ -35,6 +36,7 @@ final class SquareMatrixSupport {
      * using {@link Math#scalb(double, int)}.
      */
     interface RealSquareMatrix {
+
         /**
          * Gets the dimension for the rows and columns.
          *
@@ -91,13 +93,25 @@ final class SquareMatrixSupport {
      * </ul>
      */
     private static class ArrayRealSquareMatrix implements RealSquareMatrix {
-        /** The scaling threshold. Marsaglia used 1e140. This uses 2^400 ~ 2.58e120 */
+
+        /**
+         * The scaling threshold. Marsaglia used 1e140. This uses 2^400 ~ 2.58e120
+         */
         private static final double SCALE_THRESHOLD = 0x1.0p400;
-        /** Dimension. */
+
+        /**
+         * Dimension.
+         */
         private final int dim;
-        /** Entries of the matrix. */
+
+        /**
+         * Entries of the matrix.
+         */
         private final double[] data;
-        /** Matrix scale. */
+
+        /**
+         * Matrix scale.
+         */
         private final int exp;
 
         /**
@@ -113,79 +127,22 @@ final class SquareMatrixSupport {
 
         @Override
         public int dimension() {
-            return dim;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public int scale() {
-            return exp;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double get(int i, int j) {
-            return data[i * dim + j];
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public RealSquareMatrix power(int n) {
-            checkExponent(n);
-            if (n == 0) {
-                return identity();
-            }
-            if (n == 1) {
-                return this;
-            }
-
-            // Here at least 1 multiplication occurs.
-            // Compute the power by repeat squaring and multiplication:
-            // 13 = 1101
-            // x^13 = x^8 * x^4 * x^1
-            //      = ((x^2 * x)^2)^2 * x
-            // 21 = 10101
-            // x^21 = x^16 * x^4 * x^1
-            //      = (((x^2)^2 * x)^2)^2 * x
-            // 1. Find highest set bit in n
-            // 2. Initialise result as x
-            // 3. For remaining bits (0 or 1) below the highest set bit:
-            //    - square the current result
-            //    - if the current bit is 1 then multiply by x
-            // In this scheme we require 2 matrix array allocations and a column array.
-
-            // Working arrays
-            final double[] col = new double[dim];
-            double[] b = new double[data.length];
-            double[] tmp;
-
-            // Initialise result as A^1.
-            final double[] a = data;
-            final int ea = exp;
-            double[] r = a.clone();
-            int er = ea;
-
-            // Shift the highest set bit off the top.
-            // Any remaining bits are detected in the sign bit.
-            final int shift = Integer.numberOfLeadingZeros(n) + 1;
-            int bits = n << shift;
-
-            // Process remaining bits below highest set bit.
-            for (int i = 32 - shift; i != 0; i--, bits <<= 1) {
-                // Square the result
-                er = multiply(r, er, r, er, col, b);
-                // Recycle working array
-                tmp = b;
-                b = r;
-                r = tmp;
-                if (bits < 0) {
-                    // Multiply by A
-                    er = multiply(r, er, a, ea, col, b);
-                    // Recycle working array
-                    tmp = b;
-                    b = r;
-                    r = tmp;
-                }
-            }
-
-            return new ArrayRealSquareMatrix(dim, r, er);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -196,24 +153,25 @@ final class SquareMatrixSupport {
         private RealSquareMatrix identity() {
             final int n = dimension();
             return new RealSquareMatrix() {
+
                 @Override
                 public int dimension() {
-                    return n;
+                    throw new UnsupportedOperationException("STUB: not implemented");
                 }
 
                 @Override
                 public int scale() {
-                    return 0;
+                    throw new UnsupportedOperationException("STUB: not implemented");
                 }
 
                 @Override
                 public double get(int i, int j) {
-                    return i == j ? 1 : 0;
+                    throw new UnsupportedOperationException("STUB: not implemented");
                 }
 
                 @Override
                 public RealSquareMatrix power(int p) {
-                    return this;
+                    throw new UnsupportedOperationException("STUB: not implemented");
                 }
             };
         }
@@ -286,8 +244,11 @@ final class SquareMatrixSupport {
         }
     }
 
-    /** No instances. */
-    private SquareMatrixSupport() {}
+    /**
+     * No instances.
+     */
+    private SquareMatrixSupport() {
+    }
 
     /**
      * Creates a square matrix. Data may be used in-place.
@@ -300,10 +261,6 @@ final class SquareMatrixSupport {
      * @throws IllegalArgumentException if the matrix data is not square (length = dimension * dimension)
      */
     static RealSquareMatrix create(int dimension, double[] data) {
-        if (dimension * dimension != data.length) {
-            // Note: %<d is 'relative indexing' to re-use the last argument
-            throw new IllegalArgumentException(String.format("Not square: %d * %<d != %d", dimension, data.length));
-        }
-        return new ArrayRealSquareMatrix(dimension, data, 0);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

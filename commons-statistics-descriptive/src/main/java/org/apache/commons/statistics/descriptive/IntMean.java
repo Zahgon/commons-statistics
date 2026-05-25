@@ -49,15 +49,24 @@ package org.apache.commons.statistics.descriptive;
  * safe and efficient parallel execution.
  *
  * @see <a href="https://en.wikipedia.org/wiki/Mean">Mean (Wikipedia)</a>
- * @since 1.1 */
+ * @since 1.1
+ */
 public final class IntMean implements IntStatistic, StatisticAccumulator<IntMean> {
-    /** Limit for small sample size where the sum can exactly map to a double.
-     * This is conservatively set using 2^21 values of 2^31 (2^21 ~ 2 million). */
+
+    /**
+     * Limit for small sample size where the sum can exactly map to a double.
+     * This is conservatively set using 2^21 values of 2^31 (2^21 ~ 2 million).
+     */
     private static final long SMALL_N = 1L << 21;
 
-    /** Sum of the values. */
+    /**
+     * Sum of the values.
+     */
     private final Int128 sum;
-    /** Count of values that have been added. */
+
+    /**
+     * Count of values that have been added.
+     */
     private long n;
 
     /**
@@ -86,7 +95,7 @@ public final class IntMean implements IntStatistic, StatisticAccumulator<IntMean
      * @return {@code IntMean} instance.
      */
     public static IntMean create() {
-        return new IntMean();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -96,13 +105,7 @@ public final class IntMean implements IntStatistic, StatisticAccumulator<IntMean
      * @return {@code IntMean} instance.
      */
     public static IntMean of(int... values) {
-        // Sum of an array cannot exceed a 64-bit long
-        long s = 0;
-        for (final int x : values) {
-            s += x;
-        }
-        // Convert
-        return new IntMean(Int128.of(s), values.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -116,8 +119,7 @@ public final class IntMean implements IntStatistic, StatisticAccumulator<IntMean
      * @since 1.2
      */
     public static IntMean ofRange(int[] values, int from, int to) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return createFromRange(values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -131,13 +133,7 @@ public final class IntMean implements IntStatistic, StatisticAccumulator<IntMean
      * @return {@code IntMean} instance.
      */
     static IntMean createFromRange(int[] values, int from, int to) {
-        // Sum of an array cannot exceed a 64-bit long
-        long s = 0;
-        for (int i = from; i < to; i++) {
-            s += values[i];
-        }
-        // Convert
-        return new IntMean(Int128.of(s), to - from);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -147,8 +143,7 @@ public final class IntMean implements IntStatistic, StatisticAccumulator<IntMean
      */
     @Override
     public void accept(int value) {
-        sum.add(value);
-        n++;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -160,7 +155,7 @@ public final class IntMean implements IntStatistic, StatisticAccumulator<IntMean
      */
     @Override
     public double getAsDouble() {
-        return computeMean(sum, n);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -173,20 +168,11 @@ public final class IntMean implements IntStatistic, StatisticAccumulator<IntMean
      * @return the mean
      */
     static double computeMean(Int128 sum, long n) {
-        // Fast option when the sum fits within
-        // the mantissa of a double.
-        // Handles n=0 as NaN
-        if (n < SMALL_N) {
-            return (double) sum.lo64() / n;
-        }
-        // Extended precision
-        return sum.divideToDouble(n);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public IntMean combine(IntMean other) {
-        sum.add(other.sum);
-        n += other.n;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

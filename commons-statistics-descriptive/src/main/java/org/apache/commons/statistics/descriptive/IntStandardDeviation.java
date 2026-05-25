@@ -69,14 +69,24 @@ package org.apache.commons.statistics.descriptive;
  */
 public final class IntStandardDeviation implements IntStatistic, StatisticAccumulator<IntStandardDeviation> {
 
-    /** Sum of the squared values. */
+    /**
+     * Sum of the squared values.
+     */
     private final UInt128 sumSq;
-    /** Sum of the values. */
+
+    /**
+     * Sum of the values.
+     */
     private final Int128 sum;
-    /** Count of values that have been added. */
+
+    /**
+     * Count of values that have been added.
+     */
     private long n;
 
-    /** Flag to control if the statistic is biased, or should use a bias correction. */
+    /**
+     * Flag to control if the statistic is biased, or should use a bias correction.
+     */
     private boolean biased;
 
     /**
@@ -107,7 +117,7 @@ public final class IntStandardDeviation implements IntStatistic, StatisticAccumu
      * @return {@code IntStandardDeviation} instance.
      */
     public static IntStandardDeviation create() {
-        return new IntStandardDeviation();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -117,7 +127,7 @@ public final class IntStandardDeviation implements IntStatistic, StatisticAccumu
      * @return {@code IntStandardDeviation} instance.
      */
     public static IntStandardDeviation of(int... values) {
-        return createFromRange(values, 0, values.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -131,8 +141,7 @@ public final class IntStandardDeviation implements IntStatistic, StatisticAccumu
      * @since 1.2
      */
     public static IntStandardDeviation ofRange(int[] values, int from, int to) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return createFromRange(values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -146,37 +155,7 @@ public final class IntStandardDeviation implements IntStatistic, StatisticAccumu
      * @return {@code IntStandardDeviation} instance.
      */
     static IntStandardDeviation createFromRange(int[] values, int from, int to) {
-        // Small arrays can be processed using the object
-        final int length = to - from;
-        if (length < IntVariance.SMALL_SAMPLE) {
-            final IntStandardDeviation stat = new IntStandardDeviation();
-            for (int i = from; i < to; i++) {
-                stat.accept(values[i]);
-            }
-            return stat;
-        }
-
-        // Arrays can be processed using specialised counts knowing the maximum limit
-        // for an array is 2^31 values.
-        long s = 0;
-        final UInt96 ss = UInt96.create();
-        // Process pairs as we know two maximum value int^2 will not overflow
-        // an unsigned long.
-        final int end = from + (length & ~0x1);
-        for (int i = from; i < end; i += 2) {
-            final long x = values[i];
-            final long y = values[i + 1];
-            s += x + y;
-            ss.addPositive(x * x + y * y);
-        }
-        if (end < to) {
-            final long x = values[end];
-            s += x;
-            ss.addPositive(x * x);
-        }
-
-        // Convert
-        return new IntStandardDeviation(UInt128.of(ss), Int128.of(s), length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -186,9 +165,7 @@ public final class IntStandardDeviation implements IntStatistic, StatisticAccumu
      */
     @Override
     public void accept(int value) {
-        sumSq.addPositive((long) value * value);
-        sum.add(value);
-        n++;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -200,15 +177,12 @@ public final class IntStandardDeviation implements IntStatistic, StatisticAccumu
      */
     @Override
     public double getAsDouble() {
-        return IntVariance.computeVarianceOrStd(sumSq, sum, n, biased, true);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public IntStandardDeviation combine(IntStandardDeviation other) {
-        sumSq.add(other.sumSq);
-        sum.add(other.sum);
-        n += other.n;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -226,7 +200,6 @@ public final class IntStandardDeviation implements IntStatistic, StatisticAccumu
      * @see IntVariance#setBiased(boolean)
      */
     public IntStandardDeviation setBiased(boolean v) {
-        biased = v;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

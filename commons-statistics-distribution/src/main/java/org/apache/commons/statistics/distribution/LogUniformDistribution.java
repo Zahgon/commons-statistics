@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.apache.commons.statistics.distribution;
 
 import org.apache.commons.rng.UniformRandomProvider;
@@ -35,25 +34,42 @@ import org.apache.commons.rng.sampling.distribution.SharedStateContinuousSampler
  * @since 1.1
  */
 public final class LogUniformDistribution extends AbstractContinuousDistribution {
-    /** Lower bound (a) of this distribution (inclusive). */
+
+    /**
+     * Lower bound (a) of this distribution (inclusive).
+     */
     private final double lower;
-    /** Upper bound (b) of this distribution (exclusive). */
+
+    /**
+     * Upper bound (b) of this distribution (exclusive).
+     */
     private final double upper;
-    /** log(a). */
+
+    /**
+     * log(a).
+     */
     private final double logA;
-    /** log(b). */
+
+    /**
+     * log(b).
+     */
     private final double logB;
-    /** log(b) - log(a). */
+
+    /**
+     * log(b) - log(a).
+     */
     private final double logBmLogA;
-    /** log(log(b) - log(a)). */
+
+    /**
+     * log(log(b) - log(a)).
+     */
     private final double logLogBmLogA;
 
     /**
      * @param lower Lower bound of this distribution (inclusive).
      * @param upper Upper bound of this distribution (inclusive).
      */
-    private LogUniformDistribution(double lower,
-                                   double upper) {
+    private LogUniformDistribution(double lower, double upper) {
         this.lower = lower;
         this.upper = upper;
         logA = Math.log(lower);
@@ -71,76 +87,53 @@ public final class LogUniformDistribution extends AbstractContinuousDistribution
      * @throws IllegalArgumentException if {@code lower >= upper}; the range between the bounds
      * is not finite; or {@code lower <= 0}
      */
-    public static LogUniformDistribution of(double lower,
-                                            double upper) {
-        if (lower >= upper) {
-            throw new DistributionException(DistributionException.INVALID_RANGE_LOW_GTE_HIGH,
-                                            lower, upper);
-        }
-        if (!Double.isFinite(upper - lower)) {
-            throw new DistributionException("Range %s is not finite", upper - lower);
-        }
-        if (lower <= 0) {
-            throw new DistributionException(DistributionException.NOT_STRICTLY_POSITIVE, lower);
-        }
-        return new LogUniformDistribution(lower, upper);
+    public static LogUniformDistribution of(double lower, double upper) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double density(double x) {
-        if (x < lower || x > upper) {
-            return 0;
-        }
-        return Math.exp(logDensity(x));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double logDensity(double x) {
-        if (x < lower || x > upper) {
-            return Double.NEGATIVE_INFINITY;
-        }
-        return -Math.log(x) - logLogBmLogA;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public double cumulativeProbability(double x)  {
-        if (x <= lower) {
-            return 0;
-        }
-        if (x >= upper) {
-            return 1;
-        }
-        return (Math.log(x) - logA) / logBmLogA;
+    public double cumulativeProbability(double x) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double survivalProbability(double x) {
-        if (x <= lower) {
-            return 1;
-        }
-        if (x >= upper) {
-            return 0;
-        }
-        return (logB - Math.log(x)) / logBmLogA;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double inverseCumulativeProbability(double p) {
-        ArgumentUtils.checkProbability(p);
-        // Avoid floating-point error at the bounds
-        return clipToRange(Math.exp(logA + p * logBmLogA));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public double inverseSurvivalProbability(double p) {
-        ArgumentUtils.checkProbability(p);
-        // Avoid floating-point error at the bounds
-        return clipToRange(Math.exp(logB - p * logBmLogA));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -152,7 +145,7 @@ public final class LogUniformDistribution extends AbstractContinuousDistribution
      */
     @Override
     public double getMean() {
-        return (upper - lower) / logBmLogA;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -164,12 +157,7 @@ public final class LogUniformDistribution extends AbstractContinuousDistribution
      */
     @Override
     public double getVariance() {
-        // Compute u_2 via a stabilising rearrangement:
-        // https://docs.scipy.org/doc/scipy/tutorial/stats/continuous_loguniform.html
-        final double a = lower;
-        final double b = upper;
-        final double d = -logBmLogA;
-        return (a - b) * (a * (d - 2) + b * (d + 2)) / (2 * d * d);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -180,7 +168,7 @@ public final class LogUniformDistribution extends AbstractContinuousDistribution
      */
     @Override
     public double getSupportLowerBound() {
-        return lower;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -191,7 +179,7 @@ public final class LogUniformDistribution extends AbstractContinuousDistribution
      */
     @Override
     public double getSupportUpperBound() {
-        return upper;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -220,20 +208,19 @@ public final class LogUniformDistribution extends AbstractContinuousDistribution
         return x < upper ? x : upper;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     double getMedian() {
-        // Overridden for the probability(double, double) method.
-        // This is intentionally not a public method.
-        // sqrt(ab) avoiding overflow
-        return Math.exp(0.5 * (logA + logB));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ContinuousDistribution.Sampler createSampler(final UniformRandomProvider rng) {
-        // Exponentiate a uniform distribution sampler of the logarithmic range.
-        final SharedStateContinuousSampler s = ContinuousUniformSampler.of(rng, logA, logB);
-        return () -> Math.exp(s.sample());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

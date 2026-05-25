@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.apache.commons.statistics.distribution;
 
 import java.util.function.DoubleUnaryOperator;
@@ -39,38 +38,47 @@ import org.apache.commons.rng.sampling.distribution.InverseTransformParetoSample
  * @see  <a href="https://mathworld.wolfram.com/ParetoDistribution.html">Pareto distribution (MathWorld)</a>
  */
 public final class ParetoDistribution extends AbstractContinuousDistribution {
-    /** The minimum value for the shape parameter when computing when computing the variance. */
+
+    /**
+     * The minimum value for the shape parameter when computing when computing the variance.
+     */
     private static final double MIN_SHAPE_FOR_VARIANCE = 2.0;
 
-    /** The scale parameter of this distribution. Also known as {@code k};
-     * the minimum possible value for the random variable {@code X}. */
+    /**
+     * The scale parameter of this distribution. Also known as {@code k};
+     * the minimum possible value for the random variable {@code X}.
+     */
     private final double scale;
-    /** The shape parameter of this distribution. */
+
+    /**
+     * The shape parameter of this distribution.
+     */
     private final double shape;
-    /** Implementation of PDF(x). Assumes that {@code x >= scale}. */
+
+    /**
+     * Implementation of PDF(x). Assumes that {@code x >= scale}.
+     */
     private final DoubleUnaryOperator pdf;
-    /** Implementation of log PDF(x). Assumes that {@code x >= scale}. */
+
+    /**
+     * Implementation of log PDF(x). Assumes that {@code x >= scale}.
+     */
     private final DoubleUnaryOperator logpdf;
 
     /**
      * @param scale Scale parameter (minimum possible value of X).
      * @param shape Shape parameter (Pareto index).
      */
-    private ParetoDistribution(double scale,
-                               double shape) {
+    private ParetoDistribution(double scale, double shape) {
         this.scale = scale;
         this.shape = shape;
-
         // The Pareto distribution approaches a Dirac delta function when shape -> inf.
         // Parameterisations can also lead to underflow in the standard computation.
         // Extract the PDF and CDF to specialized implementations to handle edge cases.
-
         // Pre-compute factors for the standard computation
         final double shapeByScalePowShape = shape * Math.pow(scale, shape);
         final double logShapePlusShapeByLogScale = Math.log(shape) + Math.log(scale) * shape;
-
-        if (shapeByScalePowShape < Double.POSITIVE_INFINITY &&
-            shapeByScalePowShape >= Double.MIN_NORMAL) {
+        if (shapeByScalePowShape < Double.POSITIVE_INFINITY && shapeByScalePowShape >= Double.MIN_NORMAL) {
             // Standard computation
             pdf = x -> shapeByScalePowShape / Math.pow(x, shape + 1);
             logpdf = x -> logShapePlusShapeByLogScale - Math.log(x) * (shape + 1);
@@ -80,7 +88,7 @@ public final class ParetoDistribution extends AbstractContinuousDistribution {
                 // Log computation is valid
                 logpdf = x -> logShapePlusShapeByLogScale - Math.log(x) * (shape + 1);
                 pdf = x -> Math.exp(logpdf.applyAsDouble(x));
-            } else  {
+            } else {
                 // Assume Dirac function
                 logpdf = x -> x > scale ? Double.NEGATIVE_INFINITY : Double.POSITIVE_INFINITY;
                 // PDF has infinite value at lower bound
@@ -98,15 +106,8 @@ public final class ParetoDistribution extends AbstractContinuousDistribution {
      * @throws IllegalArgumentException if {@code scale <= 0}, {@code scale} is
      * infinite, or {@code shape <= 0}.
      */
-    public static ParetoDistribution of(double scale,
-                                        double shape) {
-        if (scale <= 0 || scale == Double.POSITIVE_INFINITY) {
-            throw new DistributionException(DistributionException.NOT_STRICTLY_POSITIVE_FINITE, scale);
-        }
-        if (shape <= 0) {
-            throw new DistributionException(DistributionException.NOT_STRICTLY_POSITIVE, shape);
-        }
-        return new ParetoDistribution(scale, shape);
+    public static ParetoDistribution of(double scale, double shape) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -116,7 +117,7 @@ public final class ParetoDistribution extends AbstractContinuousDistribution {
      * @return the scale parameter.
      */
     public double getScale() {
-        return scale;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -126,7 +127,7 @@ public final class ParetoDistribution extends AbstractContinuousDistribution {
      * @return the shape parameter.
      */
     public double getShape() {
-        return shape;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -141,22 +142,17 @@ public final class ParetoDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double density(double x) {
-        if (x < scale) {
-            return 0;
-        }
-        return pdf.applyAsDouble(x);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
      *
      * <p>See documentation of {@link #density(double)} for computation details.
      */
     @Override
     public double logDensity(double x) {
-        if (x < scale) {
-            return Double.NEGATIVE_INFINITY;
-        }
-        return logpdf.applyAsDouble(x);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -170,13 +166,8 @@ public final class ParetoDistribution extends AbstractContinuousDistribution {
      *       \end{cases} \]
      */
     @Override
-    public double cumulativeProbability(double x)  {
-        if (x <= scale) {
-            return 0;
-        }
-        // Increase accuracy for CDF close to 0 by using a log calculation:
-        // 1 - exp(α * ln(k / x)) == -(exp(α * ln(k / x)) - 1)
-        return -Math.expm1(shape * Math.log(scale / x));
+    public double cumulativeProbability(double x) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -190,37 +181,24 @@ public final class ParetoDistribution extends AbstractContinuousDistribution {
      *       \end{cases} \]
      */
     @Override
-    public double survivalProbability(double x)  {
-        if (x <= scale) {
-            return 1;
-        }
-        return Math.pow(scale / x, shape);
+    public double survivalProbability(double x) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double inverseCumulativeProbability(double p) {
-        ArgumentUtils.checkProbability(p);
-        if (p == 0) {
-            return getSupportLowerBound();
-        }
-        if (p == 1) {
-            return getSupportUpperBound();
-        }
-        return scale / Math.exp(Math.log1p(-p) / shape);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double inverseSurvivalProbability(double p) {
-        ArgumentUtils.checkProbability(p);
-        if (p == 1) {
-            return getSupportLowerBound();
-        }
-        if (p == 0) {
-            return getSupportUpperBound();
-        }
-        return scale / Math.pow(p, 1 / shape);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -235,13 +213,7 @@ public final class ParetoDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getMean() {
-        if (shape <= 1) {
-            return Double.POSITIVE_INFINITY;
-        }
-        if (shape == Double.POSITIVE_INFINITY) {
-            return scale;
-        }
-        return scale * (shape / (shape - 1));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -256,16 +228,7 @@ public final class ParetoDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getVariance() {
-        if (shape <= MIN_SHAPE_FOR_VARIANCE) {
-            return Double.POSITIVE_INFINITY;
-        }
-        if (shape == Double.POSITIVE_INFINITY) {
-            return 0;
-        }
-        final double s = shape - 1;
-        final double z = shape / s / s / (shape - 2);
-        // Avoid intermediate overflow of scale^2 if z is small
-        return z < 1 ? z * scale * scale : scale * scale * z;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -277,7 +240,7 @@ public final class ParetoDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getSupportLowerBound() {
-        return getScale();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -289,13 +252,14 @@ public final class ParetoDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getSupportUpperBound() {
-        return Double.POSITIVE_INFINITY;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ContinuousDistribution.Sampler createSampler(final UniformRandomProvider rng) {
-        // Pareto distribution sampler
-        return InverseTransformParetoSampler.of(rng, scale, shape)::sample;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

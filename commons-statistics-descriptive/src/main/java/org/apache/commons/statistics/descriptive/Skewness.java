@@ -93,12 +93,18 @@ package org.apache.commons.statistics.descriptive;
  * @since 1.1
  */
 public final class Skewness implements DoubleStatistic, StatisticAccumulator<Skewness> {
-    /** 2, the length limit where the biased skewness is undefined.
+
+    /**
+     * 2, the length limit where the biased skewness is undefined.
      * This limit effectively imposes the result m3 / m2^1.5 = 0 / 0 = NaN when 1 value
      * has been added. Note that when more samples are added and the variance
-     * approaches zero the result is also returned as NaN. */
+     * approaches zero the result is also returned as NaN.
+     */
     private static final int LENGTH_TWO = 2;
-    /** 3, the length limit where the unbiased skewness is undefined. */
+
+    /**
+     * 3, the length limit where the unbiased skewness is undefined.
+     */
     private static final int LENGTH_THREE = 3;
 
     /**
@@ -107,7 +113,9 @@ public final class Skewness implements DoubleStatistic, StatisticAccumulator<Ske
      */
     private final SumOfCubedDeviations sc;
 
-    /** Flag to control if the statistic is biased, or should use a bias correction. */
+    /**
+     * Flag to control if the statistic is biased, or should use a bias correction.
+     */
     private boolean biased;
 
     /**
@@ -134,7 +142,7 @@ public final class Skewness implements DoubleStatistic, StatisticAccumulator<Ske
      * @return {@code Skewness} instance.
      */
     public static Skewness create() {
-        return new Skewness();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -147,7 +155,7 @@ public final class Skewness implements DoubleStatistic, StatisticAccumulator<Ske
      * @return {@code Skewness} instance.
      */
     public static Skewness of(double... values) {
-        return new Skewness(SumOfCubedDeviations.of(values));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -164,8 +172,7 @@ public final class Skewness implements DoubleStatistic, StatisticAccumulator<Ske
      * @since 1.2
      */
     public static Skewness ofRange(double[] values, int from, int to) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return new Skewness(SumOfCubedDeviations.ofRange(values, from, to));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -178,7 +185,7 @@ public final class Skewness implements DoubleStatistic, StatisticAccumulator<Ske
      * @return {@code Skewness} instance.
      */
     public static Skewness of(int... values) {
-        return new Skewness(SumOfCubedDeviations.of(values));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -195,8 +202,7 @@ public final class Skewness implements DoubleStatistic, StatisticAccumulator<Ske
      * @since 1.2
      */
     public static Skewness ofRange(int[] values, int from, int to) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return new Skewness(SumOfCubedDeviations.ofRange(values, from, to));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -209,7 +215,7 @@ public final class Skewness implements DoubleStatistic, StatisticAccumulator<Ske
      * @return {@code Skewness} instance.
      */
     public static Skewness of(long... values) {
-        return new Skewness(SumOfCubedDeviations.of(values));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -226,8 +232,7 @@ public final class Skewness implements DoubleStatistic, StatisticAccumulator<Ske
      * @since 1.2
      */
     public static Skewness ofRange(long[] values, int from, int to) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return new Skewness(SumOfCubedDeviations.ofRange(values, from, to));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -237,7 +242,7 @@ public final class Skewness implements DoubleStatistic, StatisticAccumulator<Ske
      */
     @Override
     public void accept(double value) {
-        sc.accept(value);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -249,42 +254,12 @@ public final class Skewness implements DoubleStatistic, StatisticAccumulator<Ske
      */
     @Override
     public double getAsDouble() {
-        // This method checks the sum of squared or cubed deviations is finite
-        // and the value of the biased variance
-        // to provide a consistent result when the computation is not possible.
-
-        if (sc.n < (biased ? LENGTH_TWO : LENGTH_THREE)) {
-            return Double.NaN;
-        }
-        final double x2 = sc.getSumOfSquaredDeviations();
-        if (!Double.isFinite(x2)) {
-            return Double.NaN;
-        }
-        final double x3 = sc.getSumOfCubedDeviations();
-        if (!Double.isFinite(x3)) {
-            return Double.NaN;
-        }
-        // Avoid a divide by zero; for a negligible variance return NaN.
-        // Note: Commons Math returns zero if variance is < 1e-19.
-        final double m2 = x2 / sc.n;
-        if (Statistics.zeroVariance(sc.getFirstMoment(), m2)) {
-            return Double.NaN;
-        }
-        // denom = pow(m2, 1.5)
-        final double denom = Math.sqrt(m2) * m2;
-        final double m3 = x3 / sc.n;
-        double g1 = m3 / denom;
-        if (!biased) {
-            final double n = sc.n;
-            g1 *= Math.sqrt(n * (n - 1)) / (n - 2);
-        }
-        return g1;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Skewness combine(Skewness other) {
-        sc.combine(other.sc);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -299,7 +274,6 @@ public final class Skewness implements DoubleStatistic, StatisticAccumulator<Ske
      * @return {@code this} instance
      */
     public Skewness setBiased(boolean v) {
-        biased = v;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

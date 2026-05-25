@@ -35,41 +35,16 @@ import picocli.CommandLine.Mixin;
  * evaluation.
  */
 abstract class AbstractContinuousDistributionCommand implements Callable<Void> {
-    /** The standard options. */
+
+    /**
+     * The standard options.
+     */
     @Mixin
     private StandardOptions standardOptions;
 
     @Override
     public Void call() {
-        final List<Distribution<ContinuousDistribution>> distributions = getDistributions();
-        final DistributionOptions distributionOptions = getDistributionOptions();
-        // Set the function based on the class name
-        final String name = getClass().getSimpleName();
-
-        // Special handling of sub-classes which do not evaluate a function of the distribution.
-        // This is done here to avoid duplicating an overridden 'call()' method for each instance.
-        // Currently this applies to a 'check' command that performs verification checks
-        // on the distribution.
-        if ("Check".equals(name)) {
-            // This is not an evaluation of a single function.
-            DistributionUtils.check(distributions,
-                (ContinuousDistributionOptions) distributionOptions);
-            return null;
-        }
-
-        // Assume an evaluation of a distribution function
-        distributionOptions.distributionFunction = DistributionFunction.valueOf(name);
-        // Assume there are only two types of options:
-        // Forward functions: x (real) -> p-value
-        // Inverse functions: p-value -> x (real)
-        if (distributionOptions instanceof InverseContinuousDistributionOptions) {
-            DistributionUtils.evaluate(distributions,
-                (InverseContinuousDistributionOptions) distributionOptions);
-        } else {
-            DistributionUtils.evaluate(distributions,
-                (ContinuousDistributionOptions) distributionOptions);
-        }
-        return null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**

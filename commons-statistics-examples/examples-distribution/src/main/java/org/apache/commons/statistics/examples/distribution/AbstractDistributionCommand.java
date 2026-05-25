@@ -26,18 +26,21 @@ import picocli.CommandLine.Spec;
  * This is used for commands that have sub-commands.
  */
 abstract class AbstractDistributionCommand implements Callable<Void> {
-    /** The command specification. Used to print the usage built by Picocli. */
+
+    /**
+     * The command specification. Used to print the usage built by Picocli.
+     */
     @Spec
     private CommandSpec spec;
 
-    /** The standard options. */
+    /**
+     * The standard options.
+     */
     @Mixin
     private StandardOptions standardOptions;
 
     @Override
     public Void call() {
-        // All work is done in sub-commands so just print the usage
-        spec.commandLine().usage(System.out);
-        return null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

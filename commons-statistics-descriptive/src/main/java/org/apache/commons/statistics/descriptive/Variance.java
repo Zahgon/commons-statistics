@@ -92,7 +92,9 @@ public final class Variance implements DoubleStatistic, StatisticAccumulator<Var
      */
     private final SumOfSquaredDeviations ss;
 
-    /** Flag to control if the statistic is biased, or should use a bias correction. */
+    /**
+     * Flag to control if the statistic is biased, or should use a bias correction.
+     */
     private boolean biased;
 
     /**
@@ -119,7 +121,7 @@ public final class Variance implements DoubleStatistic, StatisticAccumulator<Var
      * @return {@code Variance} instance.
      */
     public static Variance create() {
-        return new Variance();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -134,7 +136,7 @@ public final class Variance implements DoubleStatistic, StatisticAccumulator<Var
      * @return {@code Variance} instance.
      */
     public static Variance of(double... values) {
-        return new Variance(SumOfSquaredDeviations.of(values));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -153,8 +155,7 @@ public final class Variance implements DoubleStatistic, StatisticAccumulator<Var
      * @since 1.2
      */
     public static Variance ofRange(double[] values, int from, int to) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return new Variance(SumOfSquaredDeviations.ofRange(values, from, to));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -164,7 +165,7 @@ public final class Variance implements DoubleStatistic, StatisticAccumulator<Var
      */
     @Override
     public void accept(double value) {
-        ss.accept(value);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -176,25 +177,12 @@ public final class Variance implements DoubleStatistic, StatisticAccumulator<Var
      */
     @Override
     public double getAsDouble() {
-        // This method checks the sum of squared is finite
-        // to provide a consistent NaN when the computation is not possible.
-        // Note: The SS checks for n=0 and returns NaN.
-        final double m2 = ss.getSumOfSquaredDeviations();
-        if (!Double.isFinite(m2)) {
-            return Double.NaN;
-        }
-        final long n = ss.n;
-        // Avoid a divide by zero
-        if (n == 1) {
-            return 0;
-        }
-        return biased ? m2 / n : m2 / (n - 1);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Variance combine(Variance other) {
-        ss.combine(other.ss);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -218,7 +206,6 @@ public final class Variance implements DoubleStatistic, StatisticAccumulator<Var
      * @return {@code this} instance
      */
     public Variance setBiased(boolean v) {
-        biased = v;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

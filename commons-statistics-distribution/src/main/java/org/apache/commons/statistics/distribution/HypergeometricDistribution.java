@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.apache.commons.statistics.distribution;
 
 import java.util.function.DoublePredicate;
@@ -39,24 +38,51 @@ import java.util.function.DoublePredicate;
  * @see <a href="https://mathworld.wolfram.com/HypergeometricDistribution.html">Hypergeometric distribution (MathWorld)</a>
  */
 public final class HypergeometricDistribution extends AbstractDiscreteDistribution {
-    /** 1/2. */
+
+    /**
+     * 1/2.
+     */
     private static final double HALF = 0.5;
-    /** The number of successes in the population. */
+
+    /**
+     * The number of successes in the population.
+     */
     private final int numberOfSuccesses;
-    /** The population size. */
+
+    /**
+     * The population size.
+     */
     private final int populationSize;
-    /** The sample size. */
+
+    /**
+     * The sample size.
+     */
     private final int sampleSize;
-    /** The lower bound of the support (inclusive). */
+
+    /**
+     * The lower bound of the support (inclusive).
+     */
     private final int lowerBound;
-    /** The upper bound of the support (inclusive). */
+
+    /**
+     * The upper bound of the support (inclusive).
+     */
     private final int upperBound;
-    /** Binomial probability of success (sampleSize / populationSize). */
+
+    /**
+     * Binomial probability of success (sampleSize / populationSize).
+     */
     private final double bp;
-    /** Binomial probability of failure ((populationSize - sampleSize) / populationSize). */
+
+    /**
+     * Binomial probability of failure ((populationSize - sampleSize) / populationSize).
+     */
     private final double bq;
-    /** Cached midpoint of the CDF/SF. The array holds [x, cdf(x)] for the midpoint x.
-     * Used for the cumulative probability functions. */
+
+    /**
+     * Cached midpoint of the CDF/SF. The array holds [x, cdf(x)] for the midpoint x.
+     * Used for the cumulative probability functions.
+     */
     private double[] midpoint;
 
     /**
@@ -64,9 +90,7 @@ public final class HypergeometricDistribution extends AbstractDiscreteDistributi
      * @param numberOfSuccesses Number of successes in the population.
      * @param sampleSize Sample size.
      */
-    private HypergeometricDistribution(int populationSize,
-                                       int numberOfSuccesses,
-                                       int sampleSize) {
+    private HypergeometricDistribution(int populationSize, int numberOfSuccesses, int sampleSize) {
         this.numberOfSuccesses = numberOfSuccesses;
         this.populationSize = populationSize;
         this.sampleSize = sampleSize;
@@ -87,31 +111,8 @@ public final class HypergeometricDistribution extends AbstractDiscreteDistributi
      * {@code populationSize <= 0} or {@code numberOfSuccesses > populationSize}, or
      * {@code sampleSize > populationSize}.
      */
-    public static HypergeometricDistribution of(int populationSize,
-                                                int numberOfSuccesses,
-                                                int sampleSize) {
-        if (populationSize <= 0) {
-            throw new DistributionException(DistributionException.NOT_STRICTLY_POSITIVE,
-                                            populationSize);
-        }
-        if (numberOfSuccesses < 0) {
-            throw new DistributionException(DistributionException.NEGATIVE,
-                                            numberOfSuccesses);
-        }
-        if (sampleSize < 0) {
-            throw new DistributionException(DistributionException.NEGATIVE,
-                                            sampleSize);
-        }
-
-        if (numberOfSuccesses > populationSize) {
-            throw new DistributionException(DistributionException.TOO_LARGE,
-                                            numberOfSuccesses, populationSize);
-        }
-        if (sampleSize > populationSize) {
-            throw new DistributionException(DistributionException.TOO_LARGE,
-                                            sampleSize, populationSize);
-        }
-        return new HypergeometricDistribution(populationSize, numberOfSuccesses, sampleSize);
+    public static HypergeometricDistribution of(int populationSize, int numberOfSuccesses, int sampleSize) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -147,7 +148,7 @@ public final class HypergeometricDistribution extends AbstractDiscreteDistributi
      * @return the population size.
      */
     public int getPopulationSize() {
-        return populationSize;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -156,7 +157,7 @@ public final class HypergeometricDistribution extends AbstractDiscreteDistributi
      * @return the number of successes.
      */
     public int getNumberOfSuccesses() {
-        return numberOfSuccesses;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -165,49 +166,31 @@ public final class HypergeometricDistribution extends AbstractDiscreteDistributi
      * @return the sample size.
      */
     public int getSampleSize() {
-        return sampleSize;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double probability(int x) {
-        return Math.exp(logProbability(x));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double probability(int x0, int x1) {
-        if (x0 > x1) {
-            throw new DistributionException(DistributionException.INVALID_RANGE_LOW_GT_HIGH, x0, x1);
-        }
-        if (x0 == x1 || x1 < lowerBound) {
-            return 0;
-        }
-        // If the range is outside the bounds use the appropriate cumulative probability
-        if (x0 < lowerBound) {
-            return cumulativeProbability(x1);
-        }
-        if (x1 >= upperBound) {
-            // 1 - cdf(x0)
-            return survivalProbability(x0);
-        }
-        // Here: lower <= x0 < x1 < upper:
-        // sum(pdf(x)) for x in (x0, x1]
-        final int lo = x0 + 1;
-        // Sum small values first by starting at the point the greatest distance from the mode.
-        final int mode = (int) Math.floor((sampleSize + 1.0) * (numberOfSuccesses + 1.0) / (populationSize + 2.0));
-        return Math.abs(mode - lo) > Math.abs(mode - x1) ?
-            innerCumulativeProbability(lo, x1) :
-            innerCumulativeProbability(x1, lo);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double logProbability(int x) {
-        if (x < lowerBound || x > upperBound) {
-            return Double.NEGATIVE_INFINITY;
-        }
-        return computeLogProbability(x);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -217,52 +200,26 @@ public final class HypergeometricDistribution extends AbstractDiscreteDistributi
      * @return log(P(X = x))
      */
     private double computeLogProbability(int x) {
-        final double p1 =
-                SaddlePointExpansionUtils.logBinomialProbability(x, numberOfSuccesses, bp, bq);
-        final double p2 =
-                SaddlePointExpansionUtils.logBinomialProbability(sampleSize - x,
-                        populationSize - numberOfSuccesses, bp, bq);
-        final double p3 =
-                SaddlePointExpansionUtils.logBinomialProbability(sampleSize, populationSize, bp, bq);
+        final double p1 = SaddlePointExpansionUtils.logBinomialProbability(x, numberOfSuccesses, bp, bq);
+        final double p2 = SaddlePointExpansionUtils.logBinomialProbability(sampleSize - x, populationSize - numberOfSuccesses, bp, bq);
+        final double p3 = SaddlePointExpansionUtils.logBinomialProbability(sampleSize, populationSize, bp, bq);
         return p1 + p2 - p3;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double cumulativeProbability(int x) {
-        if (x < lowerBound) {
-            return 0.0;
-        } else if (x >= upperBound) {
-            return 1.0;
-        }
-        final double[] mid = getMidPoint();
-        final int m = (int) mid[0];
-        if (x < m) {
-            return innerCumulativeProbability(lowerBound, x);
-        } else if (x > m) {
-            return 1 - innerCumulativeProbability(upperBound, x + 1);
-        }
-        // cdf(x)
-        return mid[1];
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double survivalProbability(int x) {
-        if (x < lowerBound) {
-            return 1.0;
-        } else if (x >= upperBound) {
-            return 0.0;
-        }
-        final double[] mid = getMidPoint();
-        final int m = (int) mid[0];
-        if (x < m) {
-            return 1 - innerCumulativeProbability(lowerBound, x);
-        } else if (x > m) {
-            return innerCumulativeProbability(upperBound, x + 1);
-        }
-        // 1 - cdf(x)
-        return 1 - mid[1];
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -299,14 +256,12 @@ public final class HypergeometricDistribution extends AbstractDiscreteDistributi
 
     @Override
     public int inverseCumulativeProbability(double p) {
-        ArgumentUtils.checkProbability(p);
-        return computeInverseProbability(p, 1 - p, false);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int inverseSurvivalProbability(double p) {
-        ArgumentUtils.checkProbability(p);
-        return computeInverseProbability(1 - p, p, true);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -324,21 +279,15 @@ public final class HypergeometricDistribution extends AbstractDiscreteDistributi
         if (q == 0) {
             return upperBound;
         }
-
         // Sum the PDF(x) until the appropriate p-value is obtained
         // CDF: require smallest x where P(X<=x) >= p
         // SF:  require smallest x where P(X>x) <= q
         // The choice of summation uses the mid-point.
         // The test on the CDF or SF is based on the appropriate input p-value.
-
         final double[] mid = getMidPoint();
         final int m = (int) mid[0];
         final double mp = mid[1];
-
-        final int midPointComparison = complement ?
-            Double.compare(1 - mp, q) :
-            Double.compare(p, mp);
-
+        final int midPointComparison = complement ? Double.compare(1 - mp, q) : Double.compare(p, mp);
         if (midPointComparison < 0) {
             return inverseLower(p, q, complement);
         } else if (midPointComparison > 0) {
@@ -362,9 +311,7 @@ public final class HypergeometricDistribution extends AbstractDiscreteDistributi
     private int inverseLower(double p, double q, boolean complement) {
         // Sum from the lower bound (computing the cdf)
         int x = lowerBound;
-        final DoublePredicate test = complement ?
-            i -> 1 - i > q :
-            i -> i < p;
+        final DoublePredicate test = complement ? i -> 1 - i > q : i -> i < p;
         double cdf = Math.exp(computeLogProbability(x));
         while (test.test(cdf)) {
             x++;
@@ -384,9 +331,7 @@ public final class HypergeometricDistribution extends AbstractDiscreteDistributi
     private int inverseUpper(double p, double q, boolean complement) {
         // Sum from the upper bound (computing the sf)
         int x = upperBound;
-        final DoublePredicate test = complement ?
-            i -> i < q :
-            i -> 1 - i > p;
+        final DoublePredicate test = complement ? i -> i < q : i -> 1 - i > p;
         double sf = 0;
         while (test.test(sf)) {
             sf += Math.exp(computeLogProbability(x));
@@ -394,8 +339,7 @@ public final class HypergeometricDistribution extends AbstractDiscreteDistributi
         }
         // Here either sf(x) >= q, or cdf(x) <= p
         // Ensure sf(x) <= q, or cdf(x) >= p
-        if (complement && sf > q ||
-            !complement && 1 - sf < p) {
+        if (complement && sf > q || !complement && 1 - sf < p) {
             x++;
         }
         return x;
@@ -411,7 +355,7 @@ public final class HypergeometricDistribution extends AbstractDiscreteDistributi
      */
     @Override
     public double getMean() {
-        return getSampleSize() * (getNumberOfSuccesses() / (double) getPopulationSize());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -424,10 +368,7 @@ public final class HypergeometricDistribution extends AbstractDiscreteDistributi
      */
     @Override
     public double getVariance() {
-        final double N = getPopulationSize();
-        final double K = getNumberOfSuccesses();
-        final double n = getSampleSize();
-        return (n * K * (N - K) * (N - n)) / (N * N * (N - 1));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -440,7 +381,7 @@ public final class HypergeometricDistribution extends AbstractDiscreteDistributi
      */
     @Override
     public int getSupportLowerBound() {
-        return lowerBound;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -453,7 +394,7 @@ public final class HypergeometricDistribution extends AbstractDiscreteDistributi
      */
     @Override
     public int getSupportUpperBound() {
-        return upperBound;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -484,7 +425,7 @@ public final class HypergeometricDistribution extends AbstractDiscreteDistributi
                 x--;
                 p1 = p0;
             }
-            v = new double[] {x, p1};
+            v = new double[] { x, p1 };
             midpoint = v;
         }
         return v;

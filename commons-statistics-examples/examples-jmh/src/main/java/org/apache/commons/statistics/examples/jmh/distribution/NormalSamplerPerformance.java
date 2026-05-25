@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.apache.commons.statistics.examples.jmh.distribution;
 
 import java.util.concurrent.TimeUnit;
@@ -70,9 +69,12 @@ import org.openjdk.jmh.annotations.Warmup;
 @Warmup(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 @Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 @State(Scope.Benchmark)
-@Fork(value = 1, jvmArgs = {"-server", "-Xms512M", "-Xmx512M"})
+@Fork(value = 1, jvmArgs = { "-server", "-Xms512M", "-Xmx512M" })
 public class NormalSamplerPerformance {
-    /** The value. Must NOT be final to prevent JVM optimisation! */
+
+    /**
+     * The value. Must NOT be final to prevent JVM optimisation!
+     */
     private double value;
 
     /**
@@ -80,9 +82,13 @@ public class NormalSamplerPerformance {
      */
     @State(Scope.Benchmark)
     public static class Source {
-        /** The method. */
-        @Param({"normal", "inverse_transform"})
+
+        /**
+         * The method.
+         */
+        @Param({ "normal", "inverse_transform" })
         private String method;
+
         /**
          * RNG providers.
          *
@@ -91,19 +97,19 @@ public class NormalSamplerPerformance {
          * @see <a href="https://commons.apache.org/proper/commons-rng/userguide/rng.html">
          *      Commons RNG user guide</a>
          */
-        @Param({"XO_RO_SHI_RO_128_PP",
-                "MWC_256",
-                "JDK"})
+        @Param({ "XO_RO_SHI_RO_128_PP", "MWC_256", "JDK" })
         private String randomSourceName;
 
-        /** The generator to supply the next sample value. */
+        /**
+         * The generator to supply the next sample value.
+         */
         private DoubleSupplier gen;
 
         /**
          * @return the next value
          */
         public double next() {
-            return gen.getAsDouble();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -111,15 +117,7 @@ public class NormalSamplerPerformance {
          */
         @Setup
         public void setup() {
-            final UniformRandomProvider rng = RandomSource.valueOf(randomSourceName).create();
-            if ("normal".equals(method)) {
-                gen = ZigguratSampler.NormalizedGaussian.of(rng)::sample;
-            } else if ("inverse_transform".equals(method)) {
-                final NormalDistribution dist = NormalDistribution.of(0, 1);
-                gen = InverseTransformContinuousSampler.of(rng, dist::inverseCumulativeProbability)::sample;
-            } else {
-                throw new IllegalStateException("Unknown method: " + method);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -130,7 +128,7 @@ public class NormalSamplerPerformance {
      */
     @Benchmark
     public double baseline() {
-        return value;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -141,6 +139,6 @@ public class NormalSamplerPerformance {
      */
     @Benchmark
     public double sample(Source source) {
-        return source.next();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

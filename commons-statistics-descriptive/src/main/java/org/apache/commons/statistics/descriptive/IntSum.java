@@ -54,7 +54,10 @@ import java.math.BigInteger;
  * @since 1.1
  */
 public final class IntSum implements IntStatistic, StatisticAccumulator<IntSum> {
-    /** Sum of the values. */
+
+    /**
+     * Sum of the values.
+     */
     private final Int128 sum;
 
     /**
@@ -81,7 +84,7 @@ public final class IntSum implements IntStatistic, StatisticAccumulator<IntSum> 
      * @return {@code IntSum} instance.
      */
     public static IntSum create() {
-        return new IntSum();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -96,13 +99,7 @@ public final class IntSum implements IntStatistic, StatisticAccumulator<IntSum> 
      * @return {@code IntSum} instance.
      */
     public static IntSum of(int... values) {
-        // Sum of an array cannot exceed a 64-bit long
-        long s = 0;
-        for (final int x : values) {
-            s += x;
-        }
-        // Convert
-        return new IntSum(Int128.of(s));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -121,8 +118,7 @@ public final class IntSum implements IntStatistic, StatisticAccumulator<IntSum> 
      * @since 1.2
      */
     public static IntSum ofRange(int[] values, int from, int to) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return createFromRange(values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -136,13 +132,7 @@ public final class IntSum implements IntStatistic, StatisticAccumulator<IntSum> 
      * @return {@code IntSum} instance.
      */
     static IntSum createFromRange(int[] values, int from, int to) {
-        // Sum of an array cannot exceed a 64-bit long
-        long s = 0;
-        for (int i = from; i < to; i++) {
-            s += values[i];
-        }
-        // Convert
-        return new IntSum(Int128.of(s));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -153,7 +143,7 @@ public final class IntSum implements IntStatistic, StatisticAccumulator<IntSum> 
      * @return the sum
      */
     Int128 getSum() {
-        return sum;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -163,7 +153,7 @@ public final class IntSum implements IntStatistic, StatisticAccumulator<IntSum> 
      */
     @Override
     public void accept(int value) {
-        sum.add(value);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -180,7 +170,7 @@ public final class IntSum implements IntStatistic, StatisticAccumulator<IntSum> 
      */
     @Override
     public int getAsInt() {
-        return sum.toIntExact();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -197,7 +187,7 @@ public final class IntSum implements IntStatistic, StatisticAccumulator<IntSum> 
      */
     @Override
     public long getAsLong() {
-        return sum.toLongExact();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -213,7 +203,7 @@ public final class IntSum implements IntStatistic, StatisticAccumulator<IntSum> 
      */
     @Override
     public double getAsDouble() {
-        return sum.toDouble();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -225,12 +215,11 @@ public final class IntSum implements IntStatistic, StatisticAccumulator<IntSum> 
      */
     @Override
     public BigInteger getAsBigInteger() {
-        return sum.toBigInteger();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public IntSum combine(IntSum other) {
-        sum.add(other.sum);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

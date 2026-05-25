@@ -51,12 +51,20 @@ package org.apache.commons.statistics.descriptive;
  * @since 1.1
  */
 public final class LongMean implements LongStatistic, StatisticAccumulator<LongMean> {
-    /** Limit where the absolute sum can exactly map to a double. Set to 2^53. */
+
+    /**
+     * Limit where the absolute sum can exactly map to a double. Set to 2^53.
+     */
     private static final long SMALL_SUM = 1L << 53;
 
-    /** Sum of the values. */
+    /**
+     * Sum of the values.
+     */
     private final Int128 sum;
-    /** Count of values that have been added. */
+
+    /**
+     * Count of values that have been added.
+     */
     private long n;
 
     /**
@@ -85,7 +93,7 @@ public final class LongMean implements LongStatistic, StatisticAccumulator<LongM
      * @return {@code LongMean} instance.
      */
     public static LongMean create() {
-        return new LongMean();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -95,11 +103,7 @@ public final class LongMean implements LongStatistic, StatisticAccumulator<LongM
      * @return {@code LongMean} instance.
      */
     public static LongMean of(long... values) {
-        final Int128 s = Int128.create();
-        for (final long x : values) {
-            s.add(x);
-        }
-        return new LongMean(s, values.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -113,8 +117,7 @@ public final class LongMean implements LongStatistic, StatisticAccumulator<LongM
      * @since 1.2
      */
     public static LongMean ofRange(long[] values, int from, int to) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return createFromRange(values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -128,13 +131,7 @@ public final class LongMean implements LongStatistic, StatisticAccumulator<LongM
      * @return {@code LongMean} instance.
      */
     static LongMean createFromRange(long[] values, int from, int to) {
-        // Sum of an array cannot exceed a 64-bit long
-        final Int128 s = Int128.create();
-        for (int i = from; i < to; i++) {
-            s.add(values[i]);
-        }
-        // Convert
-        return new LongMean(s, to - from);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -144,8 +141,7 @@ public final class LongMean implements LongStatistic, StatisticAccumulator<LongM
      */
     @Override
     public void accept(long value) {
-        sum.add(value);
-        n++;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -157,7 +153,7 @@ public final class LongMean implements LongStatistic, StatisticAccumulator<LongM
      */
     @Override
     public double getAsDouble() {
-        return computeMean(sum, n);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -170,20 +166,11 @@ public final class LongMean implements LongStatistic, StatisticAccumulator<LongM
      * @return the mean
      */
     static double computeMean(Int128 sum, long n) {
-        // Fast option when the sum fits within
-        // the mantissa of a double.
-        // Handles n=0 as NaN
-        if (sum.hi64() == 0 && Math.abs(sum.lo64()) < SMALL_SUM) {
-            return (double) sum.lo64() / n;
-        }
-        // Extended precision
-        return sum.divideToDouble(n);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public LongMean combine(LongMean other) {
-        sum.add(other.sum);
-        n += other.n;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -34,6 +34,7 @@ import org.apache.commons.statistics.distribution.ChiSquaredDistribution;
  * @since 1.1
  */
 public final class GTest {
+
     // Note:
     // The g-test statistic is a summation of terms with positive and negative sign
     // and thus the sum may exhibit cancellation. This class uses separate high precision
@@ -44,11 +45,14 @@ public final class GTest {
     // The summation only need maintain enough bits in the final sum to distinguish
     // g values around critical alpha values where 0 << chisq.sf(g, k) << 0.5: g > k,
     // with k = number of terms - 1.
-
-    /** Default instance. */
+    /**
+     * Default instance.
+     */
     private static final GTest DEFAULT = new GTest(0);
 
-    /** Degrees of freedom adjustment. */
+    /**
+     * Degrees of freedom adjustment.
+     */
     private final int degreesOfFreedomAdjustment;
 
     /**
@@ -68,7 +72,7 @@ public final class GTest {
      * @return default instance
      */
     public static GTest withDefaults() {
-        return DEFAULT;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -86,7 +90,7 @@ public final class GTest {
      * @throws IllegalArgumentException if the value is negative
      */
     public GTest withDegreesOfFreedomAdjustment(int v) {
-        return new GTest(Arguments.checkNonNegative(v));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -106,29 +110,7 @@ public final class GTest {
      * @see #test(long[])
      */
     public double statistic(long[] observed) {
-        Arguments.checkValuesRequiredSize(observed.length, 2);
-        Arguments.checkNonNegative(observed);
-        final double e = LongMean.of(observed).getAsDouble();
-        if (e == 0) {
-            throw new InferenceException(InferenceException.NO_DATA);
-        }
-        // g = 2 * sum{o * ln(o/e)}
-        //   = 2 * [ sum{o * ln(o)} - sum(o) * ln(e) ]
-        // The second form has more cancellation as the sums are larger.
-        // Separate sum for positive and negative terms.
-        final Sum sum = Sum.create();
-        final Sum sum2 = Sum.create();
-        for (final double o : observed) {
-            if (o > e) {
-                // Positive term
-                sum.add(o * Math.log(o / e));
-            } else if (o > 0) {
-                // Negative term
-                // Process non-zero counts to avoid 0 * -inf = NaN
-                sum2.add(o * Math.log(o / e));
-            }
-        }
-        return sum.add(sum2).getAsDouble() * 2;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -148,26 +130,7 @@ public final class GTest {
      * @see #test(double[], long[])
      */
     public double statistic(double[] expected, long[] observed) {
-        // g = 2 * sum{o * ln(o/e)}
-        // The sum of o and e must be the same.
-        final double ratio = StatisticUtils.computeRatio(expected, observed);
-        // High precision sum to reduce cancellation.
-        // Separate sum for positive and negative terms.
-        final Sum sum = Sum.create();
-        final Sum sum2 = Sum.create();
-        for (int i = 0; i < observed.length; i++) {
-            final long o = observed[i];
-            // Process non-zero counts to avoid 0 * -inf = NaN
-            if (o != 0) {
-                final double term = o * Math.log(o / (ratio * expected[i]));
-                if (term < 0) {
-                    sum2.add(term);
-                } else {
-                    sum.add(term);
-                }
-            }
-        }
-        return sum.add(sum2).getAsDouble() * 2;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -192,60 +155,7 @@ public final class GTest {
      * @see ChiSquareTest#test(long[][])
      */
     public double statistic(long[][] counts) {
-        Arguments.checkCategoriesRequiredSize(counts.length, 2);
-        Arguments.checkValuesRequiredSize(counts[0].length, 2);
-        Arguments.checkRectangular(counts);
-        Arguments.checkNonNegative(counts);
-
-        final int ni = counts.length;
-        final int nj = counts[0].length;
-
-        // Compute row, column and total sums
-        final double[] sumi = new double[ni];
-        final double[] sumj = new double[nj];
-        double n = 0;
-        // We can sum data on the first pass. See below for computation details.
-        final Sum sum = Sum.create();
-        for (int i = 0; i < ni; i++) {
-            for (int j = 0; j < nj; j++) {
-                final long c = counts[i][j];
-                sumi[i] += c;
-                sumj[j] += c;
-                if (c > 1) {
-                    sum.add(c * Math.log(c));
-                }
-            }
-            checkNonZero(sumi[i], "Row", i);
-            n += sumi[i];
-        }
-
-        for (int j = 0; j < nj; j++) {
-            checkNonZero(sumj[j], "Column", j);
-        }
-
-        // This computes a modified form of the Shannon entropy H without requiring
-        // normalisation of observations to probabilities and without negation,
-        // i.e. we compute n * [ H(r) + H(c) - H(r,c) ] as [ H'(r,c) - H'(r) - H'(c) ].
-
-        // H  = -sum (p * log(p))
-        // H' = n * sum (p * log(p))
-        //    = n * sum (o/n * log(o/n))
-        //    = n * [ sum(o/n * log(o)) - sum(o/n * log(n)) ]
-        //    = sum(o * log(o)) - n log(n)
-
-        // After 3 modified entropy sums H'(r,c) - H'(r) - H'(c) compensation is (-1 + 2) * n log(n)
-        sum.addProduct(n, Math.log(n));
-        // Negative terms
-        final Sum sum2 = Sum.create();
-        // All these counts are above zero so no check for zeros
-        for (final double c : sumi) {
-            sum2.add(c * -Math.log(c));
-        }
-        for (final double c : sumj) {
-            sum2.add(c * -Math.log(c));
-        }
-
-        return sum.add(sum2).getAsDouble() * 2;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -259,10 +169,7 @@ public final class GTest {
      * @see #statistic(long[])
      */
     public SignificanceResult test(long[] observed) {
-        final int df = observed.length - 1;
-        final double g = statistic(observed);
-        final double p = computeP(g, df);
-        return new BaseSignificanceResult(g, p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -283,10 +190,7 @@ public final class GTest {
      * @see #statistic(double[], long[])
      */
     public SignificanceResult test(double[] expected, long[] observed) {
-        final int df = StatisticUtils.computeDegreesOfFreedom(observed.length, degreesOfFreedomAdjustment);
-        final double g = statistic(expected, observed);
-        final double p = computeP(g, df);
-        return new BaseSignificanceResult(g, p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -301,10 +205,7 @@ public final class GTest {
      * @see #statistic(long[][])
      */
     public SignificanceResult test(long[][] counts) {
-        final double g = statistic(counts);
-        final double df = (counts.length - 1.0) * (counts[0].length - 1.0);
-        final double p = computeP(g, df);
-        return new BaseSignificanceResult(g, p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**

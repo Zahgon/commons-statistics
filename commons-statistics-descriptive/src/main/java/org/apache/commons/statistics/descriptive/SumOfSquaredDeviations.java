@@ -57,7 +57,10 @@ package org.apache.commons.statistics.descriptive;
  * @since 1.1
  */
 class SumOfSquaredDeviations extends FirstMoment {
-    /** Sum of squared deviations of the values that have been added. */
+
+    /**
+     * Sum of squared deviations of the values that have been added.
+     */
     protected double sumSquaredDev;
 
     /**
@@ -112,10 +115,7 @@ class SumOfSquaredDeviations extends FirstMoment {
      * @return {@code SumOfSquaredDeviations} instance.
      */
     static SumOfSquaredDeviations of(double... values) {
-        if (values.length == 0) {
-            return new SumOfSquaredDeviations();
-        }
-        return create(FirstMoment.of(values), values, 0, values.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -132,10 +132,7 @@ class SumOfSquaredDeviations extends FirstMoment {
      * @return {@code SumOfSquaredDeviations} instance.
      */
     static SumOfSquaredDeviations ofRange(double[] values, int from, int to) {
-        if (from == to) {
-            return new SumOfSquaredDeviations();
-        }
-        return create(FirstMoment.ofRange(values, from, to), values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -153,12 +150,8 @@ class SumOfSquaredDeviations extends FirstMoment {
      * @param to Exclusive end of the range.
      * @return {@code SumOfSquaredDeviations} instance.
      */
-    static SumOfSquaredDeviations createFromRange(org.apache.commons.numbers.core.Sum sum,
-                                                  double[] values, int from, int to) {
-        if (from == to) {
-            return new SumOfSquaredDeviations();
-        }
-        return create(FirstMoment.createFromRange(sum, values, from, to), values, from, to);
+    static SumOfSquaredDeviations createFromRange(org.apache.commons.numbers.core.Sum sum, double[] values, int from, int to) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -173,7 +166,6 @@ class SumOfSquaredDeviations extends FirstMoment {
     private static SumOfSquaredDeviations create(FirstMoment m1, double[] values, int from, int to) {
         // "Corrected two-pass algorithm"
         // See: Chan et al (1983) Equation 1.7
-
         final double xbar = m1.getFirstMoment();
         if (!Double.isFinite(xbar)) {
             return new SumOfSquaredDeviations(Double.NaN, m1);
@@ -190,9 +182,7 @@ class SumOfSquaredDeviations extends FirstMoment {
         // of the error in the first term.
         // To prevent sumSquaredDev from spuriously attaining a NaN value
         // when ss is infinite, assign it an infinite value which is its intended value.
-        final double sumSquaredDev = ss == Double.POSITIVE_INFINITY ?
-            Double.POSITIVE_INFINITY :
-            ss - (s * s / (to - from));
+        final double sumSquaredDev = ss == Double.POSITIVE_INFINITY ? Double.POSITIVE_INFINITY : ss - (s * s / (to - from));
         return new SumOfSquaredDeviations(sumSquaredDev, m1);
     }
 
@@ -203,11 +193,7 @@ class SumOfSquaredDeviations extends FirstMoment {
      */
     @Override
     public void accept(double value) {
-        // "Updating one-pass algorithm"
-        // See: Chan et al (1983) Equation 1.3b
-        super.accept(value);
-        // Note: account for the half-deviation representation by scaling by 4=2^2
-        sumSquaredDev += (n - 1) * dev * nDev * 4;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -216,7 +202,7 @@ class SumOfSquaredDeviations extends FirstMoment {
      * @return sum of squared deviations of all values.
      */
     double getSumOfSquaredDeviations() {
-        return Double.isFinite(getFirstMoment()) ? sumSquaredDev : Double.NaN;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -226,19 +212,6 @@ class SumOfSquaredDeviations extends FirstMoment {
      * @return {@code this} instance after combining {@code other}.
      */
     SumOfSquaredDeviations combine(SumOfSquaredDeviations other) {
-        final long m = other.n;
-        if (n == 0) {
-            sumSquaredDev = other.sumSquaredDev;
-        } else if (m != 0) {
-            // "Updating one-pass algorithm"
-            // See: Chan et al (1983) Equation 1.5b (modified for the mean)
-            final double diffOfMean = getFirstMomentDifference(other);
-            final double sqDiffOfMean = diffOfMean * diffOfMean;
-            // Enforce symmetry
-            sumSquaredDev = (sumSquaredDev + other.sumSquaredDev) +
-                sqDiffOfMean * (((double) n * m) / ((double) n + m));
-        }
-        super.combine(other);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

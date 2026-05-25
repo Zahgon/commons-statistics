@@ -28,14 +28,21 @@ import java.nio.ByteBuffer;
  * @since 1.1
  */
 final class UInt96 {
-    /** Mask for the lower 32-bits of a long. */
+
+    /**
+     * Mask for the lower 32-bits of a long.
+     */
     private static final long MASK32 = 0xffff_ffffL;
 
     // Low data is stored using an integer to allow efficient sum-with-carry addition
-
-    /** bits 32-1 (low 32-bits). */
+    /**
+     * bits 32-1 (low 32-bits).
+     */
     private int c;
-    /** bits 96-33. */
+
+    /**
+     * bits 96-33.
+     */
     private long ab;
 
     /**
@@ -73,7 +80,7 @@ final class UInt96 {
      * @return the instance
      */
     static UInt96 create() {
-        return new UInt96();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -84,7 +91,7 @@ final class UInt96 {
      * @return the instance
      */
     static UInt96 of(long x) {
-        return new UInt96(x);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -97,12 +104,7 @@ final class UInt96 {
      * @param x Value.
      */
     void addPositive(long x) {
-        // Sum with carry.
-        // Assuming x is positive then x + lo will not overflow 64-bits
-        // so we do not have to split x into upper and lower 32-bit values.
-        final long s = x + (c & MASK32);
-        c = (int) s;
-        ab += s >>> Integer.SIZE;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -111,13 +113,7 @@ final class UInt96 {
      * @param x Value.
      */
     void add(UInt96 x) {
-        // Avoid issues adding to itself
-        final int cc = x.c;
-        final long aabb = x.ab;
-        // Sum with carry.
-        final long s = (cc & MASK32) + (c & MASK32);
-        c = (int) s;
-        ab += (s >>> Integer.SIZE) + aabb;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -126,13 +122,7 @@ final class UInt96 {
      * @return the value
      */
     BigInteger toBigInteger() {
-        if (ab != 0) {
-            final ByteBuffer bb = ByteBuffer.allocate(Integer.BYTES * 3)
-                .putLong(ab)
-                .putInt(c);
-            return new BigInteger(1, bb.array());
-        }
-        return BigInteger.valueOf(c & MASK32);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -141,7 +131,7 @@ final class UInt96 {
      * @return bits 32-1
      */
     int lo32() {
-        return c;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -150,6 +140,6 @@ final class UInt96 {
      * @return bits 96-33
      */
     long hi64() {
-        return ab;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

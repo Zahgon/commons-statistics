@@ -31,25 +31,42 @@ package org.apache.commons.statistics.distribution;
  * @see <a href="https://mathworld.wolfram.com/LogisticDistribution.html">Logistic distribution (MathWorld)</a>
  */
 public final class LogisticDistribution extends AbstractContinuousDistribution {
-    /** Support lower bound. */
+
+    /**
+     * Support lower bound.
+     */
     private static final double SUPPORT_LO = Double.NEGATIVE_INFINITY;
-    /** Support upper bound. */
+
+    /**
+     * Support upper bound.
+     */
     private static final double SUPPORT_HI = Double.POSITIVE_INFINITY;
-    /** &pi;<sup>2</sup>/3. https://oeis.org/A195055. */
+
+    /**
+     * &pi;<sup>2</sup>/3. https://oeis.org/A195055.
+     */
     private static final double PI_SQUARED_OVER_THREE = 3.289868133696452872944830;
-    /** Location parameter. */
+
+    /**
+     * Location parameter.
+     */
     private final double mu;
-    /** Scale parameter. */
+
+    /**
+     * Scale parameter.
+     */
     private final double scale;
-    /** Logarithm of "scale". */
+
+    /**
+     * Logarithm of "scale".
+     */
     private final double logScale;
 
     /**
      * @param mu Location parameter.
      * @param scale Scale parameter (must be positive).
      */
-    private LogisticDistribution(double mu,
-                                 double scale) {
+    private LogisticDistribution(double mu, double scale) {
         this.mu = mu;
         this.scale = scale;
         this.logScale = Math.log(scale);
@@ -63,13 +80,8 @@ public final class LogisticDistribution extends AbstractContinuousDistribution {
      * @return the distribution
      * @throws IllegalArgumentException if {@code scale <= 0}.
      */
-    public static LogisticDistribution of(double mu,
-                                          double scale) {
-        if (scale <= 0) {
-            throw new DistributionException(DistributionException.NOT_STRICTLY_POSITIVE,
-                                            scale);
-        }
-        return new LogisticDistribution(mu, scale);
+    public static LogisticDistribution of(double mu, double scale) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -78,7 +90,7 @@ public final class LogisticDistribution extends AbstractContinuousDistribution {
      * @return the location parameter.
      */
     public double getLocation() {
-        return mu;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -87,81 +99,55 @@ public final class LogisticDistribution extends AbstractContinuousDistribution {
      * @return the scale parameter.
      */
     public double getScale() {
-        return scale;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double density(double x) {
-        if (x <= SUPPORT_LO ||
-            x >= SUPPORT_HI) {
-            return 0;
-        }
-
-        // Ensure symmetry around location by using the absolute.
-        // This also ensures exp(z) is between 1 and 0 and avoids
-        // overflow for large negative values of (x - mu).
-        // Exploits the reciprocal relation: exp(-x) == 1 / exp(x)
-        //     exp(-z)                   1                exp(z)     exp(z)
-        // --------------- = -------------------------- * ------ = --------------
-        // (1 + exp(-z))^2    exp(z) (1 + 1 / exp(z))^2   exp(z)   (1 + exp(z))^2
-        final double z = -Math.abs(x - mu) / scale;
-        final double v = Math.exp(z);
-        return v / ((1 + v) * (1 + v)) / scale;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double logDensity(double x) {
-        if (x <= SUPPORT_LO ||
-            x >= SUPPORT_HI) {
-            return Double.NEGATIVE_INFINITY;
-        }
-
-        // Ensure symmetry around location by using the absolute
-        final double z = -Math.abs(x - mu) / scale;
-        final double v = Math.exp(z);
-        return z - 2 * Math.log1p(v) - logScale;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double cumulativeProbability(double x) {
-        final double z = (x - mu) / scale;
-        return 1 / (1 + Math.exp(-z));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double survivalProbability(double x) {
-        final double z = (x - mu) / scale;
-        return 1 / (1 + Math.exp(z));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double inverseCumulativeProbability(double p) {
-        ArgumentUtils.checkProbability(p);
-        if (p == 0) {
-            return SUPPORT_LO;
-        } else if (p == 1) {
-            return SUPPORT_HI;
-        } else {
-            return scale * Math.log(p / (1 - p)) + mu;
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double inverseSurvivalProbability(double p) {
-        ArgumentUtils.checkProbability(p);
-        if (p == 1) {
-            return SUPPORT_LO;
-        } else if (p == 0) {
-            return SUPPORT_HI;
-        } else {
-            return scale * -Math.log(p / (1 - p)) + mu;
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -171,7 +157,7 @@ public final class LogisticDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getMean() {
-        return getLocation();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -183,7 +169,7 @@ public final class LogisticDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getVariance() {
-        return scale * scale * PI_SQUARED_OVER_THREE;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -195,7 +181,7 @@ public final class LogisticDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getSupportLowerBound() {
-        return SUPPORT_LO;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -207,14 +193,14 @@ public final class LogisticDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getSupportUpperBound() {
-        return SUPPORT_HI;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     double getMedian() {
-        // Overridden for the probability(double, double) method.
-        // This is intentionally not a public method.
-        return mu;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

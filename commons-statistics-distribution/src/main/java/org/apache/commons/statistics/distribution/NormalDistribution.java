@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.apache.commons.statistics.distribution;
 
 import org.apache.commons.numbers.gamma.ErfDifference;
@@ -39,12 +38,22 @@ import org.apache.commons.rng.sampling.distribution.ZigguratSampler;
  * @see <a href="https://mathworld.wolfram.com/NormalDistribution.html">Normal distribution (MathWorld)</a>
  */
 public final class NormalDistribution extends AbstractContinuousDistribution {
-    /** Mean of this distribution. */
+
+    /**
+     * Mean of this distribution.
+     */
     private final double mean;
-    /** Standard deviation of this distribution. */
+
+    /**
+     * Standard deviation of this distribution.
+     */
     private final double standardDeviation;
-    /** The value of {@code log(sd) + 0.5*log(2*pi)} stored for faster computation. */
+
+    /**
+     * The value of {@code log(sd) + 0.5*log(2*pi)} stored for faster computation.
+     */
     private final double logStandardDeviationPlusHalfLog2Pi;
+
     /**
      * Standard deviation multiplied by sqrt(2).
      * This is used to avoid a double division when computing the value passed to the
@@ -57,6 +66,7 @@ public final class NormalDistribution extends AbstractContinuousDistribution {
      * differences as the error function computes close to 0 in the extreme tail.
      */
     private final double sdSqrt2;
+
     /**
      * Standard deviation multiplied by sqrt(2 pi). Computed to high precision.
      */
@@ -66,8 +76,7 @@ public final class NormalDistribution extends AbstractContinuousDistribution {
      * @param mean Mean for this distribution.
      * @param sd Standard deviation for this distribution.
      */
-    private NormalDistribution(double mean,
-                               double sd) {
+    private NormalDistribution(double mean, double sd) {
         this.mean = mean;
         standardDeviation = sd;
         logStandardDeviationPlusHalfLog2Pi = Math.log(sd) + Constants.HALF_LOG_TWO_PI;
@@ -86,13 +95,8 @@ public final class NormalDistribution extends AbstractContinuousDistribution {
      * @return the distribution
      * @throws IllegalArgumentException if {@code sd <= 0}.
      */
-    public static NormalDistribution of(double mean,
-                                        double sd) {
-        if (sd > 0) {
-            return new NormalDistribution(mean, sd);
-        }
-        // zero, negative or nan
-        throw new DistributionException(DistributionException.NOT_STRICTLY_POSITIVE, sd);
+    public static NormalDistribution of(double mean, double sd) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -101,68 +105,71 @@ public final class NormalDistribution extends AbstractContinuousDistribution {
      * @return the standard deviation.
      */
     public double getStandardDeviation() {
-        return standardDeviation;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double density(double x) {
-        final double z = (x - mean) / standardDeviation;
-        return ExtendedPrecision.expmhxx(z) / sdSqrt2pi;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public double probability(double x0,
-                              double x1) {
-        if (x0 > x1) {
-            throw new DistributionException(DistributionException.INVALID_RANGE_LOW_GT_HIGH,
-                                            x0, x1);
-        }
-        final double v0 = (x0 - mean) / sdSqrt2;
-        final double v1 = (x1 - mean) / sdSqrt2;
-        return 0.5 * ErfDifference.value(v0, v1);
+    public double probability(double x0, double x1) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double logDensity(double x) {
-        final double z = (x - mean) / standardDeviation;
-        return -0.5 * z * z - logStandardDeviationPlusHalfLog2Pi;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public double cumulativeProbability(double x)  {
-        final double dev = x - mean;
-        return 0.5 * Erfc.value(-dev / sdSqrt2);
+    public double cumulativeProbability(double x) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double survivalProbability(double x) {
-        final double dev = x - mean;
-        return 0.5 * Erfc.value(dev / sdSqrt2);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double inverseCumulativeProbability(double p) {
-        ArgumentUtils.checkProbability(p);
-        return mean - sdSqrt2 * InverseErfc.value(2 * p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double inverseSurvivalProbability(double p) {
-        ArgumentUtils.checkProbability(p);
-        return mean + sdSqrt2 * InverseErfc.value(2 * p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double getMean() {
-        return mean;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -172,8 +179,7 @@ public final class NormalDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getVariance() {
-        final double s = getStandardDeviation();
-        return s * s;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -185,7 +191,7 @@ public final class NormalDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getSupportLowerBound() {
-        return Double.NEGATIVE_INFINITY;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -197,14 +203,14 @@ public final class NormalDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getSupportUpperBound() {
-        return Double.POSITIVE_INFINITY;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ContinuousDistribution.Sampler createSampler(final UniformRandomProvider rng) {
-        // Gaussian distribution sampler.
-        return GaussianSampler.of(ZigguratSampler.NormalizedGaussian.of(rng),
-                                  mean, standardDeviation)::sample;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

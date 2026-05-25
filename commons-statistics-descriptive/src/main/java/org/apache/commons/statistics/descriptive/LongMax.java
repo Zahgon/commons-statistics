@@ -47,7 +47,9 @@ import java.math.BigInteger;
  */
 public final class LongMax implements LongStatistic, StatisticAccumulator<LongMax> {
 
-    /** Current maximum. */
+    /**
+     * Current maximum.
+     */
     private long maximum = Long.MIN_VALUE;
 
     /**
@@ -65,7 +67,7 @@ public final class LongMax implements LongStatistic, StatisticAccumulator<LongMa
      * @return {@code LongMax} instance.
      */
     public static LongMax create() {
-        return new LongMax();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -78,7 +80,7 @@ public final class LongMax implements LongStatistic, StatisticAccumulator<LongMa
      * @return {@code LongMax} instance.
      */
     public static LongMax of(long... values) {
-        return Statistics.add(new LongMax(), values);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -95,8 +97,7 @@ public final class LongMax implements LongStatistic, StatisticAccumulator<LongMa
      * @since 1.2
      */
     public static LongMax ofRange(long[] values, int from, int to) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return createFromRange(values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -110,7 +111,7 @@ public final class LongMax implements LongStatistic, StatisticAccumulator<LongMa
      * @return {@code LongMax} instance.
      */
     static LongMax createFromRange(long[] values, int from, int to) {
-        return Statistics.add(new LongMax(), values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -120,7 +121,7 @@ public final class LongMax implements LongStatistic, StatisticAccumulator<LongMa
      */
     @Override
     public void accept(long value) {
-        maximum = Math.max(maximum, value);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -133,7 +134,7 @@ public final class LongMax implements LongStatistic, StatisticAccumulator<LongMa
      */
     @Override
     public long getAsLong() {
-        return maximum;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -147,22 +148,21 @@ public final class LongMax implements LongStatistic, StatisticAccumulator<LongMa
      */
     @Override
     public int getAsInt() {
-        return Math.toIntExact(maximum);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public double getAsDouble() {
-        return maximum;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public BigInteger getAsBigInteger() {
-        return BigInteger.valueOf(maximum);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public LongMax combine(LongMax other) {
-        accept(other.getAsLong());
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

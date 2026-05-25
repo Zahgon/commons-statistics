@@ -54,16 +54,8 @@ public interface DiscreteDistribution {
      * and including the upper endpoint.
      * @throws IllegalArgumentException if {@code x0 > x1}.
      */
-    default double probability(int x0,
-                               int x1) {
-        if (x0 > x1) {
-            throw new DistributionException(DistributionException.INVALID_RANGE_LOW_GT_HIGH, x0, x1);
-        }
-        // Long addition avoids overflow
-        if (x0 + 1L >= x1) {
-            return x0 == x1 ? 0.0 : probability(x1);
-        }
-        return cumulativeProbability(x1) - cumulativeProbability(x0);
+    default double probability(int x0, int x1) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -76,7 +68,7 @@ public interface DiscreteDistribution {
      * {@code x}.
      */
     default double logProbability(int x) {
-        return Math.log(probability(x));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -105,7 +97,7 @@ public interface DiscreteDistribution {
      * distribution takes a value greater than {@code x}.
      */
     default double survivalProbability(int x) {
-        return 1.0 - cumulativeProbability(x);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -154,7 +146,7 @@ public interface DiscreteDistribution {
      * @throws IllegalArgumentException if {@code p < 0} or {@code p > 1}.
      */
     default int inverseSurvivalProbability(double p) {
-        return inverseCumulativeProbability(1 - p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -209,6 +201,7 @@ public interface DiscreteDistribution {
      */
     @FunctionalInterface
     interface Sampler {
+
         /**
          * Generates a random value sampled from this distribution.
          *
@@ -225,7 +218,7 @@ public interface DiscreteDistribution {
          * @return a stream of {@code int} values.
          */
         default IntStream samples() {
-            return IntStream.generate(this::sample).sequential();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -239,7 +232,7 @@ public interface DiscreteDistribution {
          * @return a stream of {@code int} values.
          */
         default IntStream samples(long streamSize) {
-            return samples().limit(streamSize);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

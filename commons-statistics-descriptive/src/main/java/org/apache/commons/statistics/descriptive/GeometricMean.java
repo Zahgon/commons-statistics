@@ -62,7 +62,10 @@ package org.apache.commons.statistics.descriptive;
  * @since 1.1
  */
 public final class GeometricMean implements DoubleStatistic, StatisticAccumulator<GeometricMean> {
-    /** Count of values that have been added. */
+
+    /**
+     * Count of values that have been added.
+     */
     private long n;
 
     /**
@@ -96,7 +99,7 @@ public final class GeometricMean implements DoubleStatistic, StatisticAccumulato
      * @return {@code GeometricMean} instance.
      */
     public static GeometricMean create() {
-        return new GeometricMean();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -108,7 +111,7 @@ public final class GeometricMean implements DoubleStatistic, StatisticAccumulato
      * @return {@code GeometricMean} instance.
      */
     public static GeometricMean of(double... values) {
-        return new GeometricMean(SumOfLogs.of(values), values.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -124,8 +127,7 @@ public final class GeometricMean implements DoubleStatistic, StatisticAccumulato
      * @since 1.2
      */
     public static GeometricMean ofRange(double[] values, int from, int to) {
-        // Range checks performed by the sum-of-logs
-        return new GeometricMean(SumOfLogs.ofRange(values, from, to), to - from);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -137,7 +139,7 @@ public final class GeometricMean implements DoubleStatistic, StatisticAccumulato
      * @return {@code GeometricMean} instance.
      */
     public static GeometricMean of(int... values) {
-        return new GeometricMean(SumOfLogs.of(values), values.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -153,8 +155,7 @@ public final class GeometricMean implements DoubleStatistic, StatisticAccumulato
      * @since 1.2
      */
     public static GeometricMean ofRange(int[] values, int from, int to) {
-        // Range checks performed by the sum-of-logs
-        return new GeometricMean(SumOfLogs.ofRange(values, from, to), to - from);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -166,7 +167,7 @@ public final class GeometricMean implements DoubleStatistic, StatisticAccumulato
      * @return {@code GeometricMean} instance.
      */
     public static GeometricMean of(long... values) {
-        return new GeometricMean(SumOfLogs.of(values), values.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -182,8 +183,7 @@ public final class GeometricMean implements DoubleStatistic, StatisticAccumulato
      * @since 1.2
      */
     public static GeometricMean ofRange(long[] values, int from, int to) {
-        // Range checks performed by the sum-of-logs
-        return new GeometricMean(SumOfLogs.ofRange(values, from, to), to - from);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -193,8 +193,7 @@ public final class GeometricMean implements DoubleStatistic, StatisticAccumulato
      */
     @Override
     public void accept(double value) {
-        n++;
-        sumOfLogs.accept(value);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -206,14 +205,12 @@ public final class GeometricMean implements DoubleStatistic, StatisticAccumulato
      */
     @Override
     public double getAsDouble() {
-        return computeGeometricMean(n, sumOfLogs);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public GeometricMean combine(GeometricMean other) {
-        n += other.n;
-        sumOfLogs.combine(other.sumOfLogs);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -224,8 +221,6 @@ public final class GeometricMean implements DoubleStatistic, StatisticAccumulato
      * @return the geometric mean
      */
     static double computeGeometricMean(long n, SumOfLogs sumOfLogs) {
-        return n == 0 ?
-            Double.NaN :
-            Math.exp(sumOfLogs.getAsDouble() / n);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

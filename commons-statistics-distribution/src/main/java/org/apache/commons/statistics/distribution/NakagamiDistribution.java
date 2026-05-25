@@ -38,30 +38,52 @@ import org.apache.commons.rng.sampling.distribution.SharedStateContinuousSampler
  * @see <a href="https://en.wikipedia.org/wiki/Nakagami_distribution">Nakagami distribution (Wikipedia)</a>
  */
 public final class NakagamiDistribution extends AbstractContinuousDistribution {
-    /** Support lower bound. */
+
+    /**
+     * Support lower bound.
+     */
     private static final double SUPPORT_LO = 0;
-    /** Support upper bound. */
+
+    /**
+     * Support upper bound.
+     */
     private static final double SUPPORT_HI = Double.POSITIVE_INFINITY;
 
-    /** The shape parameter. */
+    /**
+     * The shape parameter.
+     */
     private final double mu;
-    /** The scale parameter. */
+
+    /**
+     * The scale parameter.
+     */
     private final double omega;
-    /** Density prefactor. */
+
+    /**
+     * Density prefactor.
+     */
     private final double densityPrefactor;
-    /** Log density prefactor. */
+
+    /**
+     * Log density prefactor.
+     */
     private final double logDensityPrefactor;
-    /** Cached value for inverse probability function. */
+
+    /**
+     * Cached value for inverse probability function.
+     */
     private final double mean;
-    /** Cached value for inverse probability function. */
+
+    /**
+     * Cached value for inverse probability function.
+     */
     private final double variance;
 
     /**
      * @param mu Shape parameter (must be positive).
      * @param omega Scale parameter (must be positive). Controls the spread of the distribution.
      */
-    private NakagamiDistribution(double mu,
-                                 double omega) {
+    private NakagamiDistribution(double mu, double omega) {
         this.mu = mu;
         this.omega = omega;
         densityPrefactor = 2.0 * Math.pow(mu, mu) / (Gamma.value(mu) * Math.pow(omega, mu));
@@ -80,15 +102,8 @@ public final class NakagamiDistribution extends AbstractContinuousDistribution {
      * @throws IllegalArgumentException  if {@code mu <= 0} or if
      * {@code omega <= 0}.
      */
-    public static NakagamiDistribution of(double mu,
-                                          double omega) {
-        if (mu <= 0) {
-            throw new DistributionException(DistributionException.NOT_STRICTLY_POSITIVE, mu);
-        }
-        if (omega <= 0) {
-            throw new DistributionException(DistributionException.NOT_STRICTLY_POSITIVE, omega);
-        }
-        return new NakagamiDistribution(mu, omega);
+    public static NakagamiDistribution of(double mu, double omega) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -97,7 +112,7 @@ public final class NakagamiDistribution extends AbstractContinuousDistribution {
      * @return the shape parameter.
      */
     public double getShape() {
-        return mu;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -106,53 +121,39 @@ public final class NakagamiDistribution extends AbstractContinuousDistribution {
      * @return the scale parameter.
      */
     public double getScale() {
-        return omega;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double density(double x) {
-        if (x <= SUPPORT_LO ||
-            x >= SUPPORT_HI) {
-            return 0;
-        }
-
-        return densityPrefactor * Math.pow(x, 2 * mu - 1) * Math.exp(-mu * x * x / omega);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double logDensity(double x) {
-        if (x <= SUPPORT_LO ||
-            x >= SUPPORT_HI) {
-            return Double.NEGATIVE_INFINITY;
-        }
-
-        return logDensityPrefactor + Math.log(x) * (2 * mu - 1) - (mu * x * x / omega);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double cumulativeProbability(double x) {
-        if (x <= SUPPORT_LO) {
-            return 0;
-        } else if (x >= SUPPORT_HI) {
-            return 1;
-        }
-
-        return RegularizedGamma.P.value(mu, mu * x * x / omega);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double survivalProbability(double x) {
-        if (x <= SUPPORT_LO) {
-            return 1;
-        } else if (x >= SUPPORT_HI) {
-            return 0;
-        }
-
-        return RegularizedGamma.Q.value(mu, mu * x * x / omega);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -164,7 +165,7 @@ public final class NakagamiDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getMean() {
-        return mean;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -176,7 +177,7 @@ public final class NakagamiDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getVariance() {
-        return variance;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -188,7 +189,7 @@ public final class NakagamiDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getSupportLowerBound() {
-        return SUPPORT_LO;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -200,17 +201,11 @@ public final class NakagamiDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getSupportUpperBound() {
-        return SUPPORT_HI;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Sampler createSampler(UniformRandomProvider rng) {
-        // Generate using a related Gamma distribution
-        // See https://en.wikipedia.org/wiki/Nakagami_distribution#Generation
-        final double shape = mu;
-        final double scale = omega / mu;
-        final SharedStateContinuousSampler sampler =
-            AhrensDieterMarsagliaTsangGammaSampler.of(rng, shape, scale);
-        return () -> Math.sqrt(sampler.sample());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -27,45 +27,46 @@ import picocli.CommandLine.Option;
 /**
  * Command for the {@link ZipfDistribution}.
  */
-@Command(name = "zipf",
-         description = "Zipf distribution.",
-         subcommands = {
-             ZipfCommand.Check.class,
-             ZipfCommand.PMF.class,
-             ZipfCommand.LPMF.class,
-             ZipfCommand.CDF.class,
-             ZipfCommand.SF.class,
-             ZipfCommand.ICDF.class,
-             ZipfCommand.ISF.class,
-         })
+@Command(name = "zipf", description = "Zipf distribution.", subcommands = { ZipfCommand.Check.class, ZipfCommand.PMF.class, ZipfCommand.LPMF.class, ZipfCommand.CDF.class, ZipfCommand.SF.class, ZipfCommand.ICDF.class, ZipfCommand.ISF.class })
 class ZipfCommand extends AbstractDistributionCommand {
 
-    /** Base command for the distribution that defines the parameters. */
+    /**
+     * Base command for the distribution that defines the parameters.
+     */
     private abstract static class BaseCommand extends AbstractDiscreteDistributionCommand {
-        /** Distribution parameters. */
+
+        /**
+         * Distribution parameters.
+         */
         @ArgGroup(validate = false, heading = "Distribution parameters:%n", order = 1)
         private Params params = new Params();
 
-        /** Parameters class. */
+        /**
+         * Parameters class.
+         */
         static class Params {
-            /** The distribution number of elements. */
-            @Option(names = {"-n", "--number-of-elements"},
-                    arity = "1..*",
-                    split = ",",
-                    description = {"number of elements (default: ${DEFAULT-VALUE})."})
-            private int[] n = {10};
 
-            /** The distribution exponent. */
-            @Option(names = {"-e", "--exponent"},
-                    arity = "1..*",
-                    split = ",",
-                    description = {"exponent (default: ${DEFAULT-VALUE})."})
-            private double[] e = {1, 2, 3, 4};
+            /**
+             * The distribution number of elements.
+             */
+            @Option(names = { "-n", "--number-of-elements" }, arity = "1..*", split = ",", description = { "number of elements (default: ${DEFAULT-VALUE})." })
+            private int[] n = { 10 };
+
+            /**
+             * The distribution exponent.
+             */
+            @Option(names = { "-e", "--exponent" }, arity = "1..*", split = ",", description = { "exponent (default: ${DEFAULT-VALUE})." })
+            private double[] e = { 1, 2, 3, 4 };
         }
 
-        /** Extend the options to set the default values for this distribution. */
+        /**
+         * Extend the options to set the default values for this distribution.
+         */
         static final class Options extends DiscreteDistributionOptions {
-            /** Set defaults. */
+
+            /**
+             * Set defaults.
+             */
             private Options() {
                 min = 1;
                 max = 10;
@@ -74,82 +75,90 @@ class ZipfCommand extends AbstractDistributionCommand {
 
         @Override
         protected List<Distribution<DiscreteDistribution>> getDistributions() {
-            int[] n = params.n;
-            double[] e = params.e;
-            final int max = DistributionUtils.validateLengths(n.length, e.length);
-
-            n = DistributionUtils.expandToLength(n, max);
-            e = DistributionUtils.expandToLength(e, max);
-
-            // Create distributions
-            final ArrayList<Distribution<DiscreteDistribution>> list = new ArrayList<>();
-            for (int i = 0; i < max; i++) {
-                final DiscreteDistribution d = ZipfDistribution.of(n[i], e[i]);
-                list.add(new Distribution<>(d, "n=" + n[i] + ",p=" + e[i]));
-            }
-            return list;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    /** Base command for the distribution that defines the parameters. */
+    /**
+     * Base command for the distribution that defines the parameters.
+     */
     private abstract static class ProbabilityCommand extends BaseCommand {
-        /** The distribution options. */
+
+        /**
+         * The distribution options.
+         */
         @ArgGroup(validate = false, heading = "Evaluation options:%n", order = 2)
         private Options distributionOptions = new Options();
 
         @Override
         protected DistributionOptions getDistributionOptions() {
-            return distributionOptions;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    /** Base command for the distribution that defines the parameters for inverse probability functions. */
+    /**
+     * Base command for the distribution that defines the parameters for inverse probability functions.
+     */
     private abstract static class InverseProbabilityCommand extends BaseCommand {
-        /** The distribution options. */
+
+        /**
+         * The distribution options.
+         */
         @ArgGroup(validate = false, heading = "Evaluation options:%n", order = 2)
         private InverseDiscreteDistributionOptions distributionOptions = new InverseDiscreteDistributionOptions();
 
         @Override
         protected DistributionOptions getDistributionOptions() {
-            return distributionOptions;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    /** Verification checks command. */
-    @Command(name = "check",
-             hidden = true,
-             description = "Zipf distribution verification checks.")
-    static class Check extends ProbabilityCommand {}
+    /**
+     * Verification checks command.
+     */
+    @Command(name = "check", hidden = true, description = "Zipf distribution verification checks.")
+    static class Check extends ProbabilityCommand {
+    }
 
-    /** PMF command. */
-    @Command(name = "pmf",
-             aliases = {"pdf"},
-             description = "Zipf distribution PMF.")
-    static class PMF extends ProbabilityCommand {}
+    /**
+     * PMF command.
+     */
+    @Command(name = "pmf", aliases = { "pdf" }, description = "Zipf distribution PMF.")
+    static class PMF extends ProbabilityCommand {
+    }
 
-    /** LPMF command. */
-    @Command(name = "lpmf",
-             aliases = {"lpdf"},
-             description = "Zipf distribution natural logarithm of the PMF.")
-    static class LPMF extends ProbabilityCommand {}
+    /**
+     * LPMF command.
+     */
+    @Command(name = "lpmf", aliases = { "lpdf" }, description = "Zipf distribution natural logarithm of the PMF.")
+    static class LPMF extends ProbabilityCommand {
+    }
 
-    /** CDF command. */
-    @Command(name = "cdf",
-             description = "Zipf distribution CDF.")
-    static class CDF extends ProbabilityCommand {}
+    /**
+     * CDF command.
+     */
+    @Command(name = "cdf", description = "Zipf distribution CDF.")
+    static class CDF extends ProbabilityCommand {
+    }
 
-    /** SF command. */
-    @Command(name = "sf",
-             description = "Zipf distribution survival probability.")
-    static class SF extends ProbabilityCommand {}
+    /**
+     * SF command.
+     */
+    @Command(name = "sf", description = "Zipf distribution survival probability.")
+    static class SF extends ProbabilityCommand {
+    }
 
-    /** ICDF command. */
-    @Command(name = "icdf",
-             description = "Zipf distribution inverse CDF.")
-    static class ICDF extends InverseProbabilityCommand {}
+    /**
+     * ICDF command.
+     */
+    @Command(name = "icdf", description = "Zipf distribution inverse CDF.")
+    static class ICDF extends InverseProbabilityCommand {
+    }
 
-    /** ISF command. */
-    @Command(name = "isf",
-             description = "Zipf distribution inverse SF.")
-    static class ISF extends InverseProbabilityCommand {}
+    /**
+     * ISF command.
+     */
+    @Command(name = "isf", description = "Zipf distribution inverse SF.")
+    static class ISF extends InverseProbabilityCommand {
+    }
 }

@@ -27,39 +27,40 @@ import picocli.CommandLine.Option;
 /**
  * Command for the {@link GeometricDistribution}.
  */
-@Command(name = "geometric",
-         aliases = {"geo"},
-         description = "Geometric distribution.",
-         subcommands = {
-             GeometricCommand.Check.class,
-             GeometricCommand.PMF.class,
-             GeometricCommand.LPMF.class,
-             GeometricCommand.CDF.class,
-             GeometricCommand.SF.class,
-             GeometricCommand.ICDF.class,
-             GeometricCommand.ISF.class,
-         })
+@Command(name = "geometric", aliases = { "geo" }, description = "Geometric distribution.", subcommands = { GeometricCommand.Check.class, GeometricCommand.PMF.class, GeometricCommand.LPMF.class, GeometricCommand.CDF.class, GeometricCommand.SF.class, GeometricCommand.ICDF.class, GeometricCommand.ISF.class })
 class GeometricCommand extends AbstractDistributionCommand {
 
-    /** Base command for the distribution that defines the parameters. */
+    /**
+     * Base command for the distribution that defines the parameters.
+     */
     private abstract static class BaseCommand extends AbstractDiscreteDistributionCommand {
-        /** Distribution parameters. */
+
+        /**
+         * Distribution parameters.
+         */
         @ArgGroup(validate = false, heading = "Distribution parameters:%n", order = 1)
         private Params params = new Params();
 
-        /** Parameters class. */
+        /**
+         * Parameters class.
+         */
         static class Params {
-            /** The distribution probability of success. */
-            @Option(names = {"-p", "--probability"},
-                    arity = "1..*",
-                    split = ",",
-                    description = {"probability of success (default: ${DEFAULT-VALUE})."})
-            private double[] p = {0.2, 0.5, 0.8};
+
+            /**
+             * The distribution probability of success.
+             */
+            @Option(names = { "-p", "--probability" }, arity = "1..*", split = ",", description = { "probability of success (default: ${DEFAULT-VALUE})." })
+            private double[] p = { 0.2, 0.5, 0.8 };
         }
 
-        /** Extend the options to set the default values for this distribution. */
+        /**
+         * Extend the options to set the default values for this distribution.
+         */
         static final class Options extends DiscreteDistributionOptions {
-            /** Set defaults. */
+
+            /**
+             * Set defaults.
+             */
             private Options() {
                 min = 0;
                 max = 10;
@@ -68,75 +69,90 @@ class GeometricCommand extends AbstractDistributionCommand {
 
         @Override
         protected List<Distribution<DiscreteDistribution>> getDistributions() {
-            // Create distributions
-            final ArrayList<Distribution<DiscreteDistribution>> list = new ArrayList<>();
-            for (final double prob : params.p) {
-                final DiscreteDistribution d = GeometricDistribution.of(prob);
-                list.add(new Distribution<>(d, "p=" + prob));
-            }
-            return list;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    /** Base command for the distribution that defines the parameters. */
+    /**
+     * Base command for the distribution that defines the parameters.
+     */
     private abstract static class ProbabilityCommand extends BaseCommand {
-        /** The distribution options. */
+
+        /**
+         * The distribution options.
+         */
         @ArgGroup(validate = false, heading = "Evaluation options:%n", order = 2)
         private Options distributionOptions = new Options();
 
         @Override
         protected DistributionOptions getDistributionOptions() {
-            return distributionOptions;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    /** Base command for the distribution that defines the parameters for inverse probability functions. */
+    /**
+     * Base command for the distribution that defines the parameters for inverse probability functions.
+     */
     private abstract static class InverseProbabilityCommand extends BaseCommand {
-        /** The distribution options. */
+
+        /**
+         * The distribution options.
+         */
         @ArgGroup(validate = false, heading = "Evaluation options:%n", order = 2)
         private InverseDiscreteDistributionOptions distributionOptions = new InverseDiscreteDistributionOptions();
 
         @Override
         protected DistributionOptions getDistributionOptions() {
-            return distributionOptions;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    /** Verification checks command. */
-    @Command(name = "check",
-             hidden = true,
-             description = "Geometric distribution verification checks.")
-    static class Check extends ProbabilityCommand {}
+    /**
+     * Verification checks command.
+     */
+    @Command(name = "check", hidden = true, description = "Geometric distribution verification checks.")
+    static class Check extends ProbabilityCommand {
+    }
 
-    /** PMF command. */
-    @Command(name = "pmf",
-             aliases = {"pdf"},
-             description = "Geometric distribution PMF.")
-    static class PMF extends ProbabilityCommand {}
+    /**
+     * PMF command.
+     */
+    @Command(name = "pmf", aliases = { "pdf" }, description = "Geometric distribution PMF.")
+    static class PMF extends ProbabilityCommand {
+    }
 
-    /** LPMF command. */
-    @Command(name = "lpmf",
-             aliases = {"lpdf"},
-             description = "Geometric distribution natural logarithm of the PMF.")
-    static class LPMF extends ProbabilityCommand {}
+    /**
+     * LPMF command.
+     */
+    @Command(name = "lpmf", aliases = { "lpdf" }, description = "Geometric distribution natural logarithm of the PMF.")
+    static class LPMF extends ProbabilityCommand {
+    }
 
-    /** CDF command. */
-    @Command(name = "cdf",
-             description = "Geometric distribution CDF.")
-    static class CDF extends ProbabilityCommand {}
+    /**
+     * CDF command.
+     */
+    @Command(name = "cdf", description = "Geometric distribution CDF.")
+    static class CDF extends ProbabilityCommand {
+    }
 
-    /** SF command. */
-    @Command(name = "sf",
-             description = "Geometric distribution survival probability.")
-    static class SF extends ProbabilityCommand {}
+    /**
+     * SF command.
+     */
+    @Command(name = "sf", description = "Geometric distribution survival probability.")
+    static class SF extends ProbabilityCommand {
+    }
 
-    /** ICDF command. */
-    @Command(name = "icdf",
-             description = "Geometric distribution inverse CDF.")
-    static class ICDF extends InverseProbabilityCommand {}
+    /**
+     * ICDF command.
+     */
+    @Command(name = "icdf", description = "Geometric distribution inverse CDF.")
+    static class ICDF extends InverseProbabilityCommand {
+    }
 
-    /** ISF command. */
-    @Command(name = "isf",
-             description = "Geometric distribution inverse SF.")
-    static class ISF extends InverseProbabilityCommand {}
+    /**
+     * ISF command.
+     */
+    @Command(name = "isf", description = "Geometric distribution inverse SF.")
+    static class ISF extends InverseProbabilityCommand {
+    }
 }

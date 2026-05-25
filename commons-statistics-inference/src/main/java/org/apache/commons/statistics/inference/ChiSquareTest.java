@@ -32,14 +32,25 @@ import org.apache.commons.statistics.distribution.ChiSquaredDistribution;
  * @since 1.1
  */
 public final class ChiSquareTest {
-    /** Name for the row. */
+
+    /**
+     * Name for the row.
+     */
     private static final String ROW = "row";
-    /** Name for the column. */
+
+    /**
+     * Name for the column.
+     */
     private static final String COLUMN = "column";
-    /** Default instance. */
+
+    /**
+     * Default instance.
+     */
     private static final ChiSquareTest DEFAULT = new ChiSquareTest(0);
 
-    /** Degrees of freedom adjustment. */
+    /**
+     * Degrees of freedom adjustment.
+     */
     private final int degreesOfFreedomAdjustment;
 
     /**
@@ -59,7 +70,7 @@ public final class ChiSquareTest {
      * @return default instance
      */
     public static ChiSquareTest withDefaults() {
-        return DEFAULT;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -77,7 +88,7 @@ public final class ChiSquareTest {
      * @throws IllegalArgumentException if the value is negative
      */
     public ChiSquareTest withDegreesOfFreedomAdjustment(int v) {
-        return new ChiSquareTest(Arguments.checkNonNegative(v));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -97,19 +108,7 @@ public final class ChiSquareTest {
      * @see #test(long[])
      */
     public double statistic(long[] observed) {
-        Arguments.checkValuesRequiredSize(observed.length, 2);
-        Arguments.checkNonNegative(observed);
-        final double e = LongMean.of(observed).getAsDouble();
-        if (e == 0) {
-            throw new InferenceException(InferenceException.NO_DATA);
-        }
-        // chi2 = sum{ (o-e)^2 / e }. Use a single division at the end.
-        double chi2 = 0;
-        for (final long o : observed) {
-            final double d = o - e;
-            chi2 += d * d;
-        }
-        return chi2 / e;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -129,15 +128,7 @@ public final class ChiSquareTest {
      * @see #test(double[], long[])
      */
     public double statistic(double[] expected, long[] observed) {
-        final double ratio = StatisticUtils.computeRatio(expected, observed);
-        // chi2 = sum{ (o-e)^2 / e }
-        double chi2 = 0;
-        for (int i = 0; i < observed.length; i++) {
-            final double e = ratio * expected[i];
-            final double d = observed[i] - e;
-            chi2 += d * d / e;
-        }
-        return chi2;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -153,41 +144,7 @@ public final class ChiSquareTest {
      * @see #test(long[][])
      */
     public double statistic(long[][] counts) {
-        Arguments.checkCategoriesRequiredSize(counts.length, 2);
-        Arguments.checkValuesRequiredSize(counts[0].length, 2);
-        Arguments.checkRectangular(counts);
-        Arguments.checkNonNegative(counts);
-
-        final int nRows = counts.length;
-        final int nCols = counts[0].length;
-
-        // compute row, column and total sums
-        final double[] rowSum = new double[nRows];
-        final double[] colSum = new double[nCols];
-        double sum = 0;
-        for (int row = 0; row < nRows; row++) {
-            for (int col = 0; col < nCols; col++) {
-                rowSum[row] += counts[row][col];
-                colSum[col] += counts[row][col];
-            }
-            checkNonZero(rowSum[row], ROW, row);
-            sum += rowSum[row];
-        }
-
-        for (int col = 0; col < nCols; col++) {
-            checkNonZero(colSum[col], COLUMN, col);
-        }
-
-        // Compute expected counts and chi-square
-        double chi2 = 0;
-        for (int row = 0; row < nRows; row++) {
-            for (int col = 0; col < nCols; col++) {
-                final double e = (rowSum[row] * colSum[col]) / sum;
-                final double d = counts[row][col] - e;
-                chi2 += d * d / e;
-            }
-        }
-        return chi2;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -218,43 +175,7 @@ public final class ChiSquareTest {
      * @see ChiSquareTest#test(long[], long[])
      */
     public double statistic(long[] observed1, long[] observed2) {
-        Arguments.checkValuesRequiredSize(observed1.length, 2);
-        Arguments.checkValuesSizeMatch(observed1.length, observed2.length);
-        Arguments.checkNonNegative(observed1);
-        Arguments.checkNonNegative(observed2);
-
-        // Compute and compare count sums
-        long colSum1 = 0;
-        long colSum2 = 0;
-        for (int i = 0; i < observed1.length; i++) {
-            final long obs1 = observed1[i];
-            final long obs2 = observed2[i];
-            checkNonZero(obs1 | obs2, ROW, i);
-            colSum1 += obs1;
-            colSum2 += obs2;
-        }
-        // Create the same exception message as chiSquare(long[][])
-        checkNonZero(colSum1, COLUMN, 0);
-        checkNonZero(colSum2, COLUMN, 1);
-
-        // Compare and compute weight only if different
-        final boolean unequalCounts = colSum1 != colSum2;
-        final double weight = unequalCounts ?
-            Math.sqrt((double) colSum1 / colSum2) : 1;
-        // Compute chi-square
-        // This exploits an algebraic rearrangement of the generic n*m contingency table case
-        // for a single sum squared addition per row.
-        double chi2 = 0;
-        for (int i = 0; i < observed1.length; i++) {
-            final double obs1 = observed1[i];
-            final double obs2 = observed2[i];
-            // apply weights
-            final double d = unequalCounts ?
-                    obs1 / weight - obs2 * weight :
-                    obs1 - obs2;
-            chi2 += (d * d) / (obs1 + obs2);
-        }
-        return chi2;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -269,10 +190,7 @@ public final class ChiSquareTest {
      * @see #statistic(long[])
      */
     public SignificanceResult test(long[] observed) {
-        final int df = observed.length - 1;
-        final double chi2 = statistic(observed);
-        final double p = computeP(chi2, df);
-        return new BaseSignificanceResult(chi2, p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -293,10 +211,7 @@ public final class ChiSquareTest {
      * @see #statistic(double[], long[])
      */
     public SignificanceResult test(double[] expected, long[] observed) {
-        final int df = StatisticUtils.computeDegreesOfFreedom(observed.length, degreesOfFreedomAdjustment);
-        final double chi2 = statistic(expected, observed);
-        final double p = computeP(chi2, df);
-        return new BaseSignificanceResult(chi2, p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -311,10 +226,7 @@ public final class ChiSquareTest {
      * @see #statistic(long[][])
      */
     public SignificanceResult test(long[][] counts) {
-        final double chi2 = statistic(counts);
-        final double df = (counts.length - 1.0) * (counts[0].length - 1.0);
-        final double p = computeP(chi2, df);
-        return new BaseSignificanceResult(chi2, p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -333,9 +245,7 @@ public final class ChiSquareTest {
      * @see #statistic(long[], long[])
      */
     public SignificanceResult test(long[] observed1, long[] observed2) {
-        final double chi2 = statistic(observed1, observed2);
-        final double p = computeP(chi2, observed1.length - 1.0);
-        return new BaseSignificanceResult(chi2, p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**

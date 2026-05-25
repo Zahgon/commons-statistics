@@ -23,6 +23,7 @@ import org.apache.commons.rng.UniformRandomProvider;
  * Interface for distributions on the reals.
  */
 public interface ContinuousDistribution {
+
     /**
      * Returns the probability density function (PDF) of this distribution
      * evaluated at the specified point {@code x}.
@@ -50,12 +51,8 @@ public interface ContinuousDistribution {
      * and including the upper endpoint.
      * @throws IllegalArgumentException if {@code x0 > x1}.
      */
-    default double probability(double x0,
-                               double x1) {
-        if (x0 > x1) {
-            throw new DistributionException(DistributionException.INVALID_RANGE_LOW_GT_HIGH, x0, x1);
-        }
-        return cumulativeProbability(x1) - cumulativeProbability(x0);
+    default double probability(double x0, double x1) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -67,7 +64,7 @@ public interface ContinuousDistribution {
      * at {@code x}.
      */
     default double logDensity(double x) {
-        return Math.log(density(x));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -96,7 +93,7 @@ public interface ContinuousDistribution {
      * distribution takes a value greater than {@code x}.
      */
     default double survivalProbability(double x) {
-        return 1.0 - cumulativeProbability(x);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -135,7 +132,7 @@ public interface ContinuousDistribution {
      * @throws IllegalArgumentException if {@code p < 0} or {@code p > 1}.
      */
     default double inverseSurvivalProbability(double p) {
-        return inverseCumulativeProbability(1 - p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -186,6 +183,7 @@ public interface ContinuousDistribution {
      */
     @FunctionalInterface
     interface Sampler {
+
         /**
          * Generates a random value sampled from this distribution.
          *
@@ -202,7 +200,7 @@ public interface ContinuousDistribution {
          * @return a stream of {@code double} values.
          */
         default DoubleStream samples() {
-            return DoubleStream.generate(this::sample).sequential();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -216,7 +214,7 @@ public interface ContinuousDistribution {
          * @return a stream of {@code double} values.
          */
         default DoubleStream samples(long streamSize) {
-            return samples().limit(streamSize);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

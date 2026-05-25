@@ -22,8 +22,12 @@ package org.apache.commons.statistics.interval;
  * @since 1.2
  */
 final class ArgumentUtils {
-    /** No instances. */
-    private ArgumentUtils() {}
+
+    /**
+     * No instances.
+     */
+    private ArgumentUtils() {
+    }
 
     /**
      * Check the error rate {@code alpha} is in the open interval {@code (0, 1)}.
@@ -32,10 +36,6 @@ final class ArgumentUtils {
      * @throws IllegalArgumentException if {@code alpha} is not in the open interval {@code (0, 1)}.
      */
     static void checkErrorRate(double alpha) {
-        if (alpha > 0 && alpha < 1) {
-            return;
-        }
-        // Out-of-range or NaN
-        throw new IllegalArgumentException("Error rate is not in (0, 1): " + alpha);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

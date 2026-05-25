@@ -38,21 +38,32 @@ import org.apache.commons.rng.sampling.distribution.LevySampler;
  * @see <a href="https://mathworld.wolfram.com/LevyDistribution.html">L&eacute;vy distribution (MathWorld)</a>
  */
 public final class LevyDistribution extends AbstractContinuousDistribution {
-    /** 1 / 2(erfc^-1 (0.5))^2. Computed using Matlab's VPA to 30 digits. */
+
+    /**
+     * 1 / 2(erfc^-1 (0.5))^2. Computed using Matlab's VPA to 30 digits.
+     */
     private static final double HALF_OVER_ERFCINV_HALF_SQUARED = 2.1981093383177324039996779530797;
-    /** Location parameter. */
+
+    /**
+     * Location parameter.
+     */
     private final double mu;
-    /** Scale parameter. */
+
+    /**
+     * Scale parameter.
+     */
     private final double c;
-    /** Half of c (for calculations). */
+
+    /**
+     * Half of c (for calculations).
+     */
     private final double halfC;
 
     /**
      * @param mu Location parameter.
      * @param c Scale parameter.
      */
-    private LevyDistribution(double mu,
-                             double c) {
+    private LevyDistribution(double mu, double c) {
         this.mu = mu;
         this.c = c;
         this.halfC = 0.5 * c;
@@ -66,13 +77,8 @@ public final class LevyDistribution extends AbstractContinuousDistribution {
      * @return the distribution
      * @throws IllegalArgumentException if {@code c <= 0}.
      */
-    public static LevyDistribution of(double mu,
-                                      double c) {
-        if (c <= 0) {
-            throw new DistributionException(DistributionException.NOT_STRICTLY_POSITIVE,
-                                            c);
-        }
-        return new LevyDistribution(mu, c);
+    public static LevyDistribution of(double mu, double c) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -81,7 +87,7 @@ public final class LevyDistribution extends AbstractContinuousDistribution {
      * @return the location parameter.
      */
     public double getLocation() {
-        return mu;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -90,7 +96,7 @@ public final class LevyDistribution extends AbstractContinuousDistribution {
      * @return the scale parameter.
      */
     public double getScale() {
-        return c;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -101,63 +107,47 @@ public final class LevyDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double density(final double x) {
-        if (x <= mu) {
-            // x=mu creates NaN:
-            // sqrt(c / 2pi) * exp(-c / 2(x-mu)) / (x-mu)^1.5
-            // = F * exp(-inf) * (x-mu)^-1.5 = F * 0 * inf
-            // Return 0 for this case.
-            return 0;
-        }
-
-        final double delta = x - mu;
-        final double f = halfC / delta;
-        return Math.sqrt(f / Math.PI) * Math.exp(-f) / delta;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double logDensity(double x) {
-        if (x <= mu) {
-            return Double.NEGATIVE_INFINITY;
-        }
-
-        final double delta = x - mu;
-        final double f     = halfC / delta;
-        return 0.5 * Math.log(f / Math.PI) - f - Math.log(delta);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double cumulativeProbability(final double x) {
-        if (x <= mu) {
-            return 0;
-        }
-        return Erfc.value(Math.sqrt(halfC / (x - mu)));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double survivalProbability(final double x) {
-        if (x <= mu) {
-            return 1;
-        }
-        return Erf.value(Math.sqrt(halfC / (x - mu)));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double inverseCumulativeProbability(double p) {
-        ArgumentUtils.checkProbability(p);
-        final double t = InverseErfc.value(p);
-        return mu + halfC / (t * t);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double inverseSurvivalProbability(double p) {
-        ArgumentUtils.checkProbability(p);
-        final double t = InverseErf.value(p);
-        return mu + halfC / (t * t);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -169,7 +159,7 @@ public final class LevyDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getMean() {
-        return Double.POSITIVE_INFINITY;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -181,7 +171,7 @@ public final class LevyDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getVariance() {
-        return Double.POSITIVE_INFINITY;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -193,7 +183,7 @@ public final class LevyDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getSupportLowerBound() {
-        return getLocation();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -205,22 +195,22 @@ public final class LevyDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getSupportUpperBound() {
-        return Double.POSITIVE_INFINITY;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     double getMedian() {
-        // Overridden for the probability(double, double) method.
-        // This is intentionally not a public method.
-        // u + c / 2(erfc^-1 (0.5))^2
-        return mu + c * HALF_OVER_ERFCINV_HALF_SQUARED;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ContinuousDistribution.Sampler createSampler(final UniformRandomProvider rng) {
-        // Levy distribution sampler.
-        return LevySampler.of(rng, getLocation(), getScale())::sample;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

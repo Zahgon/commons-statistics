@@ -69,10 +69,15 @@ package org.apache.commons.statistics.descriptive;
  * @since 1.1
  */
 class SumOfCubedDeviations extends SumOfSquaredDeviations {
-    /** 2, the length limit where the sum-of-cubed deviations is zero. */
+
+    /**
+     * 2, the length limit where the sum-of-cubed deviations is zero.
+     */
     static final int LENGTH_TWO = 2;
 
-    /** Sum of cubed deviations of the values that have been added. */
+    /**
+     * Sum of cubed deviations of the values that have been added.
+     */
     protected double sumCubedDev;
 
     /**
@@ -127,10 +132,7 @@ class SumOfCubedDeviations extends SumOfSquaredDeviations {
      * @return {@code SumOfCubedDeviations} instance.
      */
     static SumOfCubedDeviations of(double... values) {
-        if (values.length == 0) {
-            return new SumOfCubedDeviations();
-        }
-        return create(SumOfSquaredDeviations.of(values), values, 0, values.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -147,10 +149,7 @@ class SumOfCubedDeviations extends SumOfSquaredDeviations {
      * @return {@code SumOfCubedDeviations} instance.
      */
     static SumOfCubedDeviations ofRange(double[] values, int from, int to) {
-        if (from == to) {
-            return new SumOfCubedDeviations();
-        }
-        return create(SumOfSquaredDeviations.ofRange(values, from, to), values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -168,12 +167,8 @@ class SumOfCubedDeviations extends SumOfSquaredDeviations {
      * @param to Exclusive end of the range.
      * @return {@code SumOfCubedDeviations} instance.
      */
-    static SumOfCubedDeviations createFromRange(org.apache.commons.numbers.core.Sum sum,
-                                                double[] values, int from, int to) {
-        if (from == to) {
-            return new SumOfCubedDeviations();
-        }
-        return create(SumOfSquaredDeviations.createFromRange(sum, values, from, to), values, from, to);
+    static SumOfCubedDeviations createFromRange(org.apache.commons.numbers.core.Sum sum, double[] values, int from, int to) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -222,7 +217,7 @@ class SumOfCubedDeviations extends SumOfSquaredDeviations {
      * @return {@code SumOfCubedDeviations} instance.
      */
     static SumOfCubedDeviations of(int... values) {
-        return ofRange(values, 0, values.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -239,21 +234,7 @@ class SumOfCubedDeviations extends SumOfSquaredDeviations {
      * @return {@code SumOfCubedDeviations} instance.
      */
     static SumOfCubedDeviations ofRange(int[] values, int from, int to) {
-        // Logic shared with the double[] version with int[] lower order moments
-        if (from == to) {
-            return new SumOfCubedDeviations();
-        }
-        final IntVariance variance = IntVariance.createFromRange(values, from, to);
-        final double xbar = variance.computeMean();
-        final double ss = variance.computeSumOfSquaredDeviations();
-
-        double sc = 0;
-        if (to - from > LENGTH_TWO) {
-            for (int i = from; i < to; i++) {
-                sc += pow3(values[i] - xbar);
-            }
-        }
-        return new SumOfCubedDeviations(sc, ss, xbar, to - from);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -266,7 +247,7 @@ class SumOfCubedDeviations extends SumOfSquaredDeviations {
      * @return {@code SumOfCubedDeviations} instance.
      */
     static SumOfCubedDeviations of(long... values) {
-        return ofRange(values, 0, values.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -284,21 +265,7 @@ class SumOfCubedDeviations extends SumOfSquaredDeviations {
      * @throws IndexOutOfBoundsException if the sub-range is out of bounds
      */
     static SumOfCubedDeviations ofRange(long[] values, int from, int to) {
-        // Logic shared with the double[] version with int[] lower order moments
-        if (from == to) {
-            return new SumOfCubedDeviations();
-        }
-        final LongVariance variance = LongVariance.createFromRange(values, from, to);
-        final double xbar = variance.computeMean();
-        final double ss = variance.computeSumOfSquaredDeviations();
-
-        double sc = 0;
-        if (to - from > LENGTH_TWO) {
-            for (int i = from; i < to; i++) {
-                sc += pow3(values[i] - xbar);
-            }
-        }
-        return new SumOfCubedDeviations(sc, ss, xbar, to - from);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -319,19 +286,7 @@ class SumOfCubedDeviations extends SumOfSquaredDeviations {
      */
     @Override
     public void accept(double value) {
-        // Require current s^2 * N == sum-of-square deviations
-        final double ss = sumSquaredDev;
-        final double np = n;
-        super.accept(value);
-        // Terms are arranged so that values that may be zero
-        // (np, ss) are first. This will cancel any overflow in
-        // multiplication of later terms (nDev * 3 and nDev^2).
-        // This handles initialisation when np in {0, 1) to zero
-        // for any deviation (e.g. series MAX_VALUE, -MAX_VALUE).
-        // Note: account for the half-deviation representation by scaling by 6=3*2; 8=2^3
-        sumCubedDev = sumCubedDev -
-            ss * nDev * 6 +
-            (np - 1.0) * np * nDev * nDev * dev * 8;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -353,7 +308,7 @@ class SumOfCubedDeviations extends SumOfSquaredDeviations {
      * @return sum of cubed deviations of all values.
      */
     double getSumOfCubedDeviations() {
-        return Double.isFinite(getFirstMoment()) ? sumCubedDev : Double.NaN;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -363,32 +318,6 @@ class SumOfCubedDeviations extends SumOfSquaredDeviations {
      * @return {@code this} instance after combining {@code other}.
      */
     SumOfCubedDeviations combine(SumOfCubedDeviations other) {
-        if (n == 0) {
-            sumCubedDev = other.sumCubedDev;
-        } else if (other.n != 0) {
-            // Avoid overflow to compute the difference.
-            // This allows any samples of size n=1 to be combined as their SS=0.
-            // The result is a SC=0 for the combined n=2.
-            final double halfDiffOfMean = getFirstMomentHalfDifference(other);
-            sumCubedDev += other.sumCubedDev;
-            // Add additional terms that do not cancel to zero
-            if (halfDiffOfMean != 0) {
-                final double n1 = n;
-                final double n2 = other.n;
-                if (n1 == n2) {
-                    // Optimisation where sizes are equal in double-precision.
-                    // This is of use in JDK streams as spliterators use a divide by two
-                    // strategy for parallel streams.
-                    sumCubedDev += (sumSquaredDev - other.sumSquaredDev) * halfDiffOfMean * 3;
-                } else {
-                    final double n1n2 = n1 + n2;
-                    final double dm = 2 * (halfDiffOfMean / n1n2);
-                    sumCubedDev += (sumSquaredDev * n2 - other.sumSquaredDev * n1) * dm * 3 +
-                                   (n2 - n1) * (n1 * n2) * pow3(dm) * n1n2;
-                }
-            }
-        }
-        super.combine(other);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

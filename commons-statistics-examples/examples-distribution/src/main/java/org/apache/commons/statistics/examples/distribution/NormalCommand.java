@@ -27,47 +27,47 @@ import picocli.CommandLine.Option;
 /**
  * Command for the {@link NormalDistribution}.
  */
-@Command(name = "normal",
-         aliases = {"norm"},
-         description = "Normal distribution.",
-         subcommands = {
-             NormalCommand.Check.class,
-             NormalCommand.PDF.class,
-             NormalCommand.LPDF.class,
-             NormalCommand.CDF.class,
-             NormalCommand.SF.class,
-             NormalCommand.ICDF.class,
-             NormalCommand.ISF.class,
-         })
+@Command(name = "normal", aliases = { "norm" }, description = "Normal distribution.", subcommands = { NormalCommand.Check.class, NormalCommand.PDF.class, NormalCommand.LPDF.class, NormalCommand.CDF.class, NormalCommand.SF.class, NormalCommand.ICDF.class, NormalCommand.ISF.class })
 class NormalCommand extends AbstractDistributionCommand {
 
-    /** Base command for the distribution that defines the parameters. */
+    /**
+     * Base command for the distribution that defines the parameters.
+     */
     private abstract static class BaseCommand extends AbstractContinuousDistributionCommand {
-        /** Distribution parameters. */
+
+        /**
+         * Distribution parameters.
+         */
         @ArgGroup(validate = false, heading = "Distribution parameters:%n", order = 1)
         private Params params = new Params();
 
-        /** Parameters class. */
+        /**
+         * Parameters class.
+         */
         static class Params {
-            /** The distribution mean. */
-            @Option(names = {"-m", "--mu", "--mean"},
-                    arity = "1..*",
-                    split = ",",
-                    description = {"mean (default: ${DEFAULT-VALUE})."})
-            private double[] mu = {0, 0, 0, -2};
 
-            /** The distribution sigma. */
-            @Option(names = {"-s", "--sigma"},
-                    arity = "1..*",
-                    split = ",",
-                    description = {"standard deviation (default: ${DEFAULT-VALUE})."})
-            // Define using variance
-            private double[] sigma = {Math.sqrt(0.2), 1, Math.sqrt(5), Math.sqrt(0.5)};
+            /**
+             * The distribution mean.
+             */
+            @Option(names = { "-m", "--mu", "--mean" }, arity = "1..*", split = ",", description = { "mean (default: ${DEFAULT-VALUE})." })
+            private double[] mu = { 0, 0, 0, -2 };
+
+            /**
+             * The distribution sigma.
+             */
+            @Option(names = { "-s", "--sigma" }, arity = "1..*", split = ",", description = { "standard deviation (default: ${DEFAULT-VALUE})." })
+            private double[] // Define using variance
+            sigma = { Math.sqrt(0.2), 1, Math.sqrt(5), Math.sqrt(0.5) };
         }
 
-        /** Extend the options to set the default values for this distribution. */
+        /**
+         * Extend the options to set the default values for this distribution.
+         */
         static final class Options extends ContinuousDistributionOptions {
-            /** Set defaults. */
+
+            /**
+             * Set defaults.
+             */
             private Options() {
                 min = -5;
                 max = 5;
@@ -76,80 +76,90 @@ class NormalCommand extends AbstractDistributionCommand {
 
         @Override
         protected List<Distribution<ContinuousDistribution>> getDistributions() {
-            double[] mean = params.mu;
-            double[] sigma = params.sigma;
-            final int n = DistributionUtils.validateLengths(mean.length, sigma.length);
-
-            mean = DistributionUtils.expandToLength(mean, n);
-            sigma = DistributionUtils.expandToLength(sigma, n);
-
-            // Create distributions
-            final ArrayList<Distribution<ContinuousDistribution>> list = new ArrayList<>();
-            for (int i = 0; i < n; i++) {
-                final ContinuousDistribution d = NormalDistribution.of(mean[i], sigma[i]);
-                list.add(new Distribution<>(d, "mu=" + mean[i] + ",sigma=" + sigma[i]));
-            }
-            return list;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    /** Base command for the distribution that defines the parameters. */
+    /**
+     * Base command for the distribution that defines the parameters.
+     */
     private abstract static class ProbabilityCommand extends BaseCommand {
-        /** The distribution options. */
+
+        /**
+         * The distribution options.
+         */
         @ArgGroup(validate = false, heading = "Evaluation options:%n", order = 2)
         private Options distributionOptions = new Options();
 
         @Override
         protected DistributionOptions getDistributionOptions() {
-            return distributionOptions;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    /** Base command for the distribution that defines the parameters for inverse probability functions. */
+    /**
+     * Base command for the distribution that defines the parameters for inverse probability functions.
+     */
     private abstract static class InverseProbabilityCommand extends BaseCommand {
-        /** The distribution options. */
+
+        /**
+         * The distribution options.
+         */
         @ArgGroup(validate = false, heading = "Evaluation options:%n", order = 2)
         private InverseContinuousDistributionOptions distributionOptions = new InverseContinuousDistributionOptions();
 
         @Override
         protected DistributionOptions getDistributionOptions() {
-            return distributionOptions;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    /** Verification checks command. */
-    @Command(name = "check",
-             hidden = true,
-             description = "Normal distribution verification checks.")
-    static class Check extends ProbabilityCommand {}
+    /**
+     * Verification checks command.
+     */
+    @Command(name = "check", hidden = true, description = "Normal distribution verification checks.")
+    static class Check extends ProbabilityCommand {
+    }
 
-    /** PDF command. */
-    @Command(name = "pdf",
-             description = "Normal distribution PDF.")
-    static class PDF extends ProbabilityCommand {}
+    /**
+     * PDF command.
+     */
+    @Command(name = "pdf", description = "Normal distribution PDF.")
+    static class PDF extends ProbabilityCommand {
+    }
 
-    /** LPDF command. */
-    @Command(name = "lpdf",
-             description = "Normal distribution natural logarithm of the PDF.")
-    static class LPDF extends ProbabilityCommand {}
+    /**
+     * LPDF command.
+     */
+    @Command(name = "lpdf", description = "Normal distribution natural logarithm of the PDF.")
+    static class LPDF extends ProbabilityCommand {
+    }
 
-    /** CDF command. */
-    @Command(name = "cdf",
-             description = "Normal distribution CDF.")
-    static class CDF extends ProbabilityCommand {}
+    /**
+     * CDF command.
+     */
+    @Command(name = "cdf", description = "Normal distribution CDF.")
+    static class CDF extends ProbabilityCommand {
+    }
 
-    /** SF command. */
-    @Command(name = "sf",
-             description = "Normal distribution survival probability.")
-    static class SF extends ProbabilityCommand {}
+    /**
+     * SF command.
+     */
+    @Command(name = "sf", description = "Normal distribution survival probability.")
+    static class SF extends ProbabilityCommand {
+    }
 
-    /** ICDF command. */
-    @Command(name = "icdf",
-             description = "Normal distribution inverse CDF.")
-    static class ICDF extends InverseProbabilityCommand {}
+    /**
+     * ICDF command.
+     */
+    @Command(name = "icdf", description = "Normal distribution inverse CDF.")
+    static class ICDF extends InverseProbabilityCommand {
+    }
 
-    /** ISF command. */
-    @Command(name = "isf",
-             description = "Normal distribution inverse SF.")
-    static class ISF extends InverseProbabilityCommand {}
+    /**
+     * ISF command.
+     */
+    @Command(name = "isf", description = "Normal distribution inverse SF.")
+    static class ISF extends InverseProbabilityCommand {
+    }
 }

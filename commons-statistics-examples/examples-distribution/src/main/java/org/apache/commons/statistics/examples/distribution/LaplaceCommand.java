@@ -27,45 +27,46 @@ import picocli.CommandLine.Option;
 /**
  * Command for the {@link LaplaceDistribution}.
  */
-@Command(name = "laplace",
-         description = "Laplace distribution.",
-         subcommands = {
-             LaplaceCommand.Check.class,
-             LaplaceCommand.PDF.class,
-             LaplaceCommand.LPDF.class,
-             LaplaceCommand.CDF.class,
-             LaplaceCommand.SF.class,
-             LaplaceCommand.ICDF.class,
-             LaplaceCommand.ISF.class,
-         })
+@Command(name = "laplace", description = "Laplace distribution.", subcommands = { LaplaceCommand.Check.class, LaplaceCommand.PDF.class, LaplaceCommand.LPDF.class, LaplaceCommand.CDF.class, LaplaceCommand.SF.class, LaplaceCommand.ICDF.class, LaplaceCommand.ISF.class })
 class LaplaceCommand extends AbstractDistributionCommand {
 
-    /** Base command for the distribution that defines the parameters. */
+    /**
+     * Base command for the distribution that defines the parameters.
+     */
     private abstract static class BaseCommand extends AbstractContinuousDistributionCommand {
-        /** Distribution parameters. */
+
+        /**
+         * Distribution parameters.
+         */
         @ArgGroup(validate = false, heading = "Distribution parameters:%n", order = 1)
         private Params params = new Params();
 
-        /** Parameters class. */
+        /**
+         * Parameters class.
+         */
         static class Params {
-            /** The distribution location. */
-            @Option(names = {"--mu", "--location"},
-                    arity = "1..*",
-                    split = ",",
-                    description = {"location (default: ${DEFAULT-VALUE})."})
-            private double[] mu = {0, 0, 0, -5};
 
-            /** The distribution scale. */
-            @Option(names = {"--beta", "--scale"},
-                    arity = "1..*",
-                    split = ",",
-                    description = {"scale (default: ${DEFAULT-VALUE})."})
-            private double[] beta = {1, 2, 4, 4};
+            /**
+             * The distribution location.
+             */
+            @Option(names = { "--mu", "--location" }, arity = "1..*", split = ",", description = { "location (default: ${DEFAULT-VALUE})." })
+            private double[] mu = { 0, 0, 0, -5 };
+
+            /**
+             * The distribution scale.
+             */
+            @Option(names = { "--beta", "--scale" }, arity = "1..*", split = ",", description = { "scale (default: ${DEFAULT-VALUE})." })
+            private double[] beta = { 1, 2, 4, 4 };
         }
 
-        /** Extend the options to set the default values for this distribution. */
+        /**
+         * Extend the options to set the default values for this distribution.
+         */
         static final class Options extends ContinuousDistributionOptions {
-            /** Set defaults. */
+
+            /**
+             * Set defaults.
+             */
             private Options() {
                 min = -10;
                 max = 10;
@@ -74,80 +75,90 @@ class LaplaceCommand extends AbstractDistributionCommand {
 
         @Override
         protected List<Distribution<ContinuousDistribution>> getDistributions() {
-            double[] location = params.mu;
-            double[] scale = params.beta;
-            final int n = DistributionUtils.validateLengths(location.length, scale.length);
-
-            location = DistributionUtils.expandToLength(location, n);
-            scale = DistributionUtils.expandToLength(scale, n);
-
-            // Create distributions
-            final ArrayList<Distribution<ContinuousDistribution>> list = new ArrayList<>();
-            for (int i = 0; i < n; i++) {
-                final ContinuousDistribution d = LaplaceDistribution.of(location[i], scale[i]);
-                list.add(new Distribution<>(d, "mu=" + location[i] + ",beta=" + scale[i]));
-            }
-            return list;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    /** Base command for the distribution that defines the parameters. */
+    /**
+     * Base command for the distribution that defines the parameters.
+     */
     private abstract static class ProbabilityCommand extends BaseCommand {
-        /** The distribution options. */
+
+        /**
+         * The distribution options.
+         */
         @ArgGroup(validate = false, heading = "Evaluation options:%n", order = 2)
         private Options distributionOptions = new Options();
 
         @Override
         protected DistributionOptions getDistributionOptions() {
-            return distributionOptions;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    /** Base command for the distribution that defines the parameters for inverse probability functions. */
+    /**
+     * Base command for the distribution that defines the parameters for inverse probability functions.
+     */
     private abstract static class InverseProbabilityCommand extends BaseCommand {
-        /** The distribution options. */
+
+        /**
+         * The distribution options.
+         */
         @ArgGroup(validate = false, heading = "Evaluation options:%n", order = 2)
         private InverseContinuousDistributionOptions distributionOptions = new InverseContinuousDistributionOptions();
 
         @Override
         protected DistributionOptions getDistributionOptions() {
-            return distributionOptions;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    /** Verification checks command. */
-    @Command(name = "check",
-             hidden = true,
-             description = "Laplace distribution verification checks.")
-    static class Check extends ProbabilityCommand {}
+    /**
+     * Verification checks command.
+     */
+    @Command(name = "check", hidden = true, description = "Laplace distribution verification checks.")
+    static class Check extends ProbabilityCommand {
+    }
 
-    /** PDF command. */
-    @Command(name = "pdf",
-             description = "Laplace distribution PDF.")
-    static class PDF extends ProbabilityCommand {}
+    /**
+     * PDF command.
+     */
+    @Command(name = "pdf", description = "Laplace distribution PDF.")
+    static class PDF extends ProbabilityCommand {
+    }
 
-    /** LPDF command. */
-    @Command(name = "lpdf",
-             description = "Laplace distribution natural logarithm of the PDF.")
-    static class LPDF extends ProbabilityCommand {}
+    /**
+     * LPDF command.
+     */
+    @Command(name = "lpdf", description = "Laplace distribution natural logarithm of the PDF.")
+    static class LPDF extends ProbabilityCommand {
+    }
 
-    /** CDF command. */
-    @Command(name = "cdf",
-             description = "Laplace distribution CDF.")
-    static class CDF extends ProbabilityCommand {}
+    /**
+     * CDF command.
+     */
+    @Command(name = "cdf", description = "Laplace distribution CDF.")
+    static class CDF extends ProbabilityCommand {
+    }
 
-    /** SF command. */
-    @Command(name = "sf",
-             description = "Laplace distribution survival probability.")
-    static class SF extends ProbabilityCommand {}
+    /**
+     * SF command.
+     */
+    @Command(name = "sf", description = "Laplace distribution survival probability.")
+    static class SF extends ProbabilityCommand {
+    }
 
-    /** ICDF command. */
-    @Command(name = "icdf",
-             description = "Laplace distribution inverse CDF.")
-    static class ICDF extends InverseProbabilityCommand {}
+    /**
+     * ICDF command.
+     */
+    @Command(name = "icdf", description = "Laplace distribution inverse CDF.")
+    static class ICDF extends InverseProbabilityCommand {
+    }
 
-    /** ISF command. */
-    @Command(name = "isf",
-             description = "Laplace distribution inverse SF.")
-    static class ISF extends InverseProbabilityCommand {}
+    /**
+     * ISF command.
+     */
+    @Command(name = "isf", description = "Laplace distribution inverse SF.")
+    static class ISF extends InverseProbabilityCommand {
+    }
 }

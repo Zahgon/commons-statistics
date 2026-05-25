@@ -27,38 +27,40 @@ import picocli.CommandLine.Option;
 /**
  * Command for the {@link TDistribution}.
  */
-@Command(name = "t",
-         description = "T distribution.",
-         subcommands = {
-             TCommand.Check.class,
-             TCommand.PDF.class,
-             TCommand.LPDF.class,
-             TCommand.CDF.class,
-             TCommand.SF.class,
-             TCommand.ICDF.class,
-             TCommand.ISF.class,
-         })
+@Command(name = "t", description = "T distribution.", subcommands = { TCommand.Check.class, TCommand.PDF.class, TCommand.LPDF.class, TCommand.CDF.class, TCommand.SF.class, TCommand.ICDF.class, TCommand.ISF.class })
 class TCommand extends AbstractDistributionCommand {
 
-    /** Base command for the distribution that defines the parameters. */
+    /**
+     * Base command for the distribution that defines the parameters.
+     */
     private abstract static class BaseCommand extends AbstractContinuousDistributionCommand {
-        /** Distribution parameters. */
+
+        /**
+         * Distribution parameters.
+         */
         @ArgGroup(validate = false, heading = "Distribution parameters:%n", order = 1)
         private Params params = new Params();
 
-        /** Parameters class. */
+        /**
+         * Parameters class.
+         */
         static class Params {
-            /** The distribution degrees of freedom. */
-            @Option(names = {"-v", "--df", "--degrees-of-freedom"},
-                    arity = "1..*",
-                    split = ",",
-                    description = {"degrees of freedom (default: ${DEFAULT-VALUE})."})
-            private double[] df = {1, 2, 5, 1e10};
+
+            /**
+             * The distribution degrees of freedom.
+             */
+            @Option(names = { "-v", "--df", "--degrees-of-freedom" }, arity = "1..*", split = ",", description = { "degrees of freedom (default: ${DEFAULT-VALUE})." })
+            private double[] df = { 1, 2, 5, 1e10 };
         }
 
-        /** Extend the options to set the default values for this distribution. */
+        /**
+         * Extend the options to set the default values for this distribution.
+         */
         static final class Options extends ContinuousDistributionOptions {
-            /** Set defaults. */
+
+            /**
+             * Set defaults.
+             */
             private Options() {
                 min = -5;
                 max = 5;
@@ -67,73 +69,90 @@ class TCommand extends AbstractDistributionCommand {
 
         @Override
         protected List<Distribution<ContinuousDistribution>> getDistributions() {
-            // Create distributions
-            final ArrayList<Distribution<ContinuousDistribution>> list = new ArrayList<>();
-            for (final double degreesOfFreedom : params.df) {
-                final ContinuousDistribution d = TDistribution.of(degreesOfFreedom);
-                list.add(new Distribution<>(d, "df=" + degreesOfFreedom));
-            }
-            return list;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    /** Base command for the distribution that defines the parameters. */
+    /**
+     * Base command for the distribution that defines the parameters.
+     */
     private abstract static class ProbabilityCommand extends BaseCommand {
-        /** The distribution options. */
+
+        /**
+         * The distribution options.
+         */
         @ArgGroup(validate = false, heading = "Evaluation options:%n", order = 2)
         private Options distributionOptions = new Options();
 
         @Override
         protected DistributionOptions getDistributionOptions() {
-            return distributionOptions;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    /** Base command for the distribution that defines the parameters for inverse probability functions. */
+    /**
+     * Base command for the distribution that defines the parameters for inverse probability functions.
+     */
     private abstract static class InverseProbabilityCommand extends BaseCommand {
-        /** The distribution options. */
+
+        /**
+         * The distribution options.
+         */
         @ArgGroup(validate = false, heading = "Evaluation options:%n", order = 2)
         private InverseContinuousDistributionOptions distributionOptions = new InverseContinuousDistributionOptions();
 
         @Override
         protected DistributionOptions getDistributionOptions() {
-            return distributionOptions;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    /** Verification checks command. */
-    @Command(name = "check",
-             hidden = true,
-             description = "T distribution verification checks.")
-    static class Check extends ProbabilityCommand {}
+    /**
+     * Verification checks command.
+     */
+    @Command(name = "check", hidden = true, description = "T distribution verification checks.")
+    static class Check extends ProbabilityCommand {
+    }
 
-    /** PDF command. */
-    @Command(name = "pdf",
-             description = "T distribution PDF.")
-    static class PDF extends ProbabilityCommand {}
+    /**
+     * PDF command.
+     */
+    @Command(name = "pdf", description = "T distribution PDF.")
+    static class PDF extends ProbabilityCommand {
+    }
 
-    /** LPDF command. */
-    @Command(name = "lpdf",
-             description = "T distribution natural logarithm of the PDF.")
-    static class LPDF extends ProbabilityCommand {}
+    /**
+     * LPDF command.
+     */
+    @Command(name = "lpdf", description = "T distribution natural logarithm of the PDF.")
+    static class LPDF extends ProbabilityCommand {
+    }
 
-    /** CDF command. */
-    @Command(name = "cdf",
-             description = "T distribution CDF.")
-    static class CDF extends ProbabilityCommand {}
+    /**
+     * CDF command.
+     */
+    @Command(name = "cdf", description = "T distribution CDF.")
+    static class CDF extends ProbabilityCommand {
+    }
 
-    /** SF command. */
-    @Command(name = "sf",
-             description = "T distribution survival probability.")
-    static class SF extends ProbabilityCommand {}
+    /**
+     * SF command.
+     */
+    @Command(name = "sf", description = "T distribution survival probability.")
+    static class SF extends ProbabilityCommand {
+    }
 
-    /** ICDF command. */
-    @Command(name = "icdf",
-             description = "T distribution inverse CDF.")
-    static class ICDF extends InverseProbabilityCommand {}
+    /**
+     * ICDF command.
+     */
+    @Command(name = "icdf", description = "T distribution inverse CDF.")
+    static class ICDF extends InverseProbabilityCommand {
+    }
 
-    /** ISF command. */
-    @Command(name = "isf",
-             description = "T distribution inverse SF.")
-    static class ISF extends InverseProbabilityCommand {}
+    /**
+     * ISF command.
+     */
+    @Command(name = "isf", description = "T distribution inverse SF.")
+    static class ISF extends InverseProbabilityCommand {
+    }
 }

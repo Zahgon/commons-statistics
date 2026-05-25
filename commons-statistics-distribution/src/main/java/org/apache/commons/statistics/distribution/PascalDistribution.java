@@ -56,26 +56,40 @@ import org.apache.commons.numbers.gamma.RegularizedBeta;
  * @see <a href="https://mathworld.wolfram.com/NegativeBinomialDistribution.html">Negative binomial distribution (MathWorld)</a>
  */
 public final class PascalDistribution extends AbstractDiscreteDistribution {
-    /** The number of successes. */
+
+    /**
+     * The number of successes.
+     */
     private final int numberOfSuccesses;
-    /** The probability of success. */
+
+    /**
+     * The probability of success.
+     */
     private final double probabilityOfSuccess;
-    /** The value of {@code log(p) * n}, where {@code p} is the probability of success
-     * and {@code n} is the number of successes, stored for faster computation. */
+
+    /**
+     * The value of {@code log(p) * n}, where {@code p} is the probability of success
+     * and {@code n} is the number of successes, stored for faster computation.
+     */
     private final double logProbabilityOfSuccessByNumOfSuccesses;
-    /** The value of {@code log(1-p)}, where {@code p} is the probability of success,
-     * stored for faster computation. */
+
+    /**
+     * The value of {@code log(1-p)}, where {@code p} is the probability of success,
+     * stored for faster computation.
+     */
     private final double log1mProbabilityOfSuccess;
-    /** The value of {@code p^n}, where {@code p} is the probability of success
-     * and {@code n} is the number of successes, stored for faster computation. */
+
+    /**
+     * The value of {@code p^n}, where {@code p} is the probability of success
+     * and {@code n} is the number of successes, stored for faster computation.
+     */
     private final double probabilityOfSuccessPowNumOfSuccesses;
 
     /**
      * @param r Number of successes.
      * @param p Probability of success.
      */
-    private PascalDistribution(int r,
-                               double p) {
+    private PascalDistribution(int r, double p) {
         numberOfSuccesses = r;
         probabilityOfSuccess = p;
         logProbabilityOfSuccessByNumOfSuccesses = Math.log(p) * numberOfSuccesses;
@@ -92,16 +106,8 @@ public final class PascalDistribution extends AbstractDiscreteDistribution {
      * @throws IllegalArgumentException if {@code r <= 0} or {@code p <= 0} or
      * {@code p > 1}.
      */
-    public static PascalDistribution of(int r,
-                                        double p) {
-        if (r <= 0) {
-            throw new DistributionException(DistributionException.NOT_STRICTLY_POSITIVE, r);
-        }
-        if (p <= 0 ||
-            p > 1) {
-            throw new DistributionException(DistributionException.INVALID_NON_ZERO_PROBABILITY, p);
-        }
-        return new PascalDistribution(r, p);
+    public static PascalDistribution of(int r, double p) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -110,7 +116,7 @@ public final class PascalDistribution extends AbstractDiscreteDistribution {
      * @return the number of successes.
      */
     public int getNumberOfSuccesses() {
-        return numberOfSuccesses;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -119,61 +125,39 @@ public final class PascalDistribution extends AbstractDiscreteDistribution {
      * @return the probability of success.
      */
     public double getProbabilityOfSuccess() {
-        return probabilityOfSuccess;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double probability(int x) {
-        if (x <= 0) {
-            // Special case of x=0 exploiting cancellation.
-            return x == 0 ? probabilityOfSuccessPowNumOfSuccesses : 0.0;
-        }
-        final int n = x + numberOfSuccesses - 1;
-        if (n < 0) {
-            // overflow
-            return 0.0;
-        }
-        return BinomialCoefficientDouble.value(n, numberOfSuccesses - 1) *
-              probabilityOfSuccessPowNumOfSuccesses *
-              Math.pow(1.0 - probabilityOfSuccess, x);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double logProbability(int x) {
-        if (x <= 0) {
-            // Special case of x=0 exploiting cancellation.
-            return x == 0 ? logProbabilityOfSuccessByNumOfSuccesses : Double.NEGATIVE_INFINITY;
-        }
-        final int n = x + numberOfSuccesses - 1;
-        if (n < 0) {
-            // overflow
-            return Double.NEGATIVE_INFINITY;
-        }
-        return LogBinomialCoefficient.value(n, numberOfSuccesses - 1) +
-              logProbabilityOfSuccessByNumOfSuccesses +
-              log1mProbabilityOfSuccess * x;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double cumulativeProbability(int x) {
-        if (x < 0) {
-            return 0.0;
-        }
-        return RegularizedBeta.value(probabilityOfSuccess,
-                                     numberOfSuccesses, x + 1.0);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double survivalProbability(int x) {
-        if (x < 0) {
-            return 1.0;
-        }
-        return RegularizedBeta.complement(probabilityOfSuccess,
-                                          numberOfSuccesses, x + 1.0);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -186,9 +170,7 @@ public final class PascalDistribution extends AbstractDiscreteDistribution {
      */
     @Override
     public double getMean() {
-        final double p = getProbabilityOfSuccess();
-        final double r = getNumberOfSuccesses();
-        return (r * (1 - p)) / p;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -201,9 +183,7 @@ public final class PascalDistribution extends AbstractDiscreteDistribution {
      */
     @Override
     public double getVariance() {
-        final double p = getProbabilityOfSuccess();
-        final double r = getNumberOfSuccesses();
-        return r * (1 - p) / (p * p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -215,7 +195,7 @@ public final class PascalDistribution extends AbstractDiscreteDistribution {
      */
     @Override
     public int getSupportLowerBound() {
-        return 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -228,6 +208,6 @@ public final class PascalDistribution extends AbstractDiscreteDistribution {
      */
     @Override
     public int getSupportUpperBound() {
-        return probabilityOfSuccess < 1 ? Integer.MAX_VALUE : 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

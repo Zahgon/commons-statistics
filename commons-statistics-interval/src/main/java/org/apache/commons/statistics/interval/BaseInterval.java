@@ -22,9 +22,15 @@ package org.apache.commons.statistics.interval;
  * @since 1.2
  */
 final class BaseInterval implements Interval {
-    /** Lower bound. */
+
+    /**
+     * Lower bound.
+     */
     private final double lower;
-    /** Upper bound. */
+
+    /**
+     * Upper bound.
+     */
     private final double upper;
 
     /**
@@ -40,11 +46,11 @@ final class BaseInterval implements Interval {
 
     @Override
     public double getLowerBound() {
-        return lower;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public double getUpperBound() {
-        return upper;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

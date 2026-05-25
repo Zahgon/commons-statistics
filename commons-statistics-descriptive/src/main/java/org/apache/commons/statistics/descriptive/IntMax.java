@@ -47,7 +47,9 @@ import java.math.BigInteger;
  */
 public final class IntMax implements IntStatistic, StatisticAccumulator<IntMax> {
 
-    /** Current maximum. */
+    /**
+     * Current maximum.
+     */
     private int maximum = Integer.MIN_VALUE;
 
     /**
@@ -65,7 +67,7 @@ public final class IntMax implements IntStatistic, StatisticAccumulator<IntMax> 
      * @return {@code IntMax} instance.
      */
     public static IntMax create() {
-        return new IntMax();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -78,7 +80,7 @@ public final class IntMax implements IntStatistic, StatisticAccumulator<IntMax> 
      * @return {@code IntMax} instance.
      */
     public static IntMax of(int... values) {
-        return Statistics.add(new IntMax(), values);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -95,8 +97,7 @@ public final class IntMax implements IntStatistic, StatisticAccumulator<IntMax> 
      * @since 1.2
      */
     public static IntMax ofRange(int[] values, int from, int to) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return createFromRange(values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -110,7 +111,7 @@ public final class IntMax implements IntStatistic, StatisticAccumulator<IntMax> 
      * @return {@code IntMax} instance.
      */
     static IntMax createFromRange(int[] values, int from, int to) {
-        return Statistics.add(new IntMax(), values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -120,7 +121,7 @@ public final class IntMax implements IntStatistic, StatisticAccumulator<IntMax> 
      */
     @Override
     public void accept(int value) {
-        maximum = Math.max(maximum, value);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -133,27 +134,26 @@ public final class IntMax implements IntStatistic, StatisticAccumulator<IntMax> 
      */
     @Override
     public int getAsInt() {
-        return maximum;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public long getAsLong() {
-        return maximum;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public double getAsDouble() {
-        return maximum;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public BigInteger getAsBigInteger() {
-        return BigInteger.valueOf(maximum);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public IntMax combine(IntMax other) {
-        accept(other.getAsInt());
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -37,7 +37,10 @@ import org.apache.commons.rng.sampling.distribution.TSampler;
  * @see <a href="https://mathworld.wolfram.com/Studentst-Distribution.html">Student&#39;s t-distribution (MathWorld)</a>
  */
 public abstract class TDistribution extends AbstractContinuousDistribution {
-    /** The degrees of freedom. */
+
+    /**
+     * The degrees of freedom.
+     */
     private final double degreesOfFreedom;
 
     /**
@@ -49,8 +52,11 @@ public abstract class TDistribution extends AbstractContinuousDistribution {
      * allowed to provide access to the degrees of freedom used during construction.
      */
     private static class NormalTDistribution extends TDistribution {
-        /** A standard normal distribution used for calculations.
-         * This is immutable and thread-safe and can be used across instances. */
+
+        /**
+         * A standard normal distribution used for calculations.
+         * This is immutable and thread-safe and can be used across instances.
+         */
         private static final NormalDistribution STANDARD_NORMAL = NormalDistribution.of(0, 1);
 
         /**
@@ -62,44 +68,43 @@ public abstract class TDistribution extends AbstractContinuousDistribution {
 
         @Override
         public double density(double x) {
-            return STANDARD_NORMAL.density(x);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double probability(double x0, double x1) {
-            return STANDARD_NORMAL.probability(x0, x1);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double logDensity(double x) {
-            return STANDARD_NORMAL.logDensity(x);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double cumulativeProbability(double x) {
-            return STANDARD_NORMAL.cumulativeProbability(x);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double inverseCumulativeProbability(double p) {
-            return STANDARD_NORMAL.inverseCumulativeProbability(p);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         // Survival probability functions inherit the symmetry operations from the TDistribution
-
         @Override
         public double getMean() {
-            return 0;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double getVariance() {
-            return 1.0;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public Sampler createSampler(UniformRandomProvider rng) {
-            return STANDARD_NORMAL.createSampler(rng);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -107,21 +112,41 @@ public abstract class TDistribution extends AbstractContinuousDistribution {
      * Implementation of Student's T-distribution.
      */
     private static class StudentsTDistribution extends TDistribution {
-        /** 2. */
+
+        /**
+         * 2.
+         */
         private static final double TWO = 2;
-        /** The threshold for the density function where the
-         * power function base minus 1 is close to zero. */
+
+        /**
+         * The threshold for the density function where the
+         * power function base minus 1 is close to zero.
+         */
         private static final double CLOSE_TO_ZERO = 0.25;
 
-        /** -(v + 1) / 2, where v = degrees of freedom. */
+        /**
+         * -(v + 1) / 2, where v = degrees of freedom.
+         */
         private final double mvp1Over2;
-        /** Density normalisation factor, sqrt(v) * beta(1/2, v/2), where v = degrees of freedom. */
+
+        /**
+         * Density normalisation factor, sqrt(v) * beta(1/2, v/2), where v = degrees of freedom.
+         */
         private final double densityNormalisation;
-        /** Log density normalisation term, 0.5 * log(v) + log(beta(1/2, v/2)), where v = degrees of freedom. */
+
+        /**
+         * Log density normalisation term, 0.5 * log(v) + log(beta(1/2, v/2)), where v = degrees of freedom.
+         */
         private final double logDensityNormalisation;
-        /** Cached value for inverse probability function. */
+
+        /**
+         * Cached value for inverse probability function.
+         */
         private final double mean;
-        /** Cached value for inverse probability function. */
+
+        /**
+         * Cached value for inverse probability function.
+         */
         private final double variance;
 
         /**
@@ -130,7 +155,6 @@ public abstract class TDistribution extends AbstractContinuousDistribution {
          */
         StudentsTDistribution(double degreesOfFreedom, double variance) {
             super(degreesOfFreedom);
-
             mvp1Over2 = -0.5 * (degreesOfFreedom + 1);
             densityNormalisation = Math.sqrt(degreesOfFreedom) * Beta.value(0.5, degreesOfFreedom / 2);
             logDensityNormalisation = 0.5 * Math.log(degreesOfFreedom) + LogBeta.value(0.5, degreesOfFreedom / 2);
@@ -143,85 +167,42 @@ public abstract class TDistribution extends AbstractContinuousDistribution {
          * @return the variance
          */
         static double computeVariance(double degreesOfFreedom) {
-            if (degreesOfFreedom == Double.POSITIVE_INFINITY) {
-                return 1;
-            } else if (degreesOfFreedom > TWO) {
-                return degreesOfFreedom / (degreesOfFreedom - 2);
-            } else if (degreesOfFreedom > 1) {
-                return Double.POSITIVE_INFINITY;
-            } else {
-                return Double.NaN;
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double density(double x) {
-            //          1                       -(v+1)/2
-            // ------------------- * (1 + t^2/v)
-            // sqrt(v) B(1/2, v/2)
-
-            final double t2OverV = x * x / getDegreesOfFreedom();
-            if (t2OverV < CLOSE_TO_ZERO) {
-                // Avoid power function when the base is close to 1
-                return Math.exp(Math.log1p(t2OverV) * mvp1Over2) / densityNormalisation;
-            }
-            return Math.pow(1 + t2OverV, mvp1Over2) / densityNormalisation;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double logDensity(double x) {
-            return Math.log1p(x * x / getDegreesOfFreedom()) * mvp1Over2 - logDensityNormalisation;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double cumulativeProbability(double x) {
-            if (x == 0) {
-                return 0.5;
-            }
-            final double v = getDegreesOfFreedom();
-
-            // cdf(t) = 1 - 0.5 * I_x(t)(v/2, 1/2)
-            // where x(t) = v / (v + t^2)
-            //
-            // When t^2 << v using the regularized beta results
-            // in loss of precision. Use the complement instead:
-            // I[x](a,b) = 1 - I[1-x](b,a)
-            // x   = v   / (v + t^2)
-            // 1-x = t^2 / (v + t^2)
-            // Use the threshold documented in the Boost t-distribution:
-            // https://www.boost.org/doc/libs/1_78_0/libs/math/doc/html/math_toolkit/dist_ref/dists/students_t_dist.html
-
-            final double t2 = x * x;
-            final double z;
-            if (v < 2 * t2) {
-                z = RegularizedBeta.value(v / (v + t2), v / 2, 0.5) / 2;
-            } else {
-                z = RegularizedBeta.complement(t2 / (v + t2), 0.5, v / 2) / 2;
-            }
-            return x > 0 ? 1 - z : z;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double getMean() {
-            return mean;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double getVariance() {
-            return variance;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         double getMedian() {
-            // Overridden for the probability(double, double) method.
-            // This is intentionally not a public method.
-            return 0;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public Sampler createSampler(UniformRandomProvider rng) {
-            // T distribution sampler.
-            return TSampler.of(rng, getDegreesOfFreedom())::sample;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -240,17 +221,7 @@ public abstract class TDistribution extends AbstractContinuousDistribution {
      * @throws IllegalArgumentException if {@code degreesOfFreedom <= 0}
      */
     public static TDistribution of(double degreesOfFreedom) {
-        if (degreesOfFreedom <= 0) {
-            throw new DistributionException(DistributionException.NOT_STRICTLY_POSITIVE,
-                                            degreesOfFreedom);
-        }
-        // If the variance converges to 1 use a NormalDistribution.
-        // Occurs at 2^55 = 3.60e16
-        final double variance = StudentsTDistribution.computeVariance(degreesOfFreedom);
-        if (variance == 1) {
-            return new NormalTDistribution(degreesOfFreedom);
-        }
-        return new StudentsTDistribution(degreesOfFreedom, variance);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -259,22 +230,23 @@ public abstract class TDistribution extends AbstractContinuousDistribution {
      * @return the degrees of freedom.
      */
     public double getDegreesOfFreedom() {
-        return degreesOfFreedom;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double survivalProbability(double x) {
-        // Exploit symmetry
-        return cumulativeProbability(-x);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double inverseSurvivalProbability(double p) {
-        // Exploit symmetry
-        // Subtract from 0 avoids returning -0.0 for p=0.5
-        return 0.0 - inverseCumulativeProbability(p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -317,7 +289,7 @@ public abstract class TDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getSupportLowerBound() {
-        return Double.NEGATIVE_INFINITY;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -329,6 +301,6 @@ public abstract class TDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getSupportUpperBound() {
-        return Double.POSITIVE_INFINITY;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -22,6 +22,7 @@ package org.apache.commons.statistics.inference;
  * @since 1.1
  */
 public interface SignificanceResult {
+
     /**
      * Returns the test statistic.
      *
@@ -50,7 +51,6 @@ public interface SignificanceResult {
      * @throws IllegalArgumentException if {@code alpha} is not in the range {@code (0, 0.5]}.
      */
     default boolean reject(double alpha) {
-        Arguments.checkSignificance(alpha);
-        return getPValue() < alpha;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

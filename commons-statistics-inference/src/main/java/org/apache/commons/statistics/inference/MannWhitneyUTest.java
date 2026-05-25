@@ -37,31 +37,60 @@ import org.apache.commons.statistics.ranking.TiesStrategy;
  * @since 1.1
  */
 public final class MannWhitneyUTest {
-    /** Limit on sample size for the exact p-value computation for the auto mode. */
+
+    /**
+     * Limit on sample size for the exact p-value computation for the auto mode.
+     */
     private static final int AUTO_LIMIT = 50;
-    /** Ranking instance. */
+
+    /**
+     * Ranking instance.
+     */
     private static final RankingAlgorithm RANKING = new NaturalRanking(NaNStrategy.FAILED, TiesStrategy.AVERAGE);
-    /** Value for an unset f computation. */
+
+    /**
+     * Value for an unset f computation.
+     */
     private static final double UNSET = -1;
-    /** An object to use for synchonization when accessing the cache of F. */
+
+    /**
+     * An object to use for synchonization when accessing the cache of F.
+     */
     private static final ReentrantLock LOCK = new ReentrantLock();
-    /** A reference to a previously computed storage for f.
+
+    /**
+     * A reference to a previously computed storage for f.
      * Use of a SoftReference ensures this is garbage collected before an OutOfMemoryError.
      * The value should only be accessed, checked for size and optionally
      * modified when holding the lock. When the storage is determined to be the correct
-     * size it can be returned for read/write to the array when not holding the lock. */
-    private static SoftReference<double[][][]> cacheF = new SoftReference<>(null); // @GuardedBy("LOCK")
-    /** Default instance. */
-    private static final MannWhitneyUTest DEFAULT = new MannWhitneyUTest(
-        AlternativeHypothesis.TWO_SIDED, PValueMethod.AUTO, true, 0);
+     * size it can be returned for read/write to the array when not holding the lock.
+     */
+    // @GuardedBy("LOCK")
+    private static SoftReference<double[][][]> cacheF = new SoftReference<>(null);
 
-    /** Alternative hypothesis. */
+    /**
+     * Default instance.
+     */
+    private static final MannWhitneyUTest DEFAULT = new MannWhitneyUTest(AlternativeHypothesis.TWO_SIDED, PValueMethod.AUTO, true, 0);
+
+    /**
+     * Alternative hypothesis.
+     */
     private final AlternativeHypothesis alternative;
-    /** Method to compute the p-value. */
+
+    /**
+     * Method to compute the p-value.
+     */
     private final PValueMethod pValueMethod;
-    /** Perform continuity correction. */
+
+    /**
+     * Perform continuity correction.
+     */
     private final boolean continuityCorrection;
-    /** Expected location shift. */
+
+    /**
+     * Expected location shift.
+     */
     private final double mu;
 
     /**
@@ -72,7 +101,10 @@ public final class MannWhitneyUTest {
      * @since 1.1
      */
     public static final class Result extends BaseSignificanceResult {
-        /** Flag indicating the data has tied values. */
+
+        /**
+         * Flag indicating the data has tied values.
+         */
         private final boolean tiedValues;
 
         /**
@@ -98,8 +130,7 @@ public final class MannWhitneyUTest {
          */
         @Override
         public double getStatistic() {
-            // Note: This method is here for documentation
-            return super.getStatistic();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -110,7 +141,7 @@ public final class MannWhitneyUTest {
          * @return {@code true} if there were tied values
          */
         public boolean hasTiedValues() {
-            return tiedValues;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -120,8 +151,7 @@ public final class MannWhitneyUTest {
      * @param continuityCorrection true to perform continuity correction.
      * @param mu Expected location shift.
      */
-    private MannWhitneyUTest(AlternativeHypothesis alternative, PValueMethod method,
-        boolean continuityCorrection, double mu) {
+    private MannWhitneyUTest(AlternativeHypothesis alternative, PValueMethod method, boolean continuityCorrection, double mu) {
         this.alternative = alternative;
         this.pValueMethod = method;
         this.continuityCorrection = continuityCorrection;
@@ -141,7 +171,7 @@ public final class MannWhitneyUTest {
      * @return default instance
      */
     public static MannWhitneyUTest withDefaults() {
-        return DEFAULT;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -151,7 +181,7 @@ public final class MannWhitneyUTest {
      * @return an instance
      */
     public MannWhitneyUTest with(AlternativeHypothesis v) {
-        return new MannWhitneyUTest(Objects.requireNonNull(v), pValueMethod, continuityCorrection, mu);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -162,9 +192,7 @@ public final class MannWhitneyUTest {
      * @throws IllegalArgumentException if the value is not in the allowed options or is null
      */
     public MannWhitneyUTest with(PValueMethod v) {
-        return new MannWhitneyUTest(alternative,
-            Arguments.checkOption(v, EnumSet.of(PValueMethod.AUTO, PValueMethod.EXACT, PValueMethod.ASYMPTOTIC)),
-            continuityCorrection, mu);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -178,8 +206,7 @@ public final class MannWhitneyUTest {
      * @return an instance
      */
     public MannWhitneyUTest with(ContinuityCorrection v) {
-        return new MannWhitneyUTest(alternative, pValueMethod,
-            Objects.requireNonNull(v) == ContinuityCorrection.ENABLED, mu);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -190,7 +217,7 @@ public final class MannWhitneyUTest {
      * @throws IllegalArgumentException if the value is not finite
      */
     public MannWhitneyUTest withMu(double v) {
-        return new MannWhitneyUTest(alternative, pValueMethod, continuityCorrection, Arguments.checkFinite(v));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -213,18 +240,7 @@ public final class MannWhitneyUTest {
      * @see #withMu(double)
      */
     public double statistic(double[] x, double[] y) {
-        checkSamples(x, y);
-
-        final double[] z = concatenateSamples(mu, x, y);
-        final double[] ranks = RANKING.apply(z);
-
-        // The ranks for x is in the first x.length entries in ranks because x
-        // is in the first x.length entries in z
-        final double sumRankX = Arrays.stream(ranks).limit(x.length).sum();
-
-        // U1 = R1 - (n1 * (n1 + 1)) / 2 where R1 is sum of ranks for sample 1,
-        // e.g. x, n1 is the number of observations in sample 1.
-        return sumRankX - ((long) x.length * (x.length + 1)) * 0.5;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -274,31 +290,7 @@ public final class MannWhitneyUTest {
      * @see #with(ContinuityCorrection)
      */
     public Result test(double[] x, double[] y) {
-        // Computation as above. The ranks are required for tie correction.
-        checkSamples(x, y);
-        final double[] z = concatenateSamples(mu, x, y);
-        final double[] ranks = RANKING.apply(z);
-        final double sumRankX = Arrays.stream(ranks).limit(x.length).sum();
-        final double u1 = sumRankX - ((long) x.length * (x.length + 1)) * 0.5;
-
-        final double c = WilcoxonSignedRankTest.calculateTieCorrection(ranks);
-        final boolean tiedValues = c != 0;
-
-        PValueMethod method = pValueMethod;
-        final int n = x.length;
-        final int m = y.length;
-        if (method == PValueMethod.AUTO && Math.max(n, m) < AUTO_LIMIT) {
-            method = PValueMethod.EXACT;
-        }
-        // Exact p requires no ties.
-        // The method will fail-fast if the computation is not possible due
-        // to the size of the data.
-        double p = method == PValueMethod.EXACT && !tiedValues ?
-            calculateExactPValue(u1, n, m, alternative) : -1;
-        if (p < 0) {
-            p = calculateAsymptoticPValue(u1, n, m, c);
-        }
-        return new Result(u1, tiedValues, p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -346,11 +338,9 @@ public final class MannWhitneyUTest {
         // Use long to avoid overflow
         final long n1n2 = (long) n1 * n2;
         final long n = (long) n1 + n2;
-
         // https://en.wikipedia.org/wiki/Mann%E2%80%93Whitney_U_test#Normal_approximation_and_tie_correction
         final double e = n1n2 * 0.5;
         final double variance = (n1n2 / 12.0) * ((n + 1.0) - c / n / (n - 1));
-
         double z = u - e;
         if (continuityCorrection) {
             // +/- 0.5 is a continuity correction towards the expected.
@@ -365,7 +355,6 @@ public final class MannWhitneyUTest {
             }
         }
         z /= Math.sqrt(variance);
-
         final NormalDistribution standardNormal = NormalDistribution.of(0, 1);
         if (alternative == AlternativeHypothesis.GREATER_THAN) {
             return standardNormal.survivalProbability(z);
@@ -391,37 +380,7 @@ public final class MannWhitneyUTest {
      */
     // package-private for testing
     static double calculateExactPValue(double u, int m, int n, AlternativeHypothesis alternative) {
-        // Check the computation can be attempted.
-        // u must be an integer
-        if ((int) u != u) {
-            return -1;
-        }
-        // Note: n+m will not overflow as we concatenated the samples to a single array.
-        final double binom = BinomialCoefficientDouble.value(n + m, m);
-        if (binom == Double.POSITIVE_INFINITY) {
-            return -1;
-        }
-
-        // Use u_min for the CDF.
-        final int u1 = (int) u;
-        final int u2 = (int) ((long) m * n - u1);
-        // Use m < n to support symmetry.
-        final int n1 = Math.min(m, n);
-        final int n2 = Math.max(m, n);
-
-        // Return the correct side:
-        if (alternative == AlternativeHypothesis.GREATER_THAN) {
-            // sf(u1 - 1)
-            return sf(u1 - 1, u2 + 1, n1, n2, binom);
-        }
-        if (alternative == AlternativeHypothesis.LESS_THAN) {
-            // cdf(u1)
-            return cdf(u1, u2, n1, n2, binom);
-        }
-        // two-sided: 2 * sf(max(u1, u2) - 1) or 2 * cdf(min(u1, u2))
-        final double p = 2 * computeCdf(Math.min(u1, u2), n1, n2, binom);
-        // Clip to range: [0, 1]
-        return Math.min(1, p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -437,9 +396,7 @@ public final class MannWhitneyUTest {
      */
     private static double cdf(int u1, int u2, int m, int n, double binom) {
         // Exploit symmetry. Note the distribution is discrete thus requiring (u2 - 1).
-        return u2 > u1 ?
-            computeCdf(u1, m, n, binom) :
-            1 - computeCdf(u2 - 1, m, n, binom);
+        return u2 > u1 ? computeCdf(u1, m, n, binom) : 1 - computeCdf(u2 - 1, m, n, binom);
     }
 
     /**
@@ -455,9 +412,7 @@ public final class MannWhitneyUTest {
      */
     private static double sf(int u1, int u2, int m, int n, double binom) {
         // Opposite of the CDF
-        return u2 > u1 ?
-            1 - computeCdf(u1, m, n, binom) :
-            computeCdf(u2 - 1, m, n, binom);
+        return u2 > u1 ? 1 - computeCdf(u1, m, n, binom) : computeCdf(u2 - 1, m, n, binom);
     }
 
     /**
@@ -483,10 +438,8 @@ public final class MannWhitneyUTest {
         }
         // Recursively compute f(m, n, k)
         final double[][][] f = getF(m, n, k);
-
         // P(X=k) = f(m, n, k) / binom(m+n, m)
         // P(X<=k) = sum_0^k (P(X=i))
-
         // Called with k = min(u1, u2) : max(p) ~ 0.5 so no need to clip to [0, 1]
         return IntStream.rangeClosed(0, k).mapToDouble(i -> fmnk(f, m, n, i)).sum() / binom;
     }
@@ -511,7 +464,6 @@ public final class MannWhitneyUTest {
             // Note: f(x<m, y<n, z<k) is always the same.
             // Cache the array and re-use any previous computation.
             double[][][] f = cacheF.get();
-
             // Require:
             // f = new double[m + 1][n + 1][k + 1]
             // f(m, n, 0) == 1; otherwise -1 if not computed
@@ -528,7 +480,6 @@ public final class MannWhitneyUTest {
                 cacheF = new SoftReference<>(f);
                 return f;
             }
-
             // Grow if required: m1 < m+1 => m1-(m+1) < 0 => m1 - m < 1
             final int m1 = f.length;
             final int n1 = f[0].length;
@@ -623,7 +574,6 @@ public final class MannWhitneyUTest {
         if (fmnk < 0) {
             // f(m, n, 0) == 1 if m >= 0, n >= 0
             // This is already computed.
-
             // Recursion from formula (3):
             // f(m, n, k) = f(m-1, n, k-n) + f(m, n-1, k)
             fmnk = fmnk(f, m - 1, n, k - n) + fmnk(f, m, n - 1, k);

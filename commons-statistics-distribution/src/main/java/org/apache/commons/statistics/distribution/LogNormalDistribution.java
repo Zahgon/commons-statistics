@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.apache.commons.statistics.distribution;
 
 import org.apache.commons.numbers.gamma.ErfDifference;
@@ -41,25 +40,42 @@ import org.apache.commons.rng.sampling.distribution.ZigguratSampler;
  * @see <a href="https://mathworld.wolfram.com/LogNormalDistribution.html">Log-normal distribution (MathWorld)</a>
  */
 public final class LogNormalDistribution extends AbstractContinuousDistribution {
-    /** &radic;(2 &pi;). */
+
+    /**
+     * &radic;(2 &pi;).
+     */
     private static final double SQRT2PI = Math.sqrt(2 * Math.PI);
-    /** The mu parameter of this distribution. */
+
+    /**
+     * The mu parameter of this distribution.
+     */
     private final double mu;
-    /** The sigma parameter of this distribution. */
+
+    /**
+     * The sigma parameter of this distribution.
+     */
     private final double sigma;
-    /** The value of {@code log(sigma) + 0.5 * log(2*PI)} stored for faster computation. */
+
+    /**
+     * The value of {@code log(sigma) + 0.5 * log(2*PI)} stored for faster computation.
+     */
     private final double logSigmaPlusHalfLog2Pi;
-    /** Sigma multiplied by sqrt(2). */
+
+    /**
+     * Sigma multiplied by sqrt(2).
+     */
     private final double sigmaSqrt2;
-    /** Sigma multiplied by sqrt(2 * pi). */
+
+    /**
+     * Sigma multiplied by sqrt(2 * pi).
+     */
     private final double sigmaSqrt2Pi;
 
     /**
      * @param mu Mean of the natural logarithm of the distribution values.
      * @param sigma Standard deviation of the natural logarithm of the distribution values.
      */
-    private LogNormalDistribution(double mu,
-                                  double sigma) {
+    private LogNormalDistribution(double mu, double sigma) {
         this.mu = mu;
         this.sigma = sigma;
         logSigmaPlusHalfLog2Pi = Math.log(sigma) + Constants.HALF_LOG_TWO_PI;
@@ -75,12 +91,8 @@ public final class LogNormalDistribution extends AbstractContinuousDistribution 
      * @return the distribution
      * @throws IllegalArgumentException if {@code sigma <= 0}.
      */
-    public static LogNormalDistribution of(double mu,
-                                           double sigma) {
-        if (sigma <= 0) {
-            throw new DistributionException(DistributionException.NOT_STRICTLY_POSITIVE, sigma);
-        }
-        return new LogNormalDistribution(mu, sigma);
+    public static LogNormalDistribution of(double mu, double sigma) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -91,7 +103,7 @@ public final class LogNormalDistribution extends AbstractContinuousDistribution 
      * @return the mu parameter.
      */
     public double getMu() {
-        return mu;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -102,7 +114,7 @@ public final class LogNormalDistribution extends AbstractContinuousDistribution 
      * @return the sigma parameter.
      */
     public double getSigma() {
-        return sigma;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -118,44 +130,25 @@ public final class LogNormalDistribution extends AbstractContinuousDistribution 
      */
     @Override
     public double density(double x) {
-        if (x <= 0) {
-            return 0;
-        }
-        final double x0 = Math.log(x) - mu;
-        final double x1 = x0 / sigma;
-        return Math.exp(-0.5 * x1 * x1) / (sigmaSqrt2Pi * x);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public double probability(double x0,
-                              double x1) {
-        if (x0 > x1) {
-            throw new DistributionException(DistributionException.INVALID_RANGE_LOW_GT_HIGH,
-                                            x0, x1);
-        }
-        if (x0 <= 0) {
-            return cumulativeProbability(x1);
-        }
-        // Assumes x1 >= x0 && x0 > 0
-        final double v0 = (Math.log(x0) - mu) / sigmaSqrt2;
-        final double v1 = (Math.log(x1) - mu) / sigmaSqrt2;
-        return 0.5 * ErfDifference.value(v0, v1);
+    public double probability(double x0, double x1) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
      *
      * <p>See documentation of {@link #density(double)} for computation details.
      */
     @Override
     public double logDensity(double x) {
-        if (x <= 0) {
-            return Double.NEGATIVE_INFINITY;
-        }
-        final double logX = Math.log(x);
-        final double x0 = logX - mu;
-        final double x1 = x0 / sigma;
-        return -0.5 * x1 * x1 - (logSigmaPlusHalfLog2Pi + logX);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -174,36 +167,32 @@ public final class LogNormalDistribution extends AbstractContinuousDistribution 
      * </ul>
      */
     @Override
-    public double cumulativeProbability(double x)  {
-        if (x <= 0) {
-            return 0;
-        }
-        final double dev = Math.log(x) - mu;
-        return 0.5 * Erfc.value(-dev / sigmaSqrt2);
+    public double cumulativeProbability(double x) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public double survivalProbability(double x)  {
-        if (x <= 0) {
-            return 1;
-        }
-        final double dev = Math.log(x) - mu;
-        return 0.5 * Erfc.value(dev / sigmaSqrt2);
+    public double survivalProbability(double x) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double inverseCumulativeProbability(double p) {
-        ArgumentUtils.checkProbability(p);
-        return Math.exp(mu - sigmaSqrt2 * InverseErfc.value(2 * p));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double inverseSurvivalProbability(double p) {
-        ArgumentUtils.checkProbability(p);
-        return Math.exp(mu + sigmaSqrt2 * InverseErfc.value(2 * p));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -217,8 +206,7 @@ public final class LogNormalDistribution extends AbstractContinuousDistribution 
      */
     @Override
     public double getMean() {
-        final double s = sigma;
-        return Math.exp(mu + (s * s / 2));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -232,9 +220,7 @@ public final class LogNormalDistribution extends AbstractContinuousDistribution 
      */
     @Override
     public double getVariance() {
-        final double s = sigma;
-        final double ss = s * s;
-        return Math.expm1(ss) * Math.exp(2 * mu + ss);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -246,7 +232,7 @@ public final class LogNormalDistribution extends AbstractContinuousDistribution 
      */
     @Override
     public double getSupportLowerBound() {
-        return 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -258,14 +244,14 @@ public final class LogNormalDistribution extends AbstractContinuousDistribution 
      */
     @Override
     public double getSupportUpperBound() {
-        return Double.POSITIVE_INFINITY;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ContinuousDistribution.Sampler createSampler(final UniformRandomProvider rng) {
-        // Log normal distribution sampler.
-        final ZigguratSampler.NormalizedGaussian gaussian = ZigguratSampler.NormalizedGaussian.of(rng);
-        return LogNormalSampler.of(gaussian, mu, sigma)::sample;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

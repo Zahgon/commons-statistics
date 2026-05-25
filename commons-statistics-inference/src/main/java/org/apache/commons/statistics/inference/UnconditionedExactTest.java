@@ -94,6 +94,7 @@ import org.apache.commons.statistics.inference.BrentOptimizer.PointValuePair;
  * @since 1.1
  */
 public final class UnconditionedExactTest {
+
     /**
      * Default instance.
      *
@@ -104,45 +105,76 @@ public final class UnconditionedExactTest {
      * initial bounds used are the same as the R Exact package. We closely match the inner
      * 31 points from SciPy by using 33 points by default.
      */
-    private static final UnconditionedExactTest DEFAULT = new UnconditionedExactTest(
-        AlternativeHypothesis.TWO_SIDED, Method.BOSCHLOO, 33, true);
-    /** Lower bound for the enumerated interval. The upper bound is {@code 1 - lower}. */
+    private static final UnconditionedExactTest DEFAULT = new UnconditionedExactTest(AlternativeHypothesis.TWO_SIDED, Method.BOSCHLOO, 33, true);
+
+    /**
+     * Lower bound for the enumerated interval. The upper bound is {@code 1 - lower}.
+     */
     private static final double LOWER_BOUND = 1e-5;
-    /** Relative epsilon for the Brent solver. This is limited for a univariate function
-     * to approximately sqrt(eps) with eps = 2^-52. */
+
+    /**
+     * Relative epsilon for the Brent solver. This is limited for a univariate function
+     * to approximately sqrt(eps) with eps = 2^-52.
+     */
     private static final double SOLVER_RELATIVE_EPS = 1.4901161193847656E-8;
-    /** Fraction of the increment (interval between enumerated points) to initialise the bracket
+
+    /**
+     * Fraction of the increment (interval between enumerated points) to initialise the bracket
      * for the minima. Note the minima should lie between x +/- increment. The bracket should
      * search within this range. Set to 1/8 and so the initial point of the bracket is
-     * approximately 1.61 * 1/8 = 0.2 of the increment away from initial points a or b. */
+     * approximately 1.61 * 1/8 = 0.2 of the increment away from initial points a or b.
+     */
     private static final double INC_FRACTION = 0.125;
-    /** Maximum number of candidate to optimize. This is a safety limit to avoid excess
+
+    /**
+     * Maximum number of candidate to optimize. This is a safety limit to avoid excess
      * optimization. Only candidates within a relative tolerance of the best candidate are
      * stored. If the number of candidates exceeds this value then many candidates have a
      * very similar p-value and the top candidates will be optimized. Using a value of 3
      * allows at least one other candidate to be optimized when there is two-fold
-     * symmetry in the energy function. */
+     * symmetry in the energy function.
+     */
     private static final int MAX_CANDIDATES = 3;
-    /** Relative distance of candidate minima from the lowest candidate. Used to exclude
-     * poor candidates from optimization. */
+
+    /**
+     * Relative distance of candidate minima from the lowest candidate. Used to exclude
+     * poor candidates from optimization.
+     */
     private static final double MINIMA_EPS = 0.02;
-    /** The maximum number of tables. This is limited by the maximum number of indices that
+
+    /**
+     * The maximum number of tables. This is limited by the maximum number of indices that
      * can be maintained in memory. Potentially up to this number of tables must be tracked
      * during computation of the p-value for as or more extreme tables. The limit is set
      * using the same limit for maximum capacity as java.util.ArrayList. In practice any
      * table anywhere near this limit can be computed using an alternative such as a chi-squared
-     * or g test. */
+     * or g test.
+     */
     private static final int MAX_TABLES = Integer.MAX_VALUE - 8;
-    /** Error message text for zero column sums. */
+
+    /**
+     * Error message text for zero column sums.
+     */
     private static final String COLUMN_SUM = "Column sum";
 
-    /** Alternative hypothesis. */
+    /**
+     * Alternative hypothesis.
+     */
     private final AlternativeHypothesis alternative;
-    /** Method to identify more extreme tables. */
+
+    /**
+     * Method to identify more extreme tables.
+     */
     private final Method method;
-    /** Number of initial points. */
+
+    /**
+     * Number of initial points.
+     */
     private final int points;
-    /** Option to optimize the best initial point(s). */
+
+    /**
+     * Option to optimize the best initial point(s).
+     */
     private final boolean optimize;
 
     /**
@@ -151,6 +183,7 @@ public final class UnconditionedExactTest {
      * @since 1.1
      */
     public enum Method {
+
         /**
          * Uses the test statistic from a Z-test using a pooled variance.
          *
@@ -172,7 +205,6 @@ public final class UnconditionedExactTest {
          * (\( m = n \)).
          */
         Z_POOLED,
-
         /**
          * Uses the test statistic from a Z-test using an unpooled variance.
          *
@@ -185,7 +217,6 @@ public final class UnconditionedExactTest {
          * per the {@link #Z_POOLED} method.
          */
         Z_UNPOOLED,
-
         /**
          * Uses the p-value from Fisher's exact test. This is also known as Boschloo's test.
          *
@@ -197,7 +228,7 @@ public final class UnconditionedExactTest {
          *
          * @see FisherExactTest
          */
-        BOSCHLOO;
+        BOSCHLOO
     }
 
     /**
@@ -208,7 +239,10 @@ public final class UnconditionedExactTest {
      * @since 1.1
      */
     public static final class Result extends BaseSignificanceResult {
-        /** Nuisance parameter. */
+
+        /**
+         * Nuisance parameter.
+         */
         private final double pi;
 
         /**
@@ -240,8 +274,7 @@ public final class UnconditionedExactTest {
          */
         @Override
         public double getStatistic() {
-            // Note: This method is here for documentation
-            return super.getStatistic();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -251,7 +284,7 @@ public final class UnconditionedExactTest {
          * @return the nuisance parameter.
          */
         public double getNuisanceParameter() {
-            return pi;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -260,14 +293,25 @@ public final class UnconditionedExactTest {
      * a single index.
      */
     private static class XYList {
-        /** The maximum size of array to allocate. */
+
+        /**
+         * The maximum size of array to allocate.
+         */
         private final int max;
-        /** Width, or maximum x value (exclusive). */
+
+        /**
+         * Width, or maximum x value (exclusive).
+         */
         private final int width;
 
-        /** The size of the list. */
+        /**
+         * The size of the list.
+         */
         private int size;
-        /** The list data. */
+
+        /**
+         * The list data.
+         */
         private int[] data = new int[10];
 
         /**
@@ -289,7 +333,7 @@ public final class UnconditionedExactTest {
          * @return the width
          */
         int getWidth() {
-            return width;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -298,7 +342,7 @@ public final class UnconditionedExactTest {
          * @return the max X
          */
         int getMaxX() {
-            return width - 1;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -307,7 +351,7 @@ public final class UnconditionedExactTest {
          * @return the max Y
          */
         int getMaxY() {
-            return max / width - 1;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -317,11 +361,7 @@ public final class UnconditionedExactTest {
          * @param y Y value.
          */
         void add(int x, int y) {
-            if (size == data.length) {
-                // Overflow safe doubling of the current size.
-                data = Arrays.copyOf(data, (int) Math.min(max, size * 2L));
-            }
-            data[size++] = width * y + x;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -336,7 +376,7 @@ public final class UnconditionedExactTest {
          * @return the 2D index
          */
         int get(int index) {
-            return data[index];
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -345,7 +385,7 @@ public final class UnconditionedExactTest {
          * @return the size
          */
         int size() {
-            return size;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -354,7 +394,7 @@ public final class UnconditionedExactTest {
          * @return true if empty
          */
         boolean isEmpty() {
-            return size == 0;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -363,7 +403,7 @@ public final class UnconditionedExactTest {
          * @return true if full
          */
         boolean isFull() {
-            return size == max;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -380,17 +420,35 @@ public final class UnconditionedExactTest {
      * candidates.
      */
     static class Candidates {
-        /** The maximum size of array to allocate. */
+
+        /**
+         * The maximum size of array to allocate.
+         */
         private final int max;
-        /** Relative distance from lowest candidate. */
+
+        /**
+         * Relative distance from lowest candidate.
+         */
         private final double eps;
-        /** Candidate (key,value) pairs. */
+
+        /**
+         * Candidate (key,value) pairs.
+         */
         private double[][] data;
-        /** Current size of the list. */
+
+        /**
+         * Current size of the list.
+         */
         private int size;
-        /** Current minimum. */
+
+        /**
+         * Current minimum.
+         */
         private double min = Double.POSITIVE_INFINITY;
-        /** Current threshold for inclusion. */
+
+        /**
+         * Current threshold for inclusion.
+         */
         private double threshold = Double.POSITIVE_INFINITY;
 
         /**
@@ -414,37 +472,7 @@ public final class UnconditionedExactTest {
          * @param v Value.
          */
         void add(double k, double v) {
-            // Store only a single NaN
-            if (Double.isNaN(v)) {
-                if (size == 0) {
-                    // No requirement to check capacity
-                    data[size++] = new double[] {k, v};
-                }
-                return;
-            }
-            // Here values are non-NaN.
-            // If higher then do not store.
-            if (v > threshold) {
-                return;
-            }
-            // Check if lower than the current minima.
-            if (v < min) {
-                min = v;
-                // Get new threshold
-                threshold = v + Math.abs(v) * eps;
-                // Remove existing entries above the threshold
-                int s = 0;
-                for (int i = 0; i < size; i++) {
-                    // This will filter NaN values
-                    if (data[i][1] <= threshold) {
-                        data[s++] = data[i];
-                    }
-                }
-                size = s;
-                // Caution: This does not clear stale data
-                // by setting all values in [newSize, oldSize) = null
-            }
-            addPair(k, v);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -464,7 +492,7 @@ public final class UnconditionedExactTest {
                 // Expand
                 data = Arrays.copyOfRange(data, 0, (int) Math.min(max, size * 2L));
             }
-            data[size++] = new double[] {k, v};
+            data[size++] = new double[] { k, v };
         }
 
         /**
@@ -492,14 +520,7 @@ public final class UnconditionedExactTest {
          * @return the minimum (or null)
          */
         double[] getMinimum() {
-            // This will handle size=0 as data[0] will be null
-            double[] best = data[0];
-            for (int i = 1; i < size; i++) {
-                if (best[1] > data[i][1]) {
-                    best = data[i];
-                }
-            }
-            return best;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -508,9 +529,7 @@ public final class UnconditionedExactTest {
          * @param action Action.
          */
         void forEach(Consumer<double[]> action) {
-            for (int i = 0; i < size; i++) {
-                action.accept(data[i]);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -519,6 +538,7 @@ public final class UnconditionedExactTest {
      */
     @FunctionalInterface
     private interface BoschlooStatistic {
+
         /**
          * Compute Fisher's p-value for the 2x2 contingency table with the observed
          * value {@code x} in position [0][0]. Note that the table margins are fixed
@@ -538,10 +558,7 @@ public final class UnconditionedExactTest {
      * @param points Number of initial points.
      * @param optimize Option to optimize the best initial point(s).
      */
-    private UnconditionedExactTest(AlternativeHypothesis alternative,
-                                   Method method,
-                                   int points,
-                                   boolean optimize) {
+    private UnconditionedExactTest(AlternativeHypothesis alternative, Method method, int points, boolean optimize) {
         this.alternative = alternative;
         this.method = method;
         this.points = points;
@@ -561,7 +578,7 @@ public final class UnconditionedExactTest {
      * @return default instance
      */
     public static UnconditionedExactTest withDefaults() {
-        return DEFAULT;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -571,7 +588,7 @@ public final class UnconditionedExactTest {
      * @return an instance
      */
     public UnconditionedExactTest with(AlternativeHypothesis v) {
-        return new UnconditionedExactTest(Objects.requireNonNull(v), method, points, optimize);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -581,7 +598,7 @@ public final class UnconditionedExactTest {
      * @return an instance
      */
     public UnconditionedExactTest with(Method v) {
-        return new UnconditionedExactTest(alternative, Objects.requireNonNull(v), points, optimize);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -602,10 +619,7 @@ public final class UnconditionedExactTest {
      * @throws IllegalArgumentException if the value is {@code < 2}.
      */
     public UnconditionedExactTest withInitialPoints(int v) {
-        if (v <= 1) {
-            throw new InferenceException(InferenceException.X_LT_Y, v, 2);
-        }
-        return new UnconditionedExactTest(alternative, method, v, optimize);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -619,7 +633,7 @@ public final class UnconditionedExactTest {
      * @see #withInitialPoints(int)
      */
     public UnconditionedExactTest withOptimize(boolean v) {
-        return new UnconditionedExactTest(alternative, method, points, v);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -635,23 +649,7 @@ public final class UnconditionedExactTest {
      * @see #test(int[][])
      */
     public double statistic(int[][] table) {
-        checkTable(table);
-        final int a = table[0][0];
-        final int b = table[0][1];
-        final int c = table[1][0];
-        final int d = table[1][1];
-        final int m = a + c;
-        final int n = b + d;
-        // Exhaustive switch statement
-        switch (method) {
-        case Z_POOLED:
-            return statisticZ(a, b, m, n, true);
-        case Z_UNPOOLED:
-            return statisticZ(a, b, m, n, false);
-        case BOSCHLOO:
-            return statisticBoschloo(a, b, m, n);
-        }
-        throw new IllegalStateException(String.valueOf(method));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -673,26 +671,7 @@ public final class UnconditionedExactTest {
      * @see #statistic(int[][])
      */
     public Result test(int[][] table) {
-        checkTable(table);
-        final int a = table[0][0];
-        final int b = table[0][1];
-        final int c = table[1][0];
-        final int d = table[1][1];
-        final int m = a + c;
-        final int n = b + d;
-
-        // Used to track more extreme tables
-        final XYList tableList = new XYList(m, n);
-
-        final double statistic = findExtremeTables(a, b, tableList);
-        if (tableList.isEmpty() || tableList.isFull()) {
-            // All possible tables are more extreme, e.g. a two-sided test where the
-            // z-statistic is zero.
-            return new Result(statistic);
-        }
-        final double[] opt = computePValue(tableList);
-
-        return new Result(statistic, opt[0], opt[1]);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -711,13 +690,13 @@ public final class UnconditionedExactTest {
         final int m = tableList.getMaxX();
         final int n = tableList.getMaxY();
         // Exhaustive switch statement
-        switch (method) {
-        case Z_POOLED:
-            return findExtremeTablesZ(a, b, m, n, true, tableList);
-        case Z_UNPOOLED:
-            return findExtremeTablesZ(a, b, m, n, false, tableList);
-        case BOSCHLOO:
-            return findExtremeTablesBoschloo(a, b, m, n, tableList);
+        switch(method) {
+            case Z_POOLED:
+                return findExtremeTablesZ(a, b, m, n, true, tableList);
+            case Z_UNPOOLED:
+                return findExtremeTablesZ(a, b, m, n, false, tableList);
+            case BOSCHLOO:
+                return findExtremeTablesBoschloo(a, b, m, n, tableList);
         }
         throw new IllegalStateException(String.valueOf(method));
     }
@@ -846,7 +825,6 @@ public final class UnconditionedExactTest {
         // Logic is the same as FisherExactTest but using the probability (PMF), which
         // is cached, rather than the logProbability.
         final double pk = distribution.pmf(k);
-
         final int m1 = distribution.getLowerMode();
         final int m2 = distribution.getUpperMode();
         if (k < m1) {
@@ -854,19 +832,15 @@ public final class UnconditionedExactTest {
             // Find upper half. As k < lower mode i should never
             // reach the lower mode based on the probability alone.
             // Bracket with the upper mode.
-            final int i = Searches.searchDescending(m2, distribution.getSupportUpperBound(), pk,
-                distribution::pmf);
-            return distribution.cdf(k) +
-                   distribution.sf(i - 1);
+            final int i = Searches.searchDescending(m2, distribution.getSupportUpperBound(), pk, distribution::pmf);
+            return distribution.cdf(k) + distribution.sf(i - 1);
         } else if (k > m2) {
             // Upper half = sf(k - 1)
             // Find lower half. As k > upper mode i should never
             // reach the upper mode based on the probability alone.
             // Bracket with the lower mode.
-            final int i = Searches.searchAscending(distribution.getSupportLowerBound(), m1, pk,
-                distribution::pmf);
-            return distribution.cdf(i) +
-                   distribution.sf(k - 1);
+            final int i = Searches.searchAscending(distribution.getSupportLowerBound(), m1, pk, distribution::pmf);
+            return distribution.cdf(i) + distribution.sf(k - 1);
         }
         // k == mode
         // Edge case where the sum of probabilities will be either
@@ -888,7 +862,6 @@ public final class UnconditionedExactTest {
      */
     private double findExtremeTablesBoschloo(int a, int b, int m, int n, XYList tableList) {
         final double statistic = statisticBoschloo(a, b, m, n);
-
         // Function to compute the statistic
         final BoschlooStatistic func;
         if (alternative == AlternativeHypothesis.GREATER_THAN) {
@@ -898,7 +871,6 @@ public final class UnconditionedExactTest {
         } else {
             func = UnconditionedExactTest::statisticBoschlooTwoSided;
         }
-
         // All tables are: 0 <= i <= m  by  0 <= j <= n
         // Diagonal (upper-left to lower-right) strips of the possible
         // tables use the same hypergeometric distribution
@@ -935,7 +907,6 @@ public final class UnconditionedExactTest {
      */
     private double[] computePValue(XYList tableList) {
         final DoubleUnaryOperator func = createBinomialModel(tableList);
-
         // Enumerate the range [LOWER, 1-LOWER] and save the best points for optimization
         final Candidates minima = new Candidates(MAX_CANDIDATES, MINIMA_EPS);
         final int n = points - 1;
@@ -958,9 +929,7 @@ public final class UnconditionedExactTest {
         final double vn = func.applyAsDouble(x);
         addCandidate(minima, v2, v3, vn, px);
         addCandidate(minima, v3, vn, 0, x);
-
         final double[] min = minima.getMinimum();
-
         // Optionally optimize the best point(s) (if not already optimal)
         if (optimize && min[1] > -1) {
             final BrentOptimizer opt = new BrentOptimizer(SOLVER_RELATIVE_EPS, Double.MIN_VALUE);
@@ -1012,7 +981,6 @@ public final class UnconditionedExactTest {
         final double[] c = new double[tableList.size()];
         final int[] ij = new int[tableList.size()];
         final int width = tableList.getWidth();
-
         // Compute the log binomial dynamically for a small number of values
         final IntToDoubleFunction binomM;
         final IntToDoubleFunction binomN;
@@ -1024,7 +992,6 @@ public final class UnconditionedExactTest {
             binomM = createLogBinomialCoefficients(m);
             binomN = m == n ? binomM : createLogBinomialCoefficients(n);
         }
-
         // Handle special cases i+j == 0 and i+j == m+n.
         // These will occur only once, if at all. Mark if they occur.
         int flag = 0;
@@ -1044,7 +1011,6 @@ public final class UnconditionedExactTest {
                 j++;
             }
         }
-
         final int size = j;
         final boolean ij0 = (flag & 1) != 0;
         final boolean ijmn = (flag & 2) != 0;

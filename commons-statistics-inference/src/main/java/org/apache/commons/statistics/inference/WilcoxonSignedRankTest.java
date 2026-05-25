@@ -33,23 +33,45 @@ import org.apache.commons.statistics.ranking.TiesStrategy;
  * @since 1.1
  */
 public final class WilcoxonSignedRankTest {
-    /** Limit on sample size for the exact p-value computation. */
-    private static final int EXACT_LIMIT = 1023;
-    /** Limit on sample size for the exact p-value computation for the auto mode. */
-    private static final int AUTO_LIMIT = 50;
-    /** Ranking instance. */
-    private static final RankingAlgorithm RANKING = new NaturalRanking(NaNStrategy.FAILED, TiesStrategy.AVERAGE);
-    /** Default instance. */
-    private static final WilcoxonSignedRankTest DEFAULT = new WilcoxonSignedRankTest(
-        AlternativeHypothesis.TWO_SIDED, PValueMethod.AUTO, true, 0);
 
-    /** Alternative hypothesis. */
+    /**
+     * Limit on sample size for the exact p-value computation.
+     */
+    private static final int EXACT_LIMIT = 1023;
+
+    /**
+     * Limit on sample size for the exact p-value computation for the auto mode.
+     */
+    private static final int AUTO_LIMIT = 50;
+
+    /**
+     * Ranking instance.
+     */
+    private static final RankingAlgorithm RANKING = new NaturalRanking(NaNStrategy.FAILED, TiesStrategy.AVERAGE);
+
+    /**
+     * Default instance.
+     */
+    private static final WilcoxonSignedRankTest DEFAULT = new WilcoxonSignedRankTest(AlternativeHypothesis.TWO_SIDED, PValueMethod.AUTO, true, 0);
+
+    /**
+     * Alternative hypothesis.
+     */
     private final AlternativeHypothesis alternative;
-    /** Method to compute the p-value. */
+
+    /**
+     * Method to compute the p-value.
+     */
     private final PValueMethod pValueMethod;
-    /** Perform continuity correction. */
+
+    /**
+     * Perform continuity correction.
+     */
     private final boolean continuityCorrection;
-    /** Expected location shift. */
+
+    /**
+     * Expected location shift.
+     */
     private final double mu;
 
     /**
@@ -60,9 +82,15 @@ public final class WilcoxonSignedRankTest {
      * @since 1.1
      */
     public static final class Result extends BaseSignificanceResult {
-        /** Flag indicating the data had tied values. */
+
+        /**
+         * Flag indicating the data had tied values.
+         */
         private final boolean tiedValues;
-        /** Flag indicating the data had zero values. */
+
+        /**
+         * Flag indicating the data had zero values.
+         */
         private final boolean zeroValues;
 
         /**
@@ -88,7 +116,7 @@ public final class WilcoxonSignedRankTest {
          * @return {@code true} if there were tied values
          */
         public boolean hasTiedValues() {
-            return tiedValues;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -101,7 +129,7 @@ public final class WilcoxonSignedRankTest {
          * @return {@code true} if there were zero values
          */
         public boolean hasZeroValues() {
-            return zeroValues;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -111,8 +139,7 @@ public final class WilcoxonSignedRankTest {
      * @param continuityCorrection true to perform continuity correction.
      * @param mu Expected location shift.
      */
-    private WilcoxonSignedRankTest(AlternativeHypothesis alternative, PValueMethod method,
-        boolean continuityCorrection, double mu) {
+    private WilcoxonSignedRankTest(AlternativeHypothesis alternative, PValueMethod method, boolean continuityCorrection, double mu) {
         this.alternative = alternative;
         this.pValueMethod = method;
         this.continuityCorrection = continuityCorrection;
@@ -132,7 +159,7 @@ public final class WilcoxonSignedRankTest {
      * @return default instance
      */
     public static WilcoxonSignedRankTest withDefaults() {
-        return DEFAULT;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -142,7 +169,7 @@ public final class WilcoxonSignedRankTest {
      * @return an instance
      */
     public WilcoxonSignedRankTest with(AlternativeHypothesis v) {
-        return new WilcoxonSignedRankTest(Objects.requireNonNull(v), pValueMethod, continuityCorrection, mu);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -153,9 +180,7 @@ public final class WilcoxonSignedRankTest {
      * @throws IllegalArgumentException if the value is not in the allowed options or is null
      */
     public WilcoxonSignedRankTest with(PValueMethod v) {
-        return new WilcoxonSignedRankTest(alternative,
-            Arguments.checkOption(v, EnumSet.of(PValueMethod.AUTO, PValueMethod.EXACT, PValueMethod.ASYMPTOTIC)),
-            continuityCorrection, mu);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -169,8 +194,7 @@ public final class WilcoxonSignedRankTest {
      * @return an instance
      */
     public WilcoxonSignedRankTest with(ContinuityCorrection v) {
-        return new WilcoxonSignedRankTest(alternative, pValueMethod,
-            Objects.requireNonNull(v) == ContinuityCorrection.ENABLED, mu);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -181,7 +205,7 @@ public final class WilcoxonSignedRankTest {
      * @throws IllegalArgumentException if the value is not finite
      */
     public WilcoxonSignedRankTest withMu(double v) {
-        return new WilcoxonSignedRankTest(alternative, pValueMethod, continuityCorrection, Arguments.checkFinite(v));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -199,7 +223,7 @@ public final class WilcoxonSignedRankTest {
      * @see #withMu(double)
      */
     public double statistic(double[] z) {
-        return computeStatistic(z, mu);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -223,10 +247,7 @@ public final class WilcoxonSignedRankTest {
      * @see #withMu(double)
      */
     public double statistic(double[] x, double[] y) {
-        checkSamples(x, y);
-        // Apply mu before creation of differences
-        final double[] z = calculateDifferences(mu, x, y);
-        return computeStatistic(z, 0);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -271,7 +292,7 @@ public final class WilcoxonSignedRankTest {
      * @see #with(ContinuityCorrection)
      */
     public Result test(double[] z) {
-        return computeTest(z, mu);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -296,10 +317,7 @@ public final class WilcoxonSignedRankTest {
      * @see #test(double[])
      */
     public Result test(double[] x, double[] y) {
-        checkSamples(x, y);
-        // Apply mu before creation of differences
-        final double[] z = calculateDifferences(mu, x, y);
-        return computeTest(z, 0);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -342,11 +360,9 @@ public final class WilcoxonSignedRankTest {
         final double[] zAbs = calculateAbsoluteDifferences(x);
         final double[] ranks = RANKING.apply(zAbs);
         final double wPlus = calculateW(x, ranks);
-
         // Exact p has strict requirements for no zeros, no ties
         final double c = calculateTieCorrection(ranks);
         final boolean tiedValues = c != 0;
-
         final int n = z.length;
         // Exact p requires no ties and no zeros
         final double p;
@@ -452,26 +468,7 @@ public final class WilcoxonSignedRankTest {
      * @return the tie correction
      */
     static double calculateTieCorrection(double[] ranks) {
-        double c = 0;
-        int ties = 1;
-        Arrays.sort(ranks);
-        double last = Double.NaN;
-        for (final double rank : ranks) {
-            // Deliberate use of equals
-            if (last == rank) {
-                // Extend the tied group
-                ties++;
-            } else {
-                if (ties != 1) {
-                    c += Math.pow(ties, 3) - ties;
-                    ties = 1;
-                }
-                last = rank;
-            }
-        }
-        // Final ties count
-        c += Math.pow(ties, 3) - ties;
-        return c;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -498,14 +495,10 @@ public final class WilcoxonSignedRankTest {
      * @param continuityCorrection true to use a continuity correction.
      * @return two-sided asymptotic p-value
      */
-    private static double calculateAsymptoticPValue(double wPlus, int n, double z, double c,
-            AlternativeHypothesis alternative, boolean continuityCorrection) {
+    private static double calculateAsymptoticPValue(double wPlus, int n, double z, double c, AlternativeHypothesis alternative, boolean continuityCorrection) {
         // E[W+] = n * (n + 1) / 4 - z * (z + 1) / 4
         final double e = (n * (n + 1.0) - z * (z + 1.0)) * 0.25;
-
-        final double variance = ((n * (n + 1.0) * (2 * n + 1.0)) -
-                                (z * (z + 1.0) * (2 * z + 1.0)) - c * 0.5) / 24;
-
+        final double variance = ((n * (n + 1.0) * (2 * n + 1.0)) - (z * (z + 1.0) * (2 * z + 1.0)) - c * 0.5) / 24;
         double x = wPlus - e;
         if (continuityCorrection) {
             // +/- 0.5 is a continuity correction towards the expected.
@@ -520,7 +513,6 @@ public final class WilcoxonSignedRankTest {
             }
         }
         x /= Math.sqrt(variance);
-
         final NormalDistribution standardNormal = NormalDistribution.of(0, 1);
         if (alternative == AlternativeHypothesis.GREATER_THAN) {
             return standardNormal.survivalProbability(x);
@@ -549,7 +541,6 @@ public final class WilcoxonSignedRankTest {
         // No overflow here if n <= 1023.
         final int sum = n * (n + 1) / 2;
         final int w2 = sum - w1;
-
         // Return the correct side:
         if (alternative == AlternativeHypothesis.GREATER_THAN) {
             // sf(w1 - 1)
@@ -576,9 +567,7 @@ public final class WilcoxonSignedRankTest {
      */
     private static double cdf(int w1, int w2, int n) {
         // Exploit symmetry. Note the distribution is discrete thus requiring (w2 - 1).
-        return w2 > w1 ?
-            computeCdf(w1, n) :
-            1 - computeCdf(w2 - 1, n);
+        return w2 > w1 ? computeCdf(w1, n) : 1 - computeCdf(w2 - 1, n);
     }
 
     /**
@@ -592,9 +581,7 @@ public final class WilcoxonSignedRankTest {
      */
     private static double sf(int w1, int w2, int n) {
         // Opposite of the CDF
-        return w2 > w1 ?
-            1 - computeCdf(w1, n) :
-            computeCdf(w2 - 1, n);
+        return w2 > w1 ? 1 - computeCdf(w1, n) : computeCdf(w2 - 1, n);
     }
 
     /**
@@ -621,12 +608,10 @@ public final class WilcoxonSignedRankTest {
         // 31        [0, 496]       < 2^31       int
         // 63        [0, 2016]      < 2^63       long
         // 1023      [0, 523766]    < 2^1023     double
-
         if (t <= 0) {
             // No recursion required
             return t < 0 ? 0 : Math.scalb(1, -n);
         }
-
         // Define u_n(t) as the number of sign combinations for T = t
         // Pr(T == t) = u_n(t) / 2^n
         // Sum them to create the cumulative probability Pr(T <= t).
@@ -636,13 +621,11 @@ public final class WilcoxonSignedRankTest {
         // u_0(0) = 1
         // u_0(t) = 0 : t != 0
         // u_n(t) = 0 : t < 0 || t > n(n+1)/2
-
         // Compute all u_n(t) up to t.
         final double[] u = new double[t + 1];
         // Initialize u_1(t) using base cases for recursion
         u[0] = 1;
         u[1] = 1;
-
         // Each u_n(t) is created using the current correct values for u_{n-1}(t)
         for (int nn = 2; nn < n + 1; nn++) {
             // u[t] holds the correct value for u_{n-1}(t)
@@ -652,7 +635,6 @@ public final class WilcoxonSignedRankTest {
             }
         }
         final double sum = Arrays.stream(u).sum();
-
         // Finally divide by the number of possible sums: 2^n
         return Math.scalb(sum, -n);
     }

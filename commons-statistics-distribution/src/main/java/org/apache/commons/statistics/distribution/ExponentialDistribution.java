@@ -37,13 +37,25 @@ import org.apache.commons.rng.sampling.distribution.ZigguratSampler;
  * @see <a href="https://mathworld.wolfram.com/ExponentialDistribution.html">Exponential distribution (MathWorld)</a>
  */
 public final class ExponentialDistribution extends AbstractContinuousDistribution {
-    /** Support lower bound. */
+
+    /**
+     * Support lower bound.
+     */
     private static final double SUPPORT_LO = 0;
-    /** Support upper bound. */
+
+    /**
+     * Support upper bound.
+     */
     private static final double SUPPORT_HI = Double.POSITIVE_INFINITY;
-    /** The mean of this distribution. */
+
+    /**
+     * The mean of this distribution.
+     */
     private final double mean;
-    /** The logarithm of the mean, stored to reduce computing time. */
+
+    /**
+     * The logarithm of the mean, stored to reduce computing time.
+     */
     private final double logMean;
 
     /**
@@ -62,46 +74,39 @@ public final class ExponentialDistribution extends AbstractContinuousDistributio
      * @throws IllegalArgumentException if {@code mean <= 0}.
      */
     public static ExponentialDistribution of(double mean) {
-        if (mean <= 0) {
-            throw new DistributionException(DistributionException.NOT_STRICTLY_POSITIVE, mean);
-        }
-        return new ExponentialDistribution(mean);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double density(double x) {
-        if (x < SUPPORT_LO) {
-            return 0;
-        }
-        return Math.exp(-x / mean) / mean;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} **/
+    /**
+     * {@inheritDoc} *
+     */
     @Override
     public double logDensity(double x) {
-        if (x < SUPPORT_LO) {
-            return Double.NEGATIVE_INFINITY;
-        }
-        return -x / mean - logMean;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public double cumulativeProbability(double x)  {
-        if (x <= SUPPORT_LO) {
-            return 0;
-        }
-        return -Math.expm1(-x / mean);
+    public double cumulativeProbability(double x) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public double survivalProbability(double x)  {
-        if (x <= SUPPORT_LO) {
-            return 1;
-        }
-        return Math.exp(-x / mean);
+    public double survivalProbability(double x) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -112,12 +117,7 @@ public final class ExponentialDistribution extends AbstractContinuousDistributio
      */
     @Override
     public double inverseCumulativeProbability(double p) {
-        ArgumentUtils.checkProbability(p);
-        if (p == 1) {
-            return Double.POSITIVE_INFINITY;
-        }
-        // Subtract from zero to prevent returning -0.0 for p=-0.0
-        return 0 - mean * Math.log1p(-p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -128,18 +128,15 @@ public final class ExponentialDistribution extends AbstractContinuousDistributio
      */
     @Override
     public double inverseSurvivalProbability(double p) {
-        ArgumentUtils.checkProbability(p);
-        if (p == 0) {
-            return Double.POSITIVE_INFINITY;
-        }
-        // Subtract from zero to prevent returning -0.0 for p=1
-        return 0 - mean * Math.log(p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double getMean() {
-        return mean;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -149,7 +146,7 @@ public final class ExponentialDistribution extends AbstractContinuousDistributio
      */
     @Override
     public double getVariance() {
-        return mean * mean;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -161,7 +158,7 @@ public final class ExponentialDistribution extends AbstractContinuousDistributio
      */
     @Override
     public double getSupportLowerBound() {
-        return SUPPORT_LO;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -173,22 +170,22 @@ public final class ExponentialDistribution extends AbstractContinuousDistributio
      */
     @Override
     public double getSupportUpperBound() {
-        return SUPPORT_HI;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     double getMedian() {
-        // Overridden for the probability(double, double) method.
-        // This is intentionally not a public method.
-        // ln(2) / rate = mean * ln(2)
-        return mean * Constants.LN_TWO;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ContinuousDistribution.Sampler createSampler(final UniformRandomProvider rng) {
-        // Exponential distribution sampler.
-        return ZigguratSampler.Exponential.of(rng, getMean())::sample;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

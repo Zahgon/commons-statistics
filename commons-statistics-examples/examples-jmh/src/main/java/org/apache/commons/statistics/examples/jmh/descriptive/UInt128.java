@@ -32,16 +32,26 @@ import org.apache.commons.numbers.core.DD;
  * @since 1.1
  */
 final class UInt128 {
-    /** Mask for the lower 32-bits of a long. */
+
+    /**
+     * Mask for the lower 32-bits of a long.
+     */
     private static final long MASK32 = 0xffff_ffffL;
 
     // Data is stored using integers to allow efficient sum-with-carry addition
-
-    /** low 32-bits. */
+    /**
+     * low 32-bits.
+     */
     private int d;
-    /** low 32-bits. */
+
+    /**
+     * low 32-bits.
+     */
     private int c;
-    /** high 64-bits. */
+
+    /**
+     * high 64-bits.
+     */
     private long ab;
 
     /**
@@ -93,7 +103,7 @@ final class UInt128 {
      * @return the instance
      */
     static UInt128 create() {
-        return new UInt128();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -104,7 +114,7 @@ final class UInt128 {
      * @return the instance
      */
     static UInt128 of(long x) {
-        return new UInt128(x);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -114,13 +124,7 @@ final class UInt128 {
      * @return the instance
      */
     static UInt128 of(UInt96 x) {
-        final int lo = x.lo32();
-        final long hi = x.hi64();
-        final UInt128 y = new UInt128();
-        y.d = lo;
-        y.c = (int) hi;
-        y.ab = hi >>> Integer.SIZE;
-        return y;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -133,14 +137,7 @@ final class UInt128 {
      * @param x Value.
      */
     void addPositive(long x) {
-        // Sum with carry.
-        // Assuming x is positive then x + lo will not overflow 64-bits
-        // so we do not have to split x into upper and lower 32-bit values.
-        long s = x + (d & MASK32);
-        d = (int) s;
-        s = (s >>> Integer.SIZE) + (c & MASK32);
-        c = (int) s;
-        ab += s >>> Integer.SIZE;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -149,16 +146,7 @@ final class UInt128 {
      * @param x Value.
      */
     void add(UInt128 x) {
-        // Avoid issues adding to itself
-        final int dd = x.d;
-        final int cc = x.c;
-        final long aabb = x.ab;
-        // Sum with carry.
-        long s = (dd & MASK32) + (d & MASK32);
-        d = (int) s;
-        s = (s >>> Integer.SIZE) + (cc & MASK32) + (c & MASK32);
-        c = (int) s;
-        ab += (s >>> Integer.SIZE) + aabb;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -169,15 +157,7 @@ final class UInt128 {
      * @return the product
      */
     UInt128 unsignedMultiply(int x) {
-        final long xx = x & MASK32;
-        // Multiply with carry.
-        long product = xx * (d & MASK32);
-        final int dd = (int) product;
-        product = (product >>> Integer.SIZE) + xx * (c & MASK32);
-        final int cc = (int) product;
-        // Possible overflow here and bits are lost
-        final long aabb = (product >>> Integer.SIZE) + xx * ab;
-        return new UInt128(aabb, cc, dd);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -188,15 +168,7 @@ final class UInt128 {
      * @return the difference
      */
     UInt128 subtract(UInt128 x) {
-        // Difference with carry.
-        long diff = (d & MASK32) - (x.d & MASK32);
-        final int dd = (int) diff;
-        diff = (diff >> Integer.SIZE) + (c & MASK32) - (x.c & MASK32);
-        final int cc = (int) diff;
-        // Possible overflow here and bits are lost containing info on the
-        // magnitude of the true negative value
-        final long aabb = (diff >> Integer.SIZE) + ab - x.ab;
-        return new UInt128(aabb, cc, dd);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -205,16 +177,7 @@ final class UInt128 {
      * @return the value
      */
     BigInteger toBigInteger() {
-        // Test if we have more than 63-bits
-        if (ab != 0 || c < 0) {
-            final ByteBuffer bb = ByteBuffer.allocate(Integer.BYTES * 4)
-                .putLong(ab)
-                .putInt(c)
-                .putInt(d);
-            return new BigInteger(1, bb.array());
-        }
-        // Create from a long
-        return BigInteger.valueOf(((c & MASK32) << Integer.SIZE) | (d & MASK32));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -223,10 +186,7 @@ final class UInt128 {
      * @return the value
      */
     DD toDD() {
-        // Sum low to high
-        return DD.ofSum(d & MASK32, (c & MASK32) * 0x1.0p32)
-            .add((ab & MASK32) * 0x1.0p64)
-            .add((ab >>> Integer.SIZE) * 0x1.0p96);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -235,7 +195,7 @@ final class UInt128 {
      * @return the value
      */
     double toDouble() {
-        return IntMath.uin128ToDouble(hi64(), lo64());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -244,7 +204,7 @@ final class UInt128 {
      * @return the low 64-bits
      */
     long lo64() {
-        return (d & MASK32) | ((c & MASK32) << Integer.SIZE);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -253,7 +213,7 @@ final class UInt128 {
      * @return bits 32-1
      */
     int lo32() {
-        return d;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -262,7 +222,7 @@ final class UInt128 {
      * @return bits 64-33
      */
     int mid32() {
-        return c;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -271,7 +231,7 @@ final class UInt128 {
      * @return bits 128-65
      */
     long hi64() {
-        return ab;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -280,6 +240,6 @@ final class UInt128 {
      * @return bits 128-97
      */
     int hi32() {
-        return (int) (ab >>> Integer.SIZE);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

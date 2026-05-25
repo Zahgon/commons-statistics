@@ -22,9 +22,15 @@ package org.apache.commons.statistics.inference;
  * @since 1.1
  */
 class BaseSignificanceResult implements SignificanceResult {
-    /** Test statistics. */
+
+    /**
+     * Test statistics.
+     */
     private final double statistic;
-    /** p-value. */
+
+    /**
+     * p-value.
+     */
     private final double p;
 
     /**
@@ -40,11 +46,11 @@ class BaseSignificanceResult implements SignificanceResult {
 
     @Override
     public double getStatistic() {
-        return statistic;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public double getPValue() {
-        return p;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.apache.commons.statistics.examples.jmh.distribution;
 
 import java.util.SplittableRandom;
@@ -50,13 +49,22 @@ import org.openjdk.jmh.annotations.Warmup;
 @Warmup(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 @Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 @State(Scope.Benchmark)
-@Fork(value = 1, jvmArgs = {"-server", "-Xms512M", "-Xmx512M"})
+@Fork(value = 1, jvmArgs = { "-server", "-Xms512M", "-Xmx512M" })
 public class InverseProbabilityPerformance {
-    /** No-operation for baseline. */
+
+    /**
+     * No-operation for baseline.
+     */
     private static final String NOOP = "Noop";
-    /** Message prefix for an unknown function. */
+
+    /**
+     * Message prefix for an unknown function.
+     */
     private static final String UNKNOWN_FUNCTION = "unknown function: ";
-    /** Message prefix for an unknown distribution. */
+
+    /**
+     * Message prefix for an unknown distribution.
+     */
     private static final String UNKNOWN_DISTRIBUTION = "unknown distrbution: ";
 
     /**
@@ -70,42 +78,44 @@ public class InverseProbabilityPerformance {
      */
     @State(Scope.Benchmark)
     public static class InverseData {
-        /** The implementation of the function. */
-        @Param({NOOP,
-            // Worst accuracy cases from STATISTICS-36
-            "Beta:4:0.1",
-            "ChiSquared:0.1",
-            "F:5:6",
-            "Gamma:4:2",
-            "Nakagami:0.33333333333:1",
-            "T:5",
-        })
+
+        /**
+         * The implementation of the function.
+         */
+        @Param({ NOOP, // Worst accuracy cases from STATISTICS-36
+        "Beta:4:0.1", "ChiSquared:0.1", "F:5:6", "Gamma:4:2", "Nakagami:0.33333333333:1", "T:5" })
         private String implementation;
 
-        /** The inversion relative accuracy. */
-        @Param({
-            // Default from o.a.c.math4.analysis.solvers.BaseAbstractUnivariateSolver
-            "1e-14",
-            // Lowest value so that 2 * eps * x is 1 ULP. Equal to 2^-53.
-            "1.1102230246251565E-16"})
+        /**
+         * The inversion relative accuracy.
+         */
+        @Param({ // Default from o.a.c.math4.analysis.solvers.BaseAbstractUnivariateSolver
+        "1e-14", // Lowest value so that 2 * eps * x is 1 ULP. Equal to 2^-53.
+        "1.1102230246251565E-16" })
         private double relEps;
 
-        /** The inversion absolute accuracy. */
-        @Param({
-            // Default from o.a.c.math4.analysis.solvers.BaseAbstractUnivariateSolver
-            "1e-9",
-            // Lowest non-zero value. Equal to Double.MIN_VALUE.
-            "4.9e-324"})
+        /**
+         * The inversion absolute accuracy.
+         */
+        @Param({ // Default from o.a.c.math4.analysis.solvers.BaseAbstractUnivariateSolver
+        "1e-9", // Lowest non-zero value. Equal to Double.MIN_VALUE.
+        "4.9e-324" })
         private double absEps;
 
-        /** The function to invert. */
-        @Param({"cdf", "sf"})
+        /**
+         * The function to invert.
+         */
+        @Param({ "cdf", "sf" })
         private String invert;
 
-        /** Source of randomness for probabilities in the range [0, 1]. */
+        /**
+         * Source of randomness for probabilities in the range [0, 1].
+         */
         private SplittableRandom rng;
 
-        /** The inverse probability function. */
+        /**
+         * The inverse probability function.
+         */
         private DoubleUnaryOperator function;
 
         /**
@@ -114,7 +124,7 @@ public class InverseProbabilityPerformance {
          * @return the result
          */
         public double next() {
-            return function.applyAsDouble(rng.nextDouble());
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -122,11 +132,7 @@ public class InverseProbabilityPerformance {
          */
         @Setup
         public void setup() {
-            // Creation with a seed ensures the increment uses the golden ratio
-            // with its known robust statistical properties. Creating with no
-            // seed will use a random increment.
-            rng = new SplittableRandom(SEED);
-            function = createFunction(implementation, relEps, absEps, invert);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -138,20 +144,14 @@ public class InverseProbabilityPerformance {
          * @param invert Function to invert
          * @return the function
          */
-        private static DoubleUnaryOperator createFunction(String implementation,
-                                                          double relativeAccuracy,
-                                                          double absoluteAccuracy,
-                                                          String invert) {
+        private static DoubleUnaryOperator createFunction(String implementation, double relativeAccuracy, double absoluteAccuracy, String invert) {
             if (implementation.startsWith(NOOP)) {
                 return x -> x;
             }
-
             // Create the distribution
             final ContinuousDistribution dist = createDistribution(implementation);
-
             // Get the function inverter
-            final ContinuousDistributionInverter inverter =
-                new ContinuousDistributionInverter(dist, relativeAccuracy, absoluteAccuracy);
+            final ContinuousDistributionInverter inverter = new ContinuousDistributionInverter(dist, relativeAccuracy, absoluteAccuracy);
             // Support CDF and SF
             if ("cdf".equals(invert)) {
                 return inverter::inverseCumulativeProbability;
@@ -193,17 +193,28 @@ public class InverseProbabilityPerformance {
          * from Commons Statistics version 1.0.
          */
         static class ContinuousDistributionInverter {
-            /** BrentSolver function value accuracy.
+
+            /**
+             * BrentSolver function value accuracy.
              * Set to a very low value to search using Brent's method unless
-             * the starting point is correct. */
+             * the starting point is correct.
+             */
             private static final double SOLVER_FUNCTION_VALUE_ACCURACY = Double.MIN_VALUE;
 
-            /** BrentSolver relative accuracy. This is used with {@code 2 * eps * abs(b)}
-             * so the minimum non-zero value with an effect is half of machine epsilon (2^-53). */
+            /**
+             * BrentSolver relative accuracy. This is used with {@code 2 * eps * abs(b)}
+             * so the minimum non-zero value with an effect is half of machine epsilon (2^-53).
+             */
             private final double relativeAccuracy;
-            /** BrentSolver absolute accuracy. */
+
+            /**
+             * BrentSolver absolute accuracy.
+             */
             private final double absoluteAccuracy;
-            /** The distribution. */
+
+            /**
+             * The distribution.
+             */
             private final ContinuousDistribution dist;
 
             /**
@@ -211,9 +222,7 @@ public class InverseProbabilityPerformance {
              * @param relativeAccuracy Solver relative accuracy
              * @param absoluteAccuracy Solver absolute accuracy
              */
-            ContinuousDistributionInverter(ContinuousDistribution dist,
-                                           double relativeAccuracy,
-                                           double absoluteAccuracy) {
+            ContinuousDistributionInverter(ContinuousDistribution dist, double relativeAccuracy, double absoluteAccuracy) {
                 this.dist = dist;
                 this.relativeAccuracy = relativeAccuracy;
                 this.absoluteAccuracy = absoluteAccuracy;
@@ -251,8 +260,7 @@ public class InverseProbabilityPerformance {
              * @throws IllegalArgumentException if {@code p < 0} or {@code p > 1}
              */
             public double inverseCumulativeProbability(double p) {
-                checkProbability(p);
-                return inverseProbability(p, 1 - p, false);
+                throw new UnsupportedOperationException("STUB: not implemented");
             }
 
             /**
@@ -263,8 +271,7 @@ public class InverseProbabilityPerformance {
              * @throws IllegalArgumentException if {@code p < 0} or {@code p > 1}
              */
             public double inverseSurvivalProbability(double p) {
-                checkProbability(p);
-                return inverseProbability(1 - p, p, true);
+                throw new UnsupportedOperationException("STUB: not implemented");
             }
 
             /**
@@ -306,7 +313,6 @@ public class InverseProbabilityPerformance {
                  * In the case of the survival probability the bracket can be set using the same
                  * bound given that the argument p = 1 - q, with q the survival probability.
                  */
-
                 double lowerBound = dist.getSupportLowerBound();
                 if (p == 0) {
                     return lowerBound;
@@ -315,20 +321,15 @@ public class InverseProbabilityPerformance {
                 if (q == 0) {
                     return upperBound;
                 }
-
                 final double mu = dist.getMean();
                 final double sig = Math.sqrt(dist.getVariance());
-                final boolean chebyshevApplies = Double.isFinite(mu) &&
-                                                 isFiniteStrictlyPositive(sig);
-
+                final boolean chebyshevApplies = Double.isFinite(mu) && isFiniteStrictlyPositive(sig);
                 if (lowerBound == Double.NEGATIVE_INFINITY) {
                     lowerBound = createFiniteLowerBound(p, q, complement, upperBound, mu, sig, chebyshevApplies);
                 }
-
                 if (upperBound == Double.POSITIVE_INFINITY) {
                     upperBound = createFiniteUpperBound(p, q, complement, lowerBound, mu, sig, chebyshevApplies);
                 }
-
                 // Here the bracket [lower, upper] uses finite values. If the support
                 // is infinite the bracket can truncate the distribution and the target
                 // probability can be outside the range of [lower, upper].
@@ -350,20 +351,10 @@ public class InverseProbabilityPerformance {
                         return dist.getSupportLowerBound();
                     }
                 }
-
-                final DoubleUnaryOperator fun = complement ?
-                    arg -> dist.survivalProbability(arg) - q :
-                    arg -> dist.cumulativeProbability(arg) - p;
+                final DoubleUnaryOperator fun = complement ? arg -> dist.survivalProbability(arg) - q : arg -> dist.cumulativeProbability(arg) - p;
                 // Note the initial value is robust to overflow.
                 // Do not use 0.5 * (lowerBound + upperBound).
-                final double x = new BrentSolver(relativeAccuracy,
-                                                 absoluteAccuracy,
-                                                 SOLVER_FUNCTION_VALUE_ACCURACY)
-                    .findRoot(fun,
-                              lowerBound,
-                              lowerBound + 0.5 * (upperBound - lowerBound),
-                              upperBound);
-
+                final double x = new BrentSolver(relativeAccuracy, absoluteAccuracy, SOLVER_FUNCTION_VALUE_ACCURACY).findRoot(fun, lowerBound, lowerBound + 0.5 * (upperBound - lowerBound), upperBound);
                 return x;
             }
 
@@ -379,8 +370,7 @@ public class InverseProbabilityPerformance {
              * @param chebyshevApplies True if the Chebyshev inequality applies (mean is finite and {@code sig > 0}}
              * @return the finite lower bound
              */
-            private double createFiniteLowerBound(final double p, final double q, boolean complement,
-                double upperBound, final double mu, final double sig, final boolean chebyshevApplies) {
+            private double createFiniteLowerBound(final double p, final double q, boolean complement, double upperBound, final double mu, final double sig, final boolean chebyshevApplies) {
                 double lowerBound;
                 if (chebyshevApplies) {
                     lowerBound = mu - sig * Math.sqrt(q / p);
@@ -417,8 +407,7 @@ public class InverseProbabilityPerformance {
              * @param chebyshevApplies True if the Chebyshev inequality applies (mean is finite and {@code sig > 0}}
              * @return the finite lower bound
              */
-            private double createFiniteUpperBound(final double p, final double q, boolean complement,
-                double lowerBound, final double mu, final double sig, final boolean chebyshevApplies) {
+            private double createFiniteUpperBound(final double p, final double q, boolean complement, double lowerBound, final double mu, final double sig, final boolean chebyshevApplies) {
                 double upperBound;
                 if (chebyshevApplies) {
                     upperBound = mu + sig * Math.sqrt(p / q);
@@ -453,6 +442,6 @@ public class InverseProbabilityPerformance {
      */
     @Benchmark
     public double inverse(InverseData data) {
-        return data.next();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

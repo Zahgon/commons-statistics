@@ -31,19 +31,27 @@ package org.apache.commons.statistics.distribution;
  * @see <a href="https://mathworld.wolfram.com/LaplaceDistribution.html">Laplace distribution (MathWorld)</a>
  */
 public final class LaplaceDistribution extends AbstractContinuousDistribution {
-    /** The location parameter. */
+
+    /**
+     * The location parameter.
+     */
     private final double mu;
-    /** The scale parameter. */
+
+    /**
+     * The scale parameter.
+     */
     private final double beta;
-    /** log(2 * beta). */
+
+    /**
+     * log(2 * beta).
+     */
     private final double log2beta;
 
     /**
      * @param mu Location parameter.
      * @param beta Scale parameter (must be positive).
      */
-    private LaplaceDistribution(double mu,
-                                double beta) {
+    private LaplaceDistribution(double mu, double beta) {
         this.mu = mu;
         this.beta = beta;
         log2beta = Math.log(2.0 * beta);
@@ -57,12 +65,8 @@ public final class LaplaceDistribution extends AbstractContinuousDistribution {
      * @return the distribution
      * @throws IllegalArgumentException if {@code beta <= 0}
      */
-    public static LaplaceDistribution of(double mu,
-                                         double beta) {
-        if (beta <= 0) {
-            throw new DistributionException(DistributionException.NOT_STRICTLY_POSITIVE, beta);
-        }
-        return new LaplaceDistribution(mu, beta);
+    public static LaplaceDistribution of(double mu, double beta) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -71,7 +75,7 @@ public final class LaplaceDistribution extends AbstractContinuousDistribution {
      * @return the location parameter.
      */
     public double getLocation() {
-        return mu;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -80,64 +84,55 @@ public final class LaplaceDistribution extends AbstractContinuousDistribution {
      * @return the scale parameter.
      */
     public double getScale() {
-        return beta;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double density(double x) {
-        return Math.exp(-Math.abs(x - mu) / beta) / (2.0 * beta);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double logDensity(double x) {
-        return -Math.abs(x - mu) / beta - log2beta;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double cumulativeProbability(double x) {
-        if (x <= mu) {
-            return 0.5 * Math.exp((x - mu) / beta);
-        }
-        return 1.0 - 0.5 * Math.exp((mu - x) / beta);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double survivalProbability(double x) {
-        if (x <= mu) {
-            return 1.0 - 0.5 * Math.exp((x - mu) / beta);
-        }
-        return 0.5 * Math.exp((mu - x) / beta);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double inverseCumulativeProbability(double p) {
-        ArgumentUtils.checkProbability(p);
-        if (p == 0) {
-            return Double.NEGATIVE_INFINITY;
-        } else if (p == 1) {
-            return Double.POSITIVE_INFINITY;
-        }
-        final double x = (p > 0.5) ? -Math.log(2.0 * (1.0 - p)) : Math.log(2.0 * p);
-        return mu + beta * x;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double inverseSurvivalProbability(double p) {
-        ArgumentUtils.checkProbability(p);
-        if (p == 1) {
-            return Double.NEGATIVE_INFINITY;
-        } else if (p == 0) {
-            return Double.POSITIVE_INFINITY;
-        }
-        // By symmetry: x = -icdf(p); then transform back by the scale and location
-        final double x = (p > 0.5) ? Math.log(2.0 * (1.0 - p)) : -Math.log(2.0 * p);
-        return mu + beta * x;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -147,7 +142,7 @@ public final class LaplaceDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getMean() {
-        return getLocation();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -157,7 +152,7 @@ public final class LaplaceDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getVariance() {
-        return 2.0 * beta * beta;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -169,7 +164,7 @@ public final class LaplaceDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getSupportLowerBound() {
-        return Double.NEGATIVE_INFINITY;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -181,14 +176,14 @@ public final class LaplaceDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getSupportUpperBound() {
-        return Double.POSITIVE_INFINITY;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     double getMedian() {
-        // Overridden for the probability(double, double) method.
-        // This is intentionally not a public method.
-        return mu;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

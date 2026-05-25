@@ -25,27 +25,50 @@ import org.apache.commons.numbers.core.DD;
  * verify the arguments to the computations will not overflow.
  */
 final class ExtendedPrecision {
-    /** sqrt(2 pi) as a double-double number.
-     * Divided into two parts from the value sqrt(2 pi) computed to 64 decimal digits. */
+
+    /**
+     * sqrt(2 pi) as a double-double number.
+     * Divided into two parts from the value sqrt(2 pi) computed to 64 decimal digits.
+     */
     static final DD SQRT2PI = DD.ofSum(2.5066282746310007, -1.8328579980459167e-16);
 
-    /** Threshold for a big number that may overflow when squared. 2^500. */
+    /**
+     * Threshold for a big number that may overflow when squared. 2^500.
+     */
     private static final double BIG = 0x1.0p500;
-    /** Threshold for a small number that may underflow when squared. 2^-500. */
+
+    /**
+     * Threshold for a small number that may underflow when squared. 2^-500.
+     */
     private static final double SMALL = 0x1.0p-500;
-    /** Scale up by 2^600. */
+
+    /**
+     * Scale up by 2^600.
+     */
     private static final double SCALE_UP = 0x1.0p600;
-    /** Scale down by 2^600. */
+
+    /**
+     * Scale down by 2^600.
+     */
     private static final double SCALE_DOWN = 0x1.0p-600;
-    /** X squared value where {@code exp(-0.5*x*x)} cannot increase accuracy using the round-off
-     * from x squared. */
+
+    /**
+     * X squared value where {@code exp(-0.5*x*x)} cannot increase accuracy using the round-off
+     * from x squared.
+     */
     private static final int EXP_M_HALF_XX_MIN_VALUE = 2;
-    /** Approximate x squared value where {@code exp(-0.5*x*x) == 0}. This is above
-     * {@code -2 * ln(2^-1074)} due to rounding performed within the exp function. */
+
+    /**
+     * Approximate x squared value where {@code exp(-0.5*x*x) == 0}. This is above
+     * {@code -2 * ln(2^-1074)} due to rounding performed within the exp function.
+     */
     private static final int EXP_M_HALF_XX_MAX_VALUE = 1491;
 
-    /** No instances. */
-    private ExtendedPrecision() {}
+    /**
+     * No instances.
+     */
+    private ExtendedPrecision() {
+    }
 
     /**
      * Multiply the term by sqrt(2 pi).
@@ -54,18 +77,7 @@ final class ExtendedPrecision {
      * @return x * sqrt(2 pi)
      */
     static double xsqrt2pi(double x) {
-        // Note: Do not convert x to absolute for this use case
-        if (x > BIG) {
-            if (x == Double.POSITIVE_INFINITY) {
-                return Double.POSITIVE_INFINITY;
-            }
-            return computeXsqrt2pi(x * SCALE_DOWN) * SCALE_UP;
-        } else if (x < SMALL) {
-            // Note: Ignore possible zero for this use case
-            return computeXsqrt2pi(x * SCALE_UP) * SCALE_DOWN;
-        } else {
-            return computeXsqrt2pi(x);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -89,18 +101,7 @@ final class ExtendedPrecision {
      * @return {@code sqrt(2 * x * x)}
      */
     static double sqrt2xx(double x) {
-        // Note: Do not convert x to absolute for this use case
-        if (x > BIG) {
-            if (x == Double.POSITIVE_INFINITY) {
-                return Double.POSITIVE_INFINITY;
-            }
-            return computeSqrt2aa(x * SCALE_DOWN) * SCALE_UP;
-        } else if (x < SMALL) {
-            // Note: Ignore possible zero for this use case
-            return computeSqrt2aa(x * SCALE_UP) * SCALE_DOWN;
-        } else {
-            return computeSqrt2aa(x);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -129,15 +130,7 @@ final class ExtendedPrecision {
      * @see <a href="https://issues.apache.org/jira/browse/STATISTICS-52">STATISTICS-52</a>
      */
     static double expmhxx(double x) {
-        final double z = x * x;
-        if (z <= EXP_M_HALF_XX_MIN_VALUE) {
-            return Math.exp(-0.5 * z);
-        } else if (z >= EXP_M_HALF_XX_MAX_VALUE) {
-            // exp(-745.5) == 0
-            return 0;
-        }
-        final DD x2 = DD.ofSquare(x);
-        return expxx(-0.5 * x2.hi(), -0.5 * x2.lo());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -169,7 +162,6 @@ final class ExtendedPrecision {
         // and we can use an approximation for expm1 (x/1! + x^2/2! + ...)
         // The second term is required for the expm1 result but the
         // bits are not significant to change the following sum with exp(a)
-
         final double ea = Math.exp(a);
         // b ~ expm1(b)
         return ea * b + ea;

@@ -106,7 +106,7 @@ public final class Mean implements DoubleStatistic, StatisticAccumulator<Mean> {
      * @return {@code Mean} instance.
      */
     public static Mean create() {
-        return new Mean();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -121,7 +121,7 @@ public final class Mean implements DoubleStatistic, StatisticAccumulator<Mean> {
      * @return {@code Mean} instance.
      */
     public static Mean of(double... values) {
-        return new Mean(FirstMoment.of(values));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -140,8 +140,7 @@ public final class Mean implements DoubleStatistic, StatisticAccumulator<Mean> {
      * @since 1.2
      */
     public static Mean ofRange(double[] values, int from, int to) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return new Mean(FirstMoment.ofRange(values, from, to));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -151,7 +150,7 @@ public final class Mean implements DoubleStatistic, StatisticAccumulator<Mean> {
      */
     @Override
     public void accept(double value) {
-        firstMoment.accept(value);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -163,12 +162,11 @@ public final class Mean implements DoubleStatistic, StatisticAccumulator<Mean> {
      */
     @Override
     public double getAsDouble() {
-        return firstMoment.getFirstMoment();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Mean combine(Mean other) {
-        firstMoment.combine(other.firstMoment);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

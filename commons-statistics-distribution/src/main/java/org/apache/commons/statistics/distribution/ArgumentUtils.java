@@ -20,8 +20,12 @@ package org.apache.commons.statistics.distribution;
  * Utilities for argument validation.
  */
 final class ArgumentUtils {
-    /** No instances. */
-    private ArgumentUtils() {}
+
+    /**
+     * No instances.
+     */
+    private ArgumentUtils() {
+    }
 
     /**
      * Checks if the value {@code x} is finite and strictly positive.
@@ -30,7 +34,7 @@ final class ArgumentUtils {
      * @return true if {@code x > 0} and is finite
      */
     static boolean isFiniteStrictlyPositive(double x) {
-        return x > 0 && x < Double.POSITIVE_INFINITY;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -40,10 +44,6 @@ final class ArgumentUtils {
      * @throws IllegalArgumentException if {@code p < 0} or {@code p > 1}
      */
     static void checkProbability(double p) {
-        if (p >= 0 && p <= 1) {
-            return;
-        }
-        // Out-of-range or NaN
-        throw new DistributionException(DistributionException.INVALID_PROBABILITY, p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

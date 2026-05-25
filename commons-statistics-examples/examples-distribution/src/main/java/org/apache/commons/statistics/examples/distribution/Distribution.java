@@ -22,9 +22,15 @@ package org.apache.commons.statistics.examples.distribution;
  * @param <T> The type of distribution
  */
 class Distribution<T> {
-    /** The distribution. */
+
+    /**
+     * The distribution.
+     */
     private final T distribution;
-    /** The parameters. */
+
+    /**
+     * The parameters.
+     */
     private final String parameters;
 
     /**
@@ -42,7 +48,7 @@ class Distribution<T> {
      * @return the distribution
      */
     T getDistribution() {
-        return distribution;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -51,6 +57,6 @@ class Distribution<T> {
      * @return the parameters
      */
     String getParameters() {
-        return parameters;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.apache.commons.statistics.examples.jmh.descriptive;
 
 import java.util.Arrays;
@@ -48,33 +47,72 @@ import org.openjdk.jmh.annotations.Warmup;
 @Warmup(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 @Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 @State(Scope.Benchmark)
-@Fork(value = 1, jvmArgs = {"-server", "-Xms512M", "-Xmx512M"})
+@Fork(value = 1, jvmArgs = { "-server", "-Xms512M", "-Xmx512M" })
 public class MomentPerformance {
-    /** Commons Statistics Mean implementation. */
+
+    /**
+     * Commons Statistics Mean implementation.
+     */
     private static final String MEAN = "Mean";
-    /** Summation mean implementation. */
+
+    /**
+     * Summation mean implementation.
+     */
     private static final String SUM_MEAN = "SumMean";
-    /** Extended precision summation mean implementation. */
+
+    /**
+     * Extended precision summation mean implementation.
+     */
     private static final String EXTENDED_SUM_MEAN = "ExtendedSumMean";
-    /** Extended precision summation (using Numbers Sum). */
+
+    /**
+     * Extended precision summation (using Numbers Sum).
+     */
     private static final String NUMBERS_SUM = "NumbersSum";
-    /** Extended precision summation (using Numbers Sum) with computation of non-finite value. */
+
+    /**
+     * Extended precision summation (using Numbers Sum) with computation of non-finite value.
+     */
     private static final String NUMBERS_SUM2 = "NumbersSum2";
-    /** Rolling mean implementation. */
+
+    /**
+     * Rolling mean implementation.
+     */
     private static final String ROLLING_MEAN = "RollingMean";
-    /** Safe rolling mean implementation. */
+
+    /**
+     * Safe rolling mean implementation.
+     */
     private static final String SAFE_ROLLING_MEAN = "SafeRollingMean";
-    /** Safe rolling mean implementation. */
+
+    /**
+     * Safe rolling mean implementation.
+     */
     private static final String SCALED_ROLLING_MEAN = "ScaledRollingMean";
-    /** Safe rolling mean implementation with computation of non-finite value. */
+
+    /**
+     * Safe rolling mean implementation with computation of non-finite value.
+     */
     private static final String SCALED_ROLLING_MEAN2 = "ScaledRollingMean2";
-    /** Safe rolling mean implementation with computation of non-finite value. */
+
+    /**
+     * Safe rolling mean implementation with computation of non-finite value.
+     */
     private static final String SCALED_ROLLING_MEAN3 = "ScaledRollingMean3";
-    /** Inline rolling mean implementation for array-based creation. */
+
+    /**
+     * Inline rolling mean implementation for array-based creation.
+     */
     private static final String INLINE_ROLLING_MEAN = "InlineRollingMean";
-    /** Inline safe rolling mean implementation for array-based creation. */
+
+    /**
+     * Inline safe rolling mean implementation for array-based creation.
+     */
     private static final String INLINE_SAFE_ROLLING_MEAN = "InlineSafeRollingMean";
-    /** Inline safe rolling mean implementation with extended precision for array-based creation. */
+
+    /**
+     * Inline safe rolling mean implementation with extended precision for array-based creation.
+     */
     private static final String INLINE_SAFE_ROLLING_MEAN_EXT = "InlineSafeRollingMeanExt";
 
     /**
@@ -82,18 +120,23 @@ public class MomentPerformance {
      */
     @State(Scope.Benchmark)
     public static class DataSource {
-        /** Data length. */
-        @Param({"1", "10", "1000"})
+
+        /**
+         * Data length.
+         */
+        @Param({ "1", "10", "1000" })
         private int length;
 
-        /** Data. */
+        /**
+         * Data.
+         */
         private double[] data;
 
         /**
          * @return the data
          */
         public double[] getData() {
-            return data;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -101,8 +144,7 @@ public class MomentPerformance {
          */
         @Setup(Level.Iteration)
         public void setup() {
-            // Data will be randomized per iteration
-            data = RandomSource.XO_RO_SHI_RO_128_PP.create().doubles(length).toArray();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -111,19 +153,23 @@ public class MomentPerformance {
      */
     @State(Scope.Benchmark)
     public static class ActionSource {
-        /** Name of the source. */
-        @Param({MEAN, ROLLING_MEAN, SAFE_ROLLING_MEAN, SCALED_ROLLING_MEAN, SUM_MEAN, EXTENDED_SUM_MEAN,
-            SCALED_ROLLING_MEAN2, SCALED_ROLLING_MEAN3, NUMBERS_SUM, NUMBERS_SUM2})
+
+        /**
+         * Name of the source.
+         */
+        @Param({ MEAN, ROLLING_MEAN, SAFE_ROLLING_MEAN, SCALED_ROLLING_MEAN, SUM_MEAN, EXTENDED_SUM_MEAN, SCALED_ROLLING_MEAN2, SCALED_ROLLING_MEAN3, NUMBERS_SUM, NUMBERS_SUM2 })
         private String name;
 
-        /** The action. */
+        /**
+         * The action.
+         */
         private Supplier<DoubleConsumer> action;
 
         /**
          * @return the action
          */
         public DoubleConsumer getAction() {
-            return action.get();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -131,29 +177,7 @@ public class MomentPerformance {
          */
         @Setup(Level.Iteration)
         public void setup() {
-            if (MEAN.equals(name)) {
-                action = Mean::create;
-            } else if (ROLLING_MEAN.equals(name)) {
-                action = RollingFirstMoment::new;
-            } else if (SAFE_ROLLING_MEAN.equals(name)) {
-                action = SafeRollingFirstMoment::new;
-            } else if (SCALED_ROLLING_MEAN.equals(name)) {
-                action = ScaledRollingFirstMoment::new;
-            } else if (SCALED_ROLLING_MEAN2.equals(name)) {
-                action = ScaledRollingFirstMoment2::new;
-            } else if (SCALED_ROLLING_MEAN3.equals(name)) {
-                action = ScaledRollingFirstMoment3::new;
-            } else if (SUM_MEAN.equals(name)) {
-                action = SumFirstMoment::new;
-            } else if (EXTENDED_SUM_MEAN.equals(name)) {
-                action = ExtendedSumFirstMoment::new;
-            } else if (NUMBERS_SUM.equals(name)) {
-                action = NumbersSum::new;
-            } else if (NUMBERS_SUM2.equals(name)) {
-                action = NumbersSum2::new;
-            } else {
-                throw new IllegalStateException("Unknown action: " + name);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -162,26 +186,26 @@ public class MomentPerformance {
      */
     @State(Scope.Benchmark)
     public static class FunctionSource {
-        /** Name of the source. */
-        @Param({MEAN, ROLLING_MEAN, SAFE_ROLLING_MEAN, SCALED_ROLLING_MEAN,
-            INLINE_SAFE_ROLLING_MEAN, INLINE_SAFE_ROLLING_MEAN_EXT,
-            SUM_MEAN, EXTENDED_SUM_MEAN, "DDMean",
-            // Same speed as the ROLLING_MEAN, i.e. the DoubleConsumer is not an overhead
-            //INLINE_ROLLING_MEAN
-            // Higher moments
-            "SumOfCubed", "SumOfCubedPow",
-            "SumOfFourth", "SumOfFourthPow",
-        })
+
+        /**
+         * Name of the source.
+         */
+        @Param({ MEAN, ROLLING_MEAN, SAFE_ROLLING_MEAN, SCALED_ROLLING_MEAN, INLINE_SAFE_ROLLING_MEAN, INLINE_SAFE_ROLLING_MEAN_EXT, SUM_MEAN, EXTENDED_SUM_MEAN, "DDMean", // Same speed as the ROLLING_MEAN, i.e. the DoubleConsumer is not an overhead
+        //INLINE_ROLLING_MEAN
+        // Higher moments
+        "SumOfCubed", "SumOfCubedPow", "SumOfFourth", "SumOfFourthPow" })
         private String name;
 
-        /** The action. */
+        /**
+         * The action.
+         */
         private Function<double[], Object> function;
 
         /**
          * @return the function
          */
         public Function<double[], Object> getFunction() {
-            return function;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -189,38 +213,7 @@ public class MomentPerformance {
          */
         @Setup(Level.Iteration)
         public void setup() {
-            if (MEAN.equals(name)) {
-                function = Mean::of;
-            } else if (ROLLING_MEAN.equals(name)) {
-                function = MomentPerformance::arrayRollingFirstMoment;
-            } else if (SAFE_ROLLING_MEAN.equals(name)) {
-                function = MomentPerformance::arraySafeRollingFirstMoment;
-            } else if (SCALED_ROLLING_MEAN.equals(name)) {
-                function = MomentPerformance::arrayScaledRollingFirstMoment;
-            } else if (INLINE_ROLLING_MEAN.equals(name)) {
-                function = MomentPerformance::arrayInlineRollingFirstMoment;
-            } else if (INLINE_SAFE_ROLLING_MEAN.equals(name)) {
-                function = MomentPerformance::arrayInlineSafeRollingFirstMoment;
-            } else if (INLINE_SAFE_ROLLING_MEAN_EXT.equals(name)) {
-                function = MomentPerformance::arrayInlineSafeRollingFirstMomentExt;
-            } else if (SUM_MEAN.equals(name)) {
-                function = MomentPerformance::arraySumMean;
-            } else if (EXTENDED_SUM_MEAN.equals(name)) {
-                // This returns the IEEE result for non-finite input, or overflow
-                function = x -> Sum.of(x).getAsDouble() / x.length;
-            } else if ("DDMean".equals(name)) {
-                function = MomentPerformance::arrayDDSumMean;
-            } else if ("SumOfCubed".equals(name)) {
-                function = MomentPerformance::arraySumOfCubed;
-            } else if ("SumOfCubedPow".equals(name)) {
-                function = MomentPerformance::arraySumOfCubedPow;
-            } else if ("SumOfFourth".equals(name)) {
-                function = MomentPerformance::arraySumOfFourth;
-            } else if ("SumOfFourthPow".equals(name)) {
-                function = MomentPerformance::arraySumOfFourthPow;
-            } else {
-                throw new IllegalStateException("Unknown function: " + name);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -228,21 +221,25 @@ public class MomentPerformance {
      * A rolling first raw moment of {@code double} data.
      */
     static class RollingFirstMoment implements DoubleConsumer, DoubleSupplier {
-        /** Count of values that have been added. */
+
+        /**
+         * Count of values that have been added.
+         */
         private long n;
 
-        /** First moment of values that have been added. */
+        /**
+         * First moment of values that have been added.
+         */
         private double m1;
 
         @Override
         public void accept(double value) {
-            m1 += (value - m1) / ++n;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double getAsDouble() {
-            // NaN for all non-finite results
-            return Double.isFinite(m1) && n != 0 ? m1 : Double.NaN;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -251,21 +248,25 @@ public class MomentPerformance {
      * values (e.g. [MAX_VALUE, -MAX_VALUE]).
      */
     static class SafeRollingFirstMoment implements DoubleConsumer, DoubleSupplier {
-        /** Count of values that have been added. */
+
+        /**
+         * Count of values that have been added.
+         */
         private long n;
 
-        /** First moment of values that have been added. */
+        /**
+         * First moment of values that have been added.
+         */
         private double m1;
 
         @Override
         public void accept(double value) {
-            m1 += ((value * 0.5 - m1 * 0.5) / ++n) * 2;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double getAsDouble() {
-            // NaN for all non-finite results
-            return Double.isFinite(m1) && n != 0 ? m1 : Double.NaN;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -274,21 +275,25 @@ public class MomentPerformance {
      * values (e.g. [MAX_VALUE, -MAX_VALUE]).
      */
     static class ScaledRollingFirstMoment implements DoubleConsumer, DoubleSupplier {
-        /** Count of values that have been added. */
+
+        /**
+         * Count of values that have been added.
+         */
         private long n;
 
-        /** First moment of values that have been added. */
+        /**
+         * First moment of values that have been added.
+         */
         private double m1;
 
         @Override
         public void accept(double value) {
-            m1 += (value * 0.5 - m1) / ++n;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double getAsDouble() {
-            // NaN for all non-finite results
-            return n != 0 && Double.isFinite(m1 * 2) ? m1 * 2 : Double.NaN;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -298,31 +303,30 @@ public class MomentPerformance {
      * non-finite value.
      */
     static class ScaledRollingFirstMoment2 implements DoubleConsumer, DoubleSupplier {
-        /** Count of values that have been added. */
+
+        /**
+         * Count of values that have been added.
+         */
         private long n;
 
-        /** First moment of values that have been added. */
+        /**
+         * First moment of values that have been added.
+         */
         private double m1;
 
-        /** Non-finite result. This is the sum of non-finite values. */
+        /**
+         * Non-finite result. This is the sum of non-finite values.
+         */
         private double nonFiniteValue;
 
         @Override
         public void accept(double value) {
-            if (!Double.isFinite(value)) {
-                nonFiniteValue += value;
-            }
-            m1 += (value * 0.5 - m1) / ++n;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double getAsDouble() {
-            final double m = m1 * 2;
-            if (Double.isFinite(m)) {
-                return n == 0 ? Double.NaN : m;
-            }
-            // Non-finite value encountered
-            return nonFiniteValue;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -332,29 +336,30 @@ public class MomentPerformance {
      * non-finite value.
      */
     static class ScaledRollingFirstMoment3 implements DoubleConsumer, DoubleSupplier {
-        /** Count of values that have been added. */
+
+        /**
+         * Count of values that have been added.
+         */
         private long n;
 
-        /** First moment of values that have been added. */
+        /**
+         * First moment of values that have been added.
+         */
         private double m1;
 
-        /** Non-finite result. This is the sum of non-finite values. */
+        /**
+         * Non-finite result. This is the sum of non-finite values.
+         */
         private double nonFiniteValue;
 
         @Override
         public void accept(double value) {
-            nonFiniteValue += value * Double.MIN_NORMAL;
-            m1 += (value * 0.5 - m1) / ++n;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double getAsDouble() {
-            final double m = m1 * 2;
-            if (Double.isFinite(m)) {
-                return n == 0 ? Double.NaN : m;
-            }
-            // Non-finite value encountered
-            return nonFiniteValue;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -362,21 +367,25 @@ public class MomentPerformance {
      * A mean using a sum.
      */
     static class SumFirstMoment implements DoubleConsumer, DoubleSupplier {
-        /** Count of values that have been added. */
+
+        /**
+         * Count of values that have been added.
+         */
         private long n;
 
-        /** Sum of values that have been added. */
+        /**
+         * Sum of values that have been added.
+         */
         private double sum;
 
         @Override
         public void accept(double value) {
-            n++;
-            sum += value;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double getAsDouble() {
-            return sum / n;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -389,28 +398,30 @@ public class MomentPerformance {
      * {@link java.util.stream.DoubleStream#sum()}.
      */
     static class ExtendedSumFirstMoment implements DoubleConsumer, DoubleSupplier {
-        /** Count of values that have been added. */
+
+        /**
+         * Count of values that have been added.
+         */
         private long n;
 
-        /** Sum of values that have been added. */
+        /**
+         * Sum of values that have been added.
+         */
         private double sum;
-        /** A running compensation for lost low-order bits. */
+
+        /**
+         * A running compensation for lost low-order bits.
+         */
         private double c;
 
         @Override
         public void accept(double value) {
-            n++;
-            // Kahan summation
-            // https://en.wikipedia.org/wiki/Kahan_summation_algorithm
-            final double y = value - c;
-            final double t = sum + y;
-            c = (t - sum) - y;
-            sum = t;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double getAsDouble() {
-            return sum / n;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -418,17 +429,20 @@ public class MomentPerformance {
      * A sum using an Commons Numbers {@link Sum}.
      */
     static class NumbersSum implements DoubleConsumer, DoubleSupplier {
-        /** Sum of values that have been added. */
+
+        /**
+         * Sum of values that have been added.
+         */
         private final Sum sum = Sum.create();
 
         @Override
         public void accept(double value) {
-            sum.add(value);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double getAsDouble() {
-            return sum.getAsDouble();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -437,28 +451,25 @@ public class MomentPerformance {
      * non-finite value.
      */
     static class NumbersSum2 implements DoubleConsumer, DoubleSupplier {
-        /** Sum of values that have been added. */
+
+        /**
+         * Sum of values that have been added.
+         */
         private final Sum sum = Sum.create();
 
-        /** Non-finite result. This is the sum of non-finite values. */
+        /**
+         * Non-finite result. This is the sum of non-finite values.
+         */
         private double nonFiniteValue;
 
         @Override
         public void accept(double value) {
-            if (!Double.isFinite(value)) {
-                nonFiniteValue += value;
-            }
-            sum.add(value);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double getAsDouble() {
-            final double s = sum.getAsDouble();
-            if (Double.isFinite(s)) {
-                return s;
-            }
-            // Non-finite value encountered
-            return nonFiniteValue;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -471,10 +482,7 @@ public class MomentPerformance {
      * @return the action
      */
     static <T extends DoubleConsumer> T forEach(T action, double[] values) {
-        for (final double x : values) {
-            action.accept(x);
-        }
-        return action;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -528,16 +536,7 @@ public class MomentPerformance {
      * @return the statistic
      */
     static double arrayRollingFirstMoment(double[] data) {
-        final RollingFirstMoment m1 = new RollingFirstMoment();
-        for (final double x : data) {
-            m1.accept(x);
-        }
-        final double xbar = m1.getAsDouble();
-        if (!Double.isFinite(xbar)) {
-            // Note: Also occurs when the input is empty
-            return xbar;
-        }
-        return correctMean(data, xbar);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -548,16 +547,7 @@ public class MomentPerformance {
      * @return the statistic
      */
     static double arraySafeRollingFirstMoment(double[] data) {
-        final SafeRollingFirstMoment m1 = new SafeRollingFirstMoment();
-        for (final double x : data) {
-            m1.accept(x);
-        }
-        final double xbar = m1.getAsDouble();
-        if (!Double.isFinite(xbar)) {
-            // Note: Also occurs when the input is empty
-            return xbar;
-        }
-        return correctMean(data, xbar);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -568,16 +558,7 @@ public class MomentPerformance {
      * @return the statistic
      */
     static double arrayScaledRollingFirstMoment(double[] data) {
-        final ScaledRollingFirstMoment m1 = new ScaledRollingFirstMoment();
-        for (final double x : data) {
-            m1.accept(x);
-        }
-        final double xbar = m1.getAsDouble();
-        if (!Double.isFinite(xbar)) {
-            // Note: Also occurs when the input is empty
-            return xbar;
-        }
-        return correctMean(data, xbar);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -591,15 +572,7 @@ public class MomentPerformance {
      * @return the statistic
      */
     static double arrayInlineRollingFirstMoment(double[] data) {
-        double m1 = 0;
-        int n = 0;
-        for (final double x : data) {
-            m1 += (x - m1) / ++n;
-        }
-        if (!Double.isFinite(m1) || n == 0) {
-            return Double.NaN;
-        }
-        return correctMean(data, m1);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -611,16 +584,7 @@ public class MomentPerformance {
      * @return the statistic
      */
     static double arrayInlineSafeRollingFirstMoment(double[] data) {
-        double m1 = 0;
-        int n = 0;
-        for (final double x : data) {
-            m1 += (x * 0.5 - m1) / ++n;
-        }
-        m1 *= 2;
-        if (!Double.isFinite(m1) || n == 0) {
-            return Double.NaN;
-        }
-        return correctMean(data, m1);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -632,16 +596,7 @@ public class MomentPerformance {
      * @return the statistic
      */
     static double arrayInlineSafeRollingFirstMomentExt(double[] data) {
-        double m1 = 0;
-        int n = 0;
-        for (final double x : data) {
-            m1 += (x * 0.5 - m1) / ++n;
-        }
-        m1 *= 2;
-        if (!Double.isFinite(m1) || n == 0) {
-            return Double.NaN;
-        }
-        return correctMeanKahan(data, m1);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -652,11 +607,7 @@ public class MomentPerformance {
      * @return the statistic
      */
     static double arraySumMean(double[] data) {
-        double s = 0;
-        for (final double x : data) {
-            s += x;
-        }
-        return s / data.length;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -667,11 +618,7 @@ public class MomentPerformance {
      * @return the statistic
      */
     static double arrayDDSumMean(double[] data) {
-        DD s = DD.ZERO;
-        for (final double x : data) {
-            s = s.add(x);
-        }
-        return s.doubleValue() / data.length;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -681,13 +628,7 @@ public class MomentPerformance {
      * @return the statistic
      */
     static double arraySumOfCubed(double[] data) {
-        final double m = arrayInlineSafeRollingFirstMoment(data);
-        double s = 0;
-        for (final double x : data) {
-            final double dx = x - m;
-            s += dx * dx * dx;
-        }
-        return s;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -698,12 +639,7 @@ public class MomentPerformance {
      * @return the statistic
      */
     static double arraySumOfCubedPow(double[] data) {
-        final double m = arrayInlineSafeRollingFirstMoment(data);
-        double s = 0;
-        for (final double x : data) {
-            s += Math.pow(x - m, 3);
-        }
-        return s;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -713,14 +649,7 @@ public class MomentPerformance {
      * @return the statistic
      */
     static double arraySumOfFourth(double[] data) {
-        final double m = arrayInlineSafeRollingFirstMoment(data);
-        double s = 0;
-        for (final double x : data) {
-            double dx = x - m;
-            dx *= dx;
-            s += dx * dx;
-        }
-        return s;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -731,12 +660,7 @@ public class MomentPerformance {
      * @return the statistic
      */
     static double arraySumOfFourthPow(double[] data) {
-        final double m = arrayInlineSafeRollingFirstMoment(data);
-        double s = 0;
-        for (final double x : data) {
-            s += Math.pow(x - m, 4);
-        }
-        return s;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -747,7 +671,7 @@ public class MomentPerformance {
      */
     @Benchmark
     public Object streamMean(DataSource source) {
-        return Arrays.stream(source.getData()).average();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -759,7 +683,7 @@ public class MomentPerformance {
      */
     @Benchmark
     public Object forEachStatistic(ActionSource action, DataSource source) {
-        return forEach(action.getAction(), source.getData());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -771,6 +695,6 @@ public class MomentPerformance {
      */
     @Benchmark
     public Object arrayStatistic(FunctionSource function, DataSource source) {
-        return function.getFunction().apply(source.getData());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

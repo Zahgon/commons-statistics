@@ -47,7 +47,9 @@ import java.math.BigInteger;
  */
 public final class IntMin implements IntStatistic, StatisticAccumulator<IntMin> {
 
-    /** Current minimum. */
+    /**
+     * Current minimum.
+     */
     private int minimum = Integer.MAX_VALUE;
 
     /**
@@ -65,7 +67,7 @@ public final class IntMin implements IntStatistic, StatisticAccumulator<IntMin> 
      * @return {@code IntMin} instance.
      */
     public static IntMin create() {
-        return new IntMin();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -78,7 +80,7 @@ public final class IntMin implements IntStatistic, StatisticAccumulator<IntMin> 
      * @return {@code IntMin} instance.
      */
     public static IntMin of(int... values) {
-        return Statistics.add(new IntMin(), values);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -95,8 +97,7 @@ public final class IntMin implements IntStatistic, StatisticAccumulator<IntMin> 
      * @since 1.2
      */
     public static IntMin ofRange(int[] values, int from, int to) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return createFromRange(values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -110,7 +111,7 @@ public final class IntMin implements IntStatistic, StatisticAccumulator<IntMin> 
      * @return {@code IntMin} instance.
      */
     static IntMin createFromRange(int[] values, int from, int to) {
-        return Statistics.add(new IntMin(), values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -120,7 +121,7 @@ public final class IntMin implements IntStatistic, StatisticAccumulator<IntMin> 
      */
     @Override
     public void accept(int value) {
-        minimum = Math.min(minimum, value);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -133,27 +134,26 @@ public final class IntMin implements IntStatistic, StatisticAccumulator<IntMin> 
      */
     @Override
     public int getAsInt() {
-        return minimum;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public long getAsLong() {
-        return minimum;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public double getAsDouble() {
-        return minimum;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public BigInteger getAsBigInteger() {
-        return BigInteger.valueOf(minimum);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public IntMin combine(IntMin other) {
-        accept(other.getAsInt());
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

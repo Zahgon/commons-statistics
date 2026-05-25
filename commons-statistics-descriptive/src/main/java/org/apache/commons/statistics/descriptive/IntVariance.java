@@ -67,18 +67,31 @@ import java.math.BigInteger;
  * @since 1.1
  */
 public final class IntVariance implements IntStatistic, StatisticAccumulator<IntVariance> {
-    /** Small array sample size.
-     * Used to avoid computing with UInt96 then converting to UInt128. */
+
+    /**
+     * Small array sample size.
+     * Used to avoid computing with UInt96 then converting to UInt128.
+     */
     static final int SMALL_SAMPLE = 10;
 
-    /** Sum of the squared values. */
+    /**
+     * Sum of the squared values.
+     */
     private final UInt128 sumSq;
-    /** Sum of the values. */
+
+    /**
+     * Sum of the values.
+     */
     private final Int128 sum;
-    /** Count of values that have been added. */
+
+    /**
+     * Count of values that have been added.
+     */
     private long n;
 
-    /** Flag to control if the statistic is biased, or should use a bias correction. */
+    /**
+     * Flag to control if the statistic is biased, or should use a bias correction.
+     */
     private boolean biased;
 
     /**
@@ -109,7 +122,7 @@ public final class IntVariance implements IntStatistic, StatisticAccumulator<Int
      * @return {@code IntVariance} instance.
      */
     public static IntVariance create() {
-        return new IntVariance();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -119,7 +132,7 @@ public final class IntVariance implements IntStatistic, StatisticAccumulator<Int
      * @return {@code IntVariance} instance.
      */
     public static IntVariance of(int... values) {
-        return createFromRange(values, 0, values.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -133,8 +146,7 @@ public final class IntVariance implements IntStatistic, StatisticAccumulator<Int
      * @since 1.2
      */
     public static IntVariance ofRange(int[] values, int from, int to) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return createFromRange(values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -148,37 +160,7 @@ public final class IntVariance implements IntStatistic, StatisticAccumulator<Int
      * @return {@code IntVariance} instance.
      */
     static IntVariance createFromRange(int[] values, int from, int to) {
-        // Small arrays can be processed using the object
-        final int length = to - from;
-        if (length < SMALL_SAMPLE) {
-            final IntVariance stat = new IntVariance();
-            for (int i = from; i < to; i++) {
-                stat.accept(values[i]);
-            }
-            return stat;
-        }
-
-        // Arrays can be processed using specialised counts knowing the maximum limit
-        // for an array is 2^31 values.
-        long s = 0;
-        final UInt96 ss = UInt96.create();
-        // Process pairs as we know two maximum value int^2 will not overflow
-        // an unsigned long.
-        final int end = from + (length & ~0x1);
-        for (int i = from; i < end; i += 2) {
-            final long x = values[i];
-            final long y = values[i + 1];
-            s += x + y;
-            ss.addPositive(x * x + y * y);
-        }
-        if (end < to) {
-            final long x = values[end];
-            s += x;
-            ss.addPositive(x * x);
-        }
-
-        // Convert
-        return new IntVariance(UInt128.of(ss), Int128.of(s), length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -188,9 +170,7 @@ public final class IntVariance implements IntStatistic, StatisticAccumulator<Int
      */
     @Override
     public void accept(int value) {
-        sumSq.addPositive((long) value * value);
-        sum.add(value);
-        n++;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -202,7 +182,7 @@ public final class IntVariance implements IntStatistic, StatisticAccumulator<Int
      */
     @Override
     public double getAsDouble() {
-        return computeVarianceOrStd(sumSq, sum, n, biased, false);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -219,26 +199,7 @@ public final class IntVariance implements IntStatistic, StatisticAccumulator<Int
      * @return the variance (or standard deviation)
      */
     static double computeVarianceOrStd(UInt128 sumSq, Int128 sum, long n, boolean biased, boolean std) {
-        if (n == 0) {
-            return Double.NaN;
-        }
-        // Avoid a divide by zero
-        if (n == 1) {
-            return 0;
-        }
-        // Sum-of-squared deviations: sum(x^2) - sum(x)^2 / n
-        // Sum-of-squared deviations precursor: n * sum(x^2) - sum(x)^2
-        // The precursor is computed in integer precision.
-        // The divide uses double precision.
-        // This ensures we avoid cancellation in the difference and use a fast divide.
-        // The result is limited to by the rounding in the double computation.
-        final double diff = computeSSDevN(sumSq, sum, n);
-        final long n0 = biased ? n : n - 1;
-        final double v = diff / IntMath.unsignedMultiplyToDouble(n, n0);
-        if (std) {
-            return Math.sqrt(v);
-        }
-        return v;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -258,8 +219,7 @@ public final class IntVariance implements IntStatistic, StatisticAccumulator<Int
         if ((n >>> Integer.SIZE) == 0) {
             return sumSq.unsignedMultiply((int) n).subtract(sum.squareLow()).toDouble();
         } else {
-            return sumSq.toBigInteger().multiply(BigInteger.valueOf(n))
-                .subtract(square(sum.toBigInteger())).doubleValue();
+            return sumSq.toBigInteger().multiply(BigInteger.valueOf(n)).subtract(square(sum.toBigInteger())).doubleValue();
         }
     }
 
@@ -271,7 +231,7 @@ public final class IntVariance implements IntStatistic, StatisticAccumulator<Int
      * @return the sum of the squared deviations
      */
     double computeSumOfSquaredDeviations() {
-        return computeSSDevN(sumSq, sum, n) / n;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -282,7 +242,7 @@ public final class IntVariance implements IntStatistic, StatisticAccumulator<Int
      * @return the mean
      */
     double computeMean() {
-        return IntMean.computeMean(sum, n);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -297,10 +257,7 @@ public final class IntVariance implements IntStatistic, StatisticAccumulator<Int
 
     @Override
     public IntVariance combine(IntVariance other) {
-        sumSq.add(other.sumSq);
-        sum.add(other.sum);
-        n += other.n;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -324,7 +281,6 @@ public final class IntVariance implements IntStatistic, StatisticAccumulator<Int
      * @return {@code this} instance
      */
     public IntVariance setBiased(boolean v) {
-        biased = v;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

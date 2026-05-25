@@ -84,32 +84,64 @@ import java.util.function.IntUnaryOperator;
  * @since 1.1
  */
 public class NaturalRanking implements RankingAlgorithm {
-    /** Message for a null user-supplied {@link NaNStrategy}. */
+
+    /**
+     * Message for a null user-supplied {@link NaNStrategy}.
+     */
     private static final String NULL_NAN_STRATEGY = "nanStrategy";
-    /** Message for a null user-supplied {@link TiesStrategy}. */
+
+    /**
+     * Message for a null user-supplied {@link TiesStrategy}.
+     */
     private static final String NULL_TIES_STRATEGY = "tiesStrategy";
-    /** Message for a null user-supplied source of randomness. */
+
+    /**
+     * Message for a null user-supplied source of randomness.
+     */
     private static final String NULL_RANDOM_SOURCE = "randomIntFunction";
-    /** Default NaN strategy. */
+
+    /**
+     * Default NaN strategy.
+     */
     private static final NaNStrategy DEFAULT_NAN_STRATEGY = NaNStrategy.FAILED;
-    /** Default ties strategy. */
+
+    /**
+     * Default ties strategy.
+     */
     private static final TiesStrategy DEFAULT_TIES_STRATEGY = TiesStrategy.AVERAGE;
-    /** Map values to positive infinity. */
+
+    /**
+     * Map values to positive infinity.
+     */
     private static final DoubleUnaryOperator ACTION_POS_INF = x -> Double.POSITIVE_INFINITY;
-    /** Map values to negative infinity. */
+
+    /**
+     * Map values to negative infinity.
+     */
     private static final DoubleUnaryOperator ACTION_NEG_INF = x -> Double.NEGATIVE_INFINITY;
-    /** Raise an exception for values. */
+
+    /**
+     * Raise an exception for values.
+     */
     private static final DoubleUnaryOperator ACTION_ERROR = operand -> {
         throw new IllegalArgumentException("Invalid data: " + operand);
     };
 
-    /** NaN strategy. */
+    /**
+     * NaN strategy.
+     */
     private final NaNStrategy nanStrategy;
-    /** Ties strategy. */
+
+    /**
+     * Ties strategy.
+     */
     private final TiesStrategy tiesStrategy;
-    /** Source of randomness when ties strategy is RANDOM.
+
+    /**
+     * Source of randomness when ties strategy is RANDOM.
      * Function maps positive x to {@code [0, x)}.
-     * Can be null to default to a JDK implementation. */
+     * Can be null to default to a JDK implementation.
+     */
     private IntUnaryOperator randomIntFunction;
 
     /**
@@ -131,8 +163,7 @@ public class NaturalRanking implements RankingAlgorithm {
      * @throws NullPointerException if the strategy is {@code null}
      */
     public NaturalRanking(TiesStrategy tiesStrategy) {
-        this(DEFAULT_NAN_STRATEGY,
-            Objects.requireNonNull(tiesStrategy, NULL_TIES_STRATEGY), null);
+        this(DEFAULT_NAN_STRATEGY, Objects.requireNonNull(tiesStrategy, NULL_TIES_STRATEGY), null);
     }
 
     /**
@@ -143,8 +174,7 @@ public class NaturalRanking implements RankingAlgorithm {
      * @throws NullPointerException if the strategy is {@code null}
      */
     public NaturalRanking(NaNStrategy nanStrategy) {
-        this(Objects.requireNonNull(nanStrategy, NULL_NAN_STRATEGY),
-            DEFAULT_TIES_STRATEGY, null);
+        this(Objects.requireNonNull(nanStrategy, NULL_NAN_STRATEGY), DEFAULT_TIES_STRATEGY, null);
     }
 
     /**
@@ -158,10 +188,8 @@ public class NaturalRanking implements RankingAlgorithm {
      * @param tiesStrategy TiesStrategy to use.
      * @throws NullPointerException if any strategy is {@code null}
      */
-    public NaturalRanking(NaNStrategy nanStrategy,
-                          TiesStrategy tiesStrategy) {
-        this(Objects.requireNonNull(nanStrategy, NULL_NAN_STRATEGY),
-            Objects.requireNonNull(tiesStrategy, NULL_TIES_STRATEGY), null);
+    public NaturalRanking(NaNStrategy nanStrategy, TiesStrategy tiesStrategy) {
+        this(Objects.requireNonNull(nanStrategy, NULL_NAN_STRATEGY), Objects.requireNonNull(tiesStrategy, NULL_TIES_STRATEGY), null);
     }
 
     /**
@@ -173,8 +201,7 @@ public class NaturalRanking implements RankingAlgorithm {
      * @throws NullPointerException if the source of randomness is {@code null}
      */
     public NaturalRanking(IntUnaryOperator randomIntFunction) {
-        this(DEFAULT_NAN_STRATEGY, TiesStrategy.RANDOM,
-            Objects.requireNonNull(randomIntFunction, NULL_RANDOM_SOURCE));
+        this(DEFAULT_NAN_STRATEGY, TiesStrategy.RANDOM, Objects.requireNonNull(randomIntFunction, NULL_RANDOM_SOURCE));
     }
 
     /**
@@ -186,10 +213,8 @@ public class NaturalRanking implements RankingAlgorithm {
      * Function maps positive {@code x} randomly to {@code [0, x)}
      * @throws NullPointerException if the strategy or source of randomness are {@code null}
      */
-    public NaturalRanking(NaNStrategy nanStrategy,
-                          IntUnaryOperator randomIntFunction) {
-        this(Objects.requireNonNull(nanStrategy, NULL_NAN_STRATEGY), TiesStrategy.RANDOM,
-            Objects.requireNonNull(randomIntFunction, NULL_RANDOM_SOURCE));
+    public NaturalRanking(NaNStrategy nanStrategy, IntUnaryOperator randomIntFunction) {
+        this(Objects.requireNonNull(nanStrategy, NULL_NAN_STRATEGY), TiesStrategy.RANDOM, Objects.requireNonNull(randomIntFunction, NULL_RANDOM_SOURCE));
     }
 
     /**
@@ -197,9 +222,7 @@ public class NaturalRanking implements RankingAlgorithm {
      * @param tiesStrategy TiesStrategy to use.
      * @param randomIntFunction Source of random index data.
      */
-    private NaturalRanking(NaNStrategy nanStrategy,
-                           TiesStrategy tiesStrategy,
-                           IntUnaryOperator randomIntFunction) {
+    private NaturalRanking(NaNStrategy nanStrategy, TiesStrategy tiesStrategy, IntUnaryOperator randomIntFunction) {
         // User-supplied arguments are checked for non-null in the respective constructor
         this.nanStrategy = nanStrategy;
         this.tiesStrategy = tiesStrategy;
@@ -212,7 +235,7 @@ public class NaturalRanking implements RankingAlgorithm {
      * @return the strategy for handling NaN
      */
     public NaNStrategy getNanStrategy() {
-        return nanStrategy;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -221,7 +244,7 @@ public class NaturalRanking implements RankingAlgorithm {
      * @return the strategy for handling ties
      */
     public TiesStrategy getTiesStrategy() {
-        return tiesStrategy;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -234,61 +257,7 @@ public class NaturalRanking implements RankingAlgorithm {
      */
     @Override
     public double[] apply(double[] data) {
-        // Convert data for sorting.
-        // NaNs are counted for the FIXED strategy.
-        final int[] nanCount = {0};
-        final DataPosition[] ranks = createRankData(data, nanCount);
-
-        // Sorting will move NaNs to the end and we do not have to resolve ties in them.
-        final int nonNanSize = ranks.length - nanCount[0];
-
-        // Edge case for empty data
-        if (nonNanSize == 0) {
-            // Either NaN are left in-place or removed
-            return nanStrategy == NaNStrategy.FIXED ? data : new double[0];
-        }
-
-        Arrays.sort(ranks, (a, b) -> Double.compare(a.getValue(), b.getValue()));
-
-        // Walk the sorted array, filling output array using sorted positions,
-        // resolving ties as we go.
-        int pos = 1;
-        final double[] out = new double[ranks.length];
-
-        DataPosition current = ranks[0];
-        out[current.getPosition()] = pos;
-
-        // Store all previous elements of a tie.
-        // Note this lags behind the length of the tie sequence by 1.
-        // In the event there are no ties this is not used.
-        final IntList tiesTrace = new IntList(ranks.length);
-
-        for (int i = 1; i < nonNanSize; i++) {
-            final DataPosition previous = current;
-            current = ranks[i];
-            if (current.getValue() > previous.getValue()) {
-                // Check for a previous tie sequence
-                if (tiesTrace.size() != 0) {
-                    resolveTie(out, tiesTrace, previous.getPosition());
-                }
-                pos = i + 1;
-            } else {
-                // Tie sequence. Add the matching previous element.
-                tiesTrace.add(previous.getPosition());
-            }
-            out[current.getPosition()] = pos;
-        }
-        // Handle tie sequence at end
-        if (tiesTrace.size() != 0) {
-            resolveTie(out, tiesTrace, current.getPosition());
-        }
-        // For the FIXED strategy consume the remaining NaN elements
-        if (nanStrategy == NaNStrategy.FIXED) {
-            for (int i = nonNanSize; i < ranks.length; i++) {
-                out[ranks[i].getPosition()] = Double.NaN;
-            }
-        }
-        return out;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -303,9 +272,7 @@ public class NaturalRanking implements RankingAlgorithm {
      * {@link NaNStrategy#FAILED}.
      */
     private DataPosition[] createRankData(double[] data, final int[] nanCount) {
-        return nanStrategy == NaNStrategy.REMOVED ?
-                createNonNaNRankData(data) :
-                createMappedRankData(data, createNaNAction(nanCount));
+        return nanStrategy == NaNStrategy.REMOVED ? createNonNaNRankData(data) : createMappedRankData(data, createNaNAction(nanCount));
     }
 
     /**
@@ -316,20 +283,24 @@ public class NaturalRanking implements RankingAlgorithm {
      */
     private DoubleUnaryOperator createNaNAction(int[] nanCount) {
         // Exhaustive switch statement
-        switch (nanStrategy) {
-        case MAXIMAL: // Replace NaNs with +INFs
-            return ACTION_POS_INF;
-        case MINIMAL: // Replace NaNs with -INFs
-            return ACTION_NEG_INF;
-        case REMOVED: // NaNs are removed
-        case FIXED:   // NaNs are unchanged
-            // Count the NaNs in the data that must be handled
-            return x -> {
-                nanCount[0]++;
-                return x;
-            };
-        case FAILED:
-            return ACTION_ERROR;
+        switch(nanStrategy) {
+            case // Replace NaNs with +INFs
+            MAXIMAL:
+                return ACTION_POS_INF;
+            case // Replace NaNs with -INFs
+            MINIMAL:
+                return ACTION_NEG_INF;
+            // NaNs are removed
+            case REMOVED:
+            case // NaNs are unchanged
+            FIXED:
+                // Count the NaNs in the data that must be handled
+                return x -> {
+                    nanCount[0]++;
+                    return x;
+                };
+            case FAILED:
+                return ACTION_ERROR;
         }
         // Unreachable code
         throw new IllegalStateException(String.valueOf(nanStrategy));
@@ -391,40 +362,41 @@ public class NaturalRanking implements RankingAlgorithm {
      */
     private void resolveTie(double[] ranks, IntList tiesTrace, int finalIndex) {
         tiesTrace.add(finalIndex);
-
         // Constant value of ranks over tiesTrace.
         // Note: c is a rank counter starting from 1 so limited to an int.
         final double c = ranks[tiesTrace.get(0)];
-
         // length of sequence of tied ranks
         final int length = tiesTrace.size();
-
         // Exhaustive switch
-        switch (tiesStrategy) {
-        case  AVERAGE:   // Replace ranks with average: (lower + upper) / 2
-            fill(ranks, tiesTrace, (2 * c + length - 1) * 0.5);
-            break;
-        case MAXIMUM:    // Replace ranks with maximum values
-            fill(ranks, tiesTrace, c + length - 1);
-            break;
-        case MINIMUM:    // Replace ties with minimum
-            // Note that the tie sequence already has all values set to c so
-            // no requirement to fill again.
-            break;
-        case SEQUENTIAL: // Fill sequentially from c to c + length - 1
-        case RANDOM:     // Fill with randomized sequential values in [c, c + length - 1]
-            // This cast is safe as c is a counter.
-            int r = (int) c;
-            if (tiesStrategy == TiesStrategy.RANDOM) {
-                tiesTrace.shuffle(getRandomIntFunction());
-            }
-            final int size = tiesTrace.size();
-            for (int i = 0; i < size; i++) {
-                ranks[tiesTrace.get(i)] = r++;
-            }
-            break;
+        switch(tiesStrategy) {
+            case // Replace ranks with average: (lower + upper) / 2
+            AVERAGE:
+                fill(ranks, tiesTrace, (2 * c + length - 1) * 0.5);
+                break;
+            case // Replace ranks with maximum values
+            MAXIMUM:
+                fill(ranks, tiesTrace, c + length - 1);
+                break;
+            case // Replace ties with minimum
+            MINIMUM:
+                // Note that the tie sequence already has all values set to c so
+                // no requirement to fill again.
+                break;
+            // Fill sequentially from c to c + length - 1
+            case SEQUENTIAL:
+            case // Fill with randomized sequential values in [c, c + length - 1]
+            RANDOM:
+                // This cast is safe as c is a counter.
+                int r = (int) c;
+                if (tiesStrategy == TiesStrategy.RANDOM) {
+                    tiesTrace.shuffle(getRandomIntFunction());
+                }
+                final int size = tiesTrace.size();
+                for (int i = 0; i < size; i++) {
+                    ranks[tiesTrace.get(i)] = r++;
+                }
+                break;
         }
-
         tiesTrace.clear();
     }
 
@@ -463,12 +435,20 @@ public class NaturalRanking implements RankingAlgorithm {
      * without using boxed values in a {@code List<Integer>}.
      */
     private static class IntList {
-        /** The maximum size of array to allocate. */
+
+        /**
+         * The maximum size of array to allocate.
+         */
         private final int max;
 
-        /** The size of the list. */
+        /**
+         * The size of the list.
+         */
         private int size;
-        /** The list data. Initialised with space to store a tie of 2 values. */
+
+        /**
+         * The list data. Initialised with space to store a tie of 2 values.
+         */
         private int[] data = new int[2];
 
         /**
@@ -485,11 +465,7 @@ public class NaturalRanking implements RankingAlgorithm {
          * @param value the value
          */
         void add(int value) {
-            if (size == data.length) {
-                // Overflow safe doubling of the current size.
-                data = Arrays.copyOf(data, (int) Math.min(max, size * 2L));
-            }
-            data[size++] = value;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -499,7 +475,7 @@ public class NaturalRanking implements RankingAlgorithm {
          * @return the element
          */
         int get(int index) {
-            return data[index];
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -508,14 +484,14 @@ public class NaturalRanking implements RankingAlgorithm {
          * @return the size
          */
         int size() {
-            return size;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
          * Clear the list.
          */
         void clear() {
-            size = 0;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -524,11 +500,7 @@ public class NaturalRanking implements RankingAlgorithm {
          * @param randomIntFunction Function maps positive {@code x} randomly to {@code [0, x)}.
          */
         void shuffle(IntUnaryOperator randomIntFunction) {
-            // Fisher-Yates shuffle
-            final int[] array = data;
-            for (int i = size; i > 1; i--) {
-                swap(array, i - 1, randomIntFunction.applyAsInt(i));
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -549,9 +521,15 @@ public class NaturalRanking implements RankingAlgorithm {
      * Represents the position of a {@code double} value in a data array.
      */
     private static class DataPosition {
-        /** Data value. */
+
+        /**
+         * Data value.
+         */
         private final double value;
-        /** Data position. */
+
+        /**
+         * Data position.
+         */
         private final int position;
 
         /**
@@ -571,7 +549,7 @@ public class NaturalRanking implements RankingAlgorithm {
          * @return value
          */
         double getValue() {
-            return value;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -580,7 +558,7 @@ public class NaturalRanking implements RankingAlgorithm {
          * @return position
          */
         int getPosition() {
-            return position;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

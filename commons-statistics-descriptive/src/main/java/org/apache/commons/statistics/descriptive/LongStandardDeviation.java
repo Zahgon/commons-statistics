@@ -69,14 +69,24 @@ package org.apache.commons.statistics.descriptive;
  */
 public final class LongStandardDeviation implements LongStatistic, StatisticAccumulator<LongStandardDeviation> {
 
-    /** Sum of the squared values. */
+    /**
+     * Sum of the squared values.
+     */
     private final UInt192 sumSq;
-    /** Sum of the values. */
+
+    /**
+     * Sum of the values.
+     */
     private final Int128 sum;
-    /** Count of values that have been added. */
+
+    /**
+     * Count of values that have been added.
+     */
     private long n;
 
-    /** Flag to control if the statistic is biased, or should use a bias correction. */
+    /**
+     * Flag to control if the statistic is biased, or should use a bias correction.
+     */
     private boolean biased;
 
     /**
@@ -107,7 +117,7 @@ public final class LongStandardDeviation implements LongStatistic, StatisticAccu
      * @return {@code LongStandardDeviation} instance.
      */
     public static LongStandardDeviation create() {
-        return new LongStandardDeviation();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -117,7 +127,7 @@ public final class LongStandardDeviation implements LongStatistic, StatisticAccu
      * @return {@code LongStandardDeviation} instance.
      */
     public static LongStandardDeviation of(long... values) {
-        return createFromRange(values, 0, values.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -131,8 +141,7 @@ public final class LongStandardDeviation implements LongStatistic, StatisticAccu
      * @since 1.2
      */
     public static LongStandardDeviation ofRange(long[] values, int from, int to) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return createFromRange(values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -146,17 +155,7 @@ public final class LongStandardDeviation implements LongStatistic, StatisticAccu
      * @return {@code LongStandardDeviation} instance.
      */
     static LongStandardDeviation createFromRange(long[] values, int from, int to) {
-        // Note: Arrays could be processed using specialised counts knowing the maximum limit
-        // for an array is 2^31 values. Requires a UInt160.
-
-        final Int128 s = Int128.create();
-        final UInt192 ss = UInt192.create();
-        for (int i = from; i < to; i++) {
-            final long x = values[i];
-            s.add(x);
-            ss.addSquare(x);
-        }
-        return new LongStandardDeviation(ss, s, to - from);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -166,9 +165,7 @@ public final class LongStandardDeviation implements LongStatistic, StatisticAccu
      */
     @Override
     public void accept(long value) {
-        sumSq.addSquare(value);
-        sum.add(value);
-        n++;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -180,15 +177,12 @@ public final class LongStandardDeviation implements LongStatistic, StatisticAccu
      */
     @Override
     public double getAsDouble() {
-        return LongVariance.computeVarianceOrStd(sumSq, sum, n, biased, true);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public LongStandardDeviation combine(LongStandardDeviation other) {
-        sumSq.add(other.sumSq);
-        sum.add(other.sum);
-        n += other.n;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -206,7 +200,6 @@ public final class LongStandardDeviation implements LongStatistic, StatisticAccu
      * @see LongVariance#setBiased(boolean)
      */
     public LongStandardDeviation setBiased(boolean v) {
-        biased = v;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

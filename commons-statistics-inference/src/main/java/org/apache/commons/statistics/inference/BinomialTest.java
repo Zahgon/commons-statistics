@@ -29,10 +29,15 @@ import org.apache.commons.statistics.distribution.BinomialDistribution;
  * @since 1.1
  */
 public final class BinomialTest {
-    /** Default instance. */
+
+    /**
+     * Default instance.
+     */
     private static final BinomialTest DEFAULT = new BinomialTest(AlternativeHypothesis.TWO_SIDED);
 
-    /** Alternative hypothesis. */
+    /**
+     * Alternative hypothesis.
+     */
     private final AlternativeHypothesis alternative;
 
     /**
@@ -52,7 +57,7 @@ public final class BinomialTest {
      * @return default instance
      */
     public static BinomialTest withDefaults() {
-        return DEFAULT;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -62,7 +67,7 @@ public final class BinomialTest {
      * @return an instance
      */
     public BinomialTest with(AlternativeHypothesis v) {
-        return new BinomialTest(Objects.requireNonNull(v));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -107,25 +112,7 @@ public final class BinomialTest {
      * @see #with(AlternativeHypothesis)
      */
     public SignificanceResult test(int numberOfTrials, int numberOfSuccesses, double probability) {
-        // Note: The distribution validates number of trials and probability.
-        // Here we only have to validate the number of successes.
-        Arguments.checkNonNegative(numberOfSuccesses);
-        if (numberOfTrials < numberOfSuccesses) {
-            throw new InferenceException(
-                "must have n >= k for binomial coefficient (n, k), got n = %d, k = %d",
-                numberOfSuccesses, numberOfTrials);
-        }
-
-        final BinomialDistribution distribution = BinomialDistribution.of(numberOfTrials, probability);
-        final double p;
-        if (alternative == AlternativeHypothesis.GREATER_THAN) {
-            p = distribution.survivalProbability(numberOfSuccesses - 1);
-        } else if (alternative == AlternativeHypothesis.LESS_THAN) {
-            p = distribution.cumulativeProbability(numberOfSuccesses);
-        } else {
-            p = twoSidedBinomialTest(numberOfTrials, numberOfSuccesses, probability, distribution);
-        }
-        return new BaseSignificanceResult((double) numberOfSuccesses / numberOfTrials, p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -139,14 +126,12 @@ public final class BinomialTest {
      * @param distribution Binomial distribution.
      * @return p-value
      */
-    private static double twoSidedBinomialTest(int n, int k, double probability,
-                                               BinomialDistribution distribution) {
+    private static double twoSidedBinomialTest(int n, int k, double probability, BinomialDistribution distribution) {
         // Find all i where Pr(X = i) <= Pr(X = k) and sum them.
         // Exploit the known unimodal distribution to increase the
         // search speed. Note the search depends only on magnitude differences.
         // The current BinomialDistribution is faster using log probability
         // as it omits a call to Math.exp.
-
         // Use the mode as the point of largest probability.
         // The lower or upper mode is important for the search below.
         final int m1 = (int) Math.ceil((n + 1.0) * probability) - 1;
@@ -158,8 +143,7 @@ public final class BinomialTest {
             // reach the lower mode based on the probability alone.
             // Bracket with the upper mode.
             final int i = Searches.searchDescending(m2, n, pk, distribution::logProbability);
-            return distribution.cumulativeProbability(k) +
-                   distribution.survivalProbability(i - 1);
+            return distribution.cumulativeProbability(k) + distribution.survivalProbability(i - 1);
         } else if (k > m2) {
             final double pk = distribution.logProbability(k);
             // Upper half = sf(k - 1)
@@ -167,8 +151,7 @@ public final class BinomialTest {
             // reach the upper mode based on the probability alone.
             // Bracket with the lower mode.
             final int i = Searches.searchAscending(0, m1, pk, distribution::logProbability);
-            return distribution.cumulativeProbability(i) +
-                   distribution.survivalProbability(k - 1);
+            return distribution.cumulativeProbability(i) + distribution.survivalProbability(k - 1);
         }
         // k == mode
         // Edge case where the sum of probabilities will be either

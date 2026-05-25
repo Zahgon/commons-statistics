@@ -50,7 +50,9 @@ package org.apache.commons.statistics.descriptive;
  */
 public final class SumOfSquares implements DoubleStatistic, StatisticAccumulator<SumOfSquares> {
 
-    /** Sum of squares of all values. */
+    /**
+     * Sum of squares of all values.
+     */
     private double ss;
 
     /**
@@ -68,7 +70,7 @@ public final class SumOfSquares implements DoubleStatistic, StatisticAccumulator
      * @return {@code SumOfSquares} instance.
      */
     public static SumOfSquares create() {
-        return new SumOfSquares();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -82,7 +84,7 @@ public final class SumOfSquares implements DoubleStatistic, StatisticAccumulator
      * @return {@code SumOfSquares} instance.
      */
     public static SumOfSquares of(double... values) {
-        return Statistics.add(new SumOfSquares(), values);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -100,8 +102,7 @@ public final class SumOfSquares implements DoubleStatistic, StatisticAccumulator
      * @since 1.2
      */
     public static SumOfSquares ofRange(double[] values, int from, int to) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return createFromRange(values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -115,7 +116,7 @@ public final class SumOfSquares implements DoubleStatistic, StatisticAccumulator
      * @return {@code SumOfSquares} instance.
      */
     static SumOfSquares createFromRange(double[] values, int from, int to) {
-        return Statistics.add(new SumOfSquares(), values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -125,7 +126,7 @@ public final class SumOfSquares implements DoubleStatistic, StatisticAccumulator
      */
     @Override
     public void accept(double value) {
-        ss += value * value;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -137,12 +138,11 @@ public final class SumOfSquares implements DoubleStatistic, StatisticAccumulator
      */
     @Override
     public double getAsDouble() {
-        return ss;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public SumOfSquares combine(SumOfSquares other) {
-        ss += other.ss;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -27,49 +27,47 @@ import picocli.CommandLine.Option;
 /**
  * Command for the {@link PascalDistribution}.
  */
-@Command(name = "pascal",
-         aliases = {"negativebinomial", "nbin"},
-         description = "Pascal distribution.",
-         subcommands = {
-             PascalCommand.Check.class,
-             PascalCommand.PMF.class,
-             PascalCommand.LPMF.class,
-             PascalCommand.CDF.class,
-             PascalCommand.SF.class,
-             PascalCommand.ICDF.class,
-             PascalCommand.ISF.class,
-         })
+@Command(name = "pascal", aliases = { "negativebinomial", "nbin" }, description = "Pascal distribution.", subcommands = { PascalCommand.Check.class, PascalCommand.PMF.class, PascalCommand.LPMF.class, PascalCommand.CDF.class, PascalCommand.SF.class, PascalCommand.ICDF.class, PascalCommand.ISF.class })
 class PascalCommand extends AbstractDistributionCommand {
 
-    /** Base command for the distribution that defines the parameters. */
+    /**
+     * Base command for the distribution that defines the parameters.
+     */
     private abstract static class BaseCommand extends AbstractDiscreteDistributionCommand {
-        /** Distribution parameters. */
+
+        /**
+         * Distribution parameters.
+         */
         @ArgGroup(validate = false, heading = "Distribution parameters:%n", order = 1)
         private Params params = new Params();
 
-        /** Parameters class. */
+        /**
+         * Parameters class.
+         */
         static class Params {
-            /** The distribution trials. */
-            @Option(names = {"-r", "--number-of-successes"},
-                    arity = "1..*",
-                    split = ",",
-                    description = {"number of successes (default: ${DEFAULT-VALUE})."})
-            private int[] r = {1, 2, 3, 4, 5, 10, 20, 40};
 
-            /** The distribution p. */
-            @Option(names = {"-p", "--probability"},
-                    arity = "1..*",
-                    split = ",",
-                    description = {"probability of success (default: ${DEFAULT-VALUE})."})
-            // mean = (r * (1 - p)) / p = (r / p) - r
-            // p = r / (mean + r)
-            // Compute for a mean=10
-            private double[] p = {1.0 / 11, 2.0 / 12, 3.0 / 13, 4.0 / 14, 5.0 / 15, 10.0 / 20, 20.0 / 30, 40.0 / 50};
+            /**
+             * The distribution trials.
+             */
+            @Option(names = { "-r", "--number-of-successes" }, arity = "1..*", split = ",", description = { "number of successes (default: ${DEFAULT-VALUE})." })
+            private int[] r = { 1, 2, 3, 4, 5, 10, 20, 40 };
+
+            /**
+             * The distribution p.
+             */
+            @Option(names = { "-p", "--probability" }, arity = "1..*", split = ",", description = { "probability of success (default: ${DEFAULT-VALUE})." })
+            private double[] // Compute for a mean=10
+            p = { 1.0 / 11, 2.0 / 12, 3.0 / 13, 4.0 / 14, 5.0 / 15, 10.0 / 20, 20.0 / 30, 40.0 / 50 };
         }
 
-        /** Extend the options to set the default values for this distribution. */
+        /**
+         * Extend the options to set the default values for this distribution.
+         */
         static final class Options extends DiscreteDistributionOptions {
-            /** Set defaults. */
+
+            /**
+             * Set defaults.
+             */
             private Options() {
                 min = 0;
                 max = 25;
@@ -78,82 +76,90 @@ class PascalCommand extends AbstractDistributionCommand {
 
         @Override
         protected List<Distribution<DiscreteDistribution>> getDistributions() {
-            int[] r = params.r;
-            double[] p = params.p;
-            final int n = DistributionUtils.validateLengths(r.length, p.length);
-
-            r = DistributionUtils.expandToLength(r, n);
-            p = DistributionUtils.expandToLength(p, n);
-
-            // Create distributions
-            final ArrayList<Distribution<DiscreteDistribution>> list = new ArrayList<>();
-            for (int i = 0; i < n; i++) {
-                final DiscreteDistribution d = PascalDistribution.of(r[i], p[i]);
-                list.add(new Distribution<>(d, "r=" + r[i] + ",p=" + p[i]));
-            }
-            return list;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    /** Base command for the distribution that defines the parameters. */
+    /**
+     * Base command for the distribution that defines the parameters.
+     */
     private abstract static class ProbabilityCommand extends BaseCommand {
-        /** The distribution options. */
+
+        /**
+         * The distribution options.
+         */
         @ArgGroup(validate = false, heading = "Evaluation options:%n", order = 2)
         private Options distributionOptions = new Options();
 
         @Override
         protected DistributionOptions getDistributionOptions() {
-            return distributionOptions;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    /** Base command for the distribution that defines the parameters for inverse probability functions. */
+    /**
+     * Base command for the distribution that defines the parameters for inverse probability functions.
+     */
     private abstract static class InverseProbabilityCommand extends BaseCommand {
-        /** The distribution options. */
+
+        /**
+         * The distribution options.
+         */
         @ArgGroup(validate = false, heading = "Evaluation options:%n", order = 2)
         private InverseDiscreteDistributionOptions distributionOptions = new InverseDiscreteDistributionOptions();
 
         @Override
         protected DistributionOptions getDistributionOptions() {
-            return distributionOptions;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    /** Verification checks command. */
-    @Command(name = "check",
-             hidden = true,
-             description = "Pascal distribution verification checks.")
-    static class Check extends ProbabilityCommand {}
+    /**
+     * Verification checks command.
+     */
+    @Command(name = "check", hidden = true, description = "Pascal distribution verification checks.")
+    static class Check extends ProbabilityCommand {
+    }
 
-    /** PMF command. */
-    @Command(name = "pmf",
-             aliases = {"pdf"},
-             description = "Pascal distribution PMF.")
-    static class PMF extends ProbabilityCommand {}
+    /**
+     * PMF command.
+     */
+    @Command(name = "pmf", aliases = { "pdf" }, description = "Pascal distribution PMF.")
+    static class PMF extends ProbabilityCommand {
+    }
 
-    /** LPMF command. */
-    @Command(name = "lpmf",
-             aliases = {"lpdf"},
-             description = "Pascal distribution natural logarithm of the PMF.")
-    static class LPMF extends ProbabilityCommand {}
+    /**
+     * LPMF command.
+     */
+    @Command(name = "lpmf", aliases = { "lpdf" }, description = "Pascal distribution natural logarithm of the PMF.")
+    static class LPMF extends ProbabilityCommand {
+    }
 
-    /** CDF command. */
-    @Command(name = "cdf",
-             description = "Pascal distribution CDF.")
-    static class CDF extends ProbabilityCommand {}
+    /**
+     * CDF command.
+     */
+    @Command(name = "cdf", description = "Pascal distribution CDF.")
+    static class CDF extends ProbabilityCommand {
+    }
 
-    /** SF command. */
-    @Command(name = "sf",
-             description = "Pascal distribution survival probability.")
-    static class SF extends ProbabilityCommand {}
+    /**
+     * SF command.
+     */
+    @Command(name = "sf", description = "Pascal distribution survival probability.")
+    static class SF extends ProbabilityCommand {
+    }
 
-    /** ICDF command. */
-    @Command(name = "icdf",
-             description = "Pascal distribution inverse CDF.")
-    static class ICDF extends InverseProbabilityCommand {}
+    /**
+     * ICDF command.
+     */
+    @Command(name = "icdf", description = "Pascal distribution inverse CDF.")
+    static class ICDF extends InverseProbabilityCommand {
+    }
 
-    /** ISF command. */
-    @Command(name = "isf",
-             description = "Pascal distribution inverse SF.")
-    static class ISF extends InverseProbabilityCommand {}
+    /**
+     * ISF command.
+     */
+    @Command(name = "isf", description = "Pascal distribution inverse SF.")
+    static class ISF extends InverseProbabilityCommand {
+    }
 }

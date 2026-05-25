@@ -24,10 +24,15 @@ package org.apache.commons.statistics.descriptive;
  * @since 1.1
  */
 public final class StatisticsConfiguration {
-    /** Default instance. */
+
+    /**
+     * Default instance.
+     */
     private static final StatisticsConfiguration DEFAULT = new StatisticsConfiguration(false);
 
-    /** Flag to control if the statistic is biased, or should use a bias correction. */
+    /**
+     * Flag to control if the statistic is biased, or should use a bias correction.
+     */
     private final boolean biased;
 
     /**
@@ -49,7 +54,7 @@ public final class StatisticsConfiguration {
      * @return default instance
      */
     public static StatisticsConfiguration withDefaults() {
-        return DEFAULT;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -70,7 +75,7 @@ public final class StatisticsConfiguration {
      * @return an instance
      */
     public StatisticsConfiguration withBiased(boolean v) {
-        return new StatisticsConfiguration(v);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -80,6 +85,6 @@ public final class StatisticsConfiguration {
      * @return true if biased
      */
     public boolean isBiased() {
-        return biased;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

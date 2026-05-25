@@ -35,28 +35,47 @@ import org.apache.commons.rng.sampling.distribution.AhrensDieterMarsagliaTsangGa
  * @see <a href="https://mathworld.wolfram.com/GammaDistribution.html">Gamma distribution (MathWorld)</a>
  */
 public final class GammaDistribution extends AbstractContinuousDistribution {
-    /** Support lower bound. */
+
+    /**
+     * Support lower bound.
+     */
     private static final double SUPPORT_LO = 0;
-    /** Support upper bound. */
+
+    /**
+     * Support upper bound.
+     */
     private static final double SUPPORT_HI = Double.POSITIVE_INFINITY;
 
-    /** The shape parameter. */
+    /**
+     * The shape parameter.
+     */
     private final double shape;
-    /** The scale parameter. */
+
+    /**
+     * The scale parameter.
+     */
     private final double scale;
-    /** Precomputed term for the log density: {@code -log(gamma(shape)) - log(scale)}. */
+
+    /**
+     * Precomputed term for the log density: {@code -log(gamma(shape)) - log(scale)}.
+     */
     private final double minusLogGammaShapeMinusLogScale;
-    /** Cached value for inverse probability function. */
+
+    /**
+     * Cached value for inverse probability function.
+     */
     private final double mean;
-    /** Cached value for inverse probability function. */
+
+    /**
+     * Cached value for inverse probability function.
+     */
     private final double variance;
 
     /**
      * @param shape Shape parameter.
      * @param scale Scale parameter.
      */
-    private GammaDistribution(double shape,
-                              double scale) {
+    private GammaDistribution(double shape, double scale) {
         this.shape = shape;
         this.scale = scale;
         this.minusLogGammaShapeMinusLogScale = -LogGamma.value(shape) - Math.log(scale);
@@ -72,15 +91,8 @@ public final class GammaDistribution extends AbstractContinuousDistribution {
      * @return the distribution
      * @throws IllegalArgumentException if {@code shape <= 0} or {@code scale <= 0}.
      */
-    public static GammaDistribution of(double shape,
-                                       double scale) {
-        if (shape <= 0) {
-            throw new DistributionException(DistributionException.NOT_STRICTLY_POSITIVE, shape);
-        }
-        if (scale <= 0) {
-            throw new DistributionException(DistributionException.NOT_STRICTLY_POSITIVE, scale);
-        }
-        return new GammaDistribution(shape, scale);
+    public static GammaDistribution of(double shape, double scale) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -89,7 +101,7 @@ public final class GammaDistribution extends AbstractContinuousDistribution {
      * @return the shape parameter.
      */
     public double getShape() {
-        return shape;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -98,10 +110,11 @@ public final class GammaDistribution extends AbstractContinuousDistribution {
      * @return the scale parameter.
      */
     public double getScale() {
-        return scale;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
      *
      * <p>Returns the limit when {@code x = 0}:
      * <ul>
@@ -112,21 +125,11 @@ public final class GammaDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double density(double x) {
-        if (x <= SUPPORT_LO ||
-            x >= SUPPORT_HI) {
-            // Special case x=0
-            if (x == SUPPORT_LO && shape <= 1) {
-                return shape == 1 ?
-                    1 / scale :
-                    Double.POSITIVE_INFINITY;
-            }
-            return 0;
-        }
-
-        return RegularizedGamma.P.derivative(shape, x / scale) / scale;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
      *
      * <p>Returns the limit when {@code x = 0}:
      * <ul>
@@ -137,49 +140,23 @@ public final class GammaDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double logDensity(double x) {
-        if (x <= SUPPORT_LO ||
-            x >= SUPPORT_HI) {
-            // Special case x=0
-            if (x == SUPPORT_LO && shape <= 1) {
-                return shape == 1 ?
-                    -Math.log(scale) :
-                    Double.POSITIVE_INFINITY;
-            }
-            return Double.NEGATIVE_INFINITY;
-        }
-
-        final double y = x / scale;
-
-        // More accurate to log the density when it is finite.
-        // See NUMBERS-174: 'Log of the Gamma P Derivative'
-        final double p = RegularizedGamma.P.derivative(shape, y) / scale;
-        if (p <= Double.MAX_VALUE && p >= Double.MIN_NORMAL) {
-            return Math.log(p);
-        }
-        // Use the log computation
-        return minusLogGammaShapeMinusLogScale - y + Math.log(y) * (shape - 1);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double cumulativeProbability(double x) {
-        if (x <= SUPPORT_LO) {
-            return 0;
-        } else if (x >= SUPPORT_HI) {
-            return 1;
-        }
-        return RegularizedGamma.P.value(shape, x / scale);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double survivalProbability(double x) {
-        if (x <= SUPPORT_LO) {
-            return 1;
-        } else if (x >= SUPPORT_HI) {
-            return 0;
-        }
-        return RegularizedGamma.Q.value(shape, x / scale);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -190,7 +167,7 @@ public final class GammaDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getMean() {
-        return mean;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -201,7 +178,7 @@ public final class GammaDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getVariance() {
-        return variance;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -213,7 +190,7 @@ public final class GammaDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getSupportLowerBound() {
-        return SUPPORT_LO;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -225,13 +202,14 @@ public final class GammaDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getSupportUpperBound() {
-        return SUPPORT_HI;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ContinuousDistribution.Sampler createSampler(final UniformRandomProvider rng) {
-        // Gamma distribution sampler.
-        return AhrensDieterMarsagliaTsangGammaSampler.of(rng, shape, scale)::sample;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

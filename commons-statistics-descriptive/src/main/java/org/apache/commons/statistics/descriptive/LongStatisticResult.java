@@ -33,16 +33,16 @@ interface LongStatisticResult extends StatisticResult {
 
     @Override
     default double getAsDouble() {
-        return getAsLong();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     default int getAsInt() {
-        return Math.toIntExact(getAsLong());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     default BigInteger getAsBigInteger() {
-        return BigInteger.valueOf(getAsLong());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

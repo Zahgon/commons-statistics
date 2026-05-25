@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.apache.commons.statistics.distribution;
 
 /**
@@ -35,19 +34,40 @@ package org.apache.commons.statistics.distribution;
  * @see <a href="https://mathworld.wolfram.com/TriangularDistribution.html">Triangular distribution (MathWorld)</a>
  */
 public final class TriangularDistribution extends AbstractContinuousDistribution {
-    /** Lower limit of this distribution (inclusive). */
+
+    /**
+     * Lower limit of this distribution (inclusive).
+     */
     private final double a;
-    /** Upper limit of this distribution (inclusive). */
+
+    /**
+     * Upper limit of this distribution (inclusive).
+     */
     private final double b;
-    /** Mode of this distribution. */
+
+    /**
+     * Mode of this distribution.
+     */
     private final double c;
-    /** Cached value ((b - a) * (c - a). */
+
+    /**
+     * Cached value ((b - a) * (c - a).
+     */
     private final double divisor1;
-    /** Cached value ((b - a) * (b - c)). */
+
+    /**
+     * Cached value ((b - a) * (b - c)).
+     */
     private final double divisor2;
-    /** Cumulative probability at the mode. */
+
+    /**
+     * Cumulative probability at the mode.
+     */
     private final double cdfMode;
-    /** Survival probability at the mode. */
+
+    /**
+     * Survival probability at the mode.
+     */
     private final double sfMode;
 
     /**
@@ -55,9 +75,7 @@ public final class TriangularDistribution extends AbstractContinuousDistribution
      * @param c Mode of this distribution.
      * @param b Upper limit of this distribution (inclusive).
      */
-    private TriangularDistribution(double a,
-                                   double c,
-                                   double b) {
+    private TriangularDistribution(double a, double c, double b) {
         this.a = a;
         this.c = c;
         this.b = b;
@@ -77,22 +95,8 @@ public final class TriangularDistribution extends AbstractContinuousDistribution
      * @throws IllegalArgumentException if {@code a >= b}, if {@code c > b} or if
      * {@code c < a}.
      */
-    public static TriangularDistribution of(double a,
-                                            double c,
-                                            double b) {
-        if (a >= b) {
-            throw new DistributionException(DistributionException.INVALID_RANGE_LOW_GTE_HIGH,
-                                            a, b);
-        }
-        if (c < a) {
-            throw new DistributionException(DistributionException.TOO_SMALL,
-                                            c, a);
-        }
-        if (c > b) {
-            throw new DistributionException(DistributionException.TOO_LARGE,
-                                            c, b);
-        }
-        return new TriangularDistribution(a, c, b);
+    public static TriangularDistribution of(double a, double c, double b) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -101,102 +105,47 @@ public final class TriangularDistribution extends AbstractContinuousDistribution
      * @return the mode.
      */
     public double getMode() {
-        return c;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double density(double x) {
-        if (x < a) {
-            return 0;
-        }
-        if (x < c) {
-            final double divident = 2 * (x - a);
-            return divident / divisor1;
-        }
-        if (x == c) {
-            return 2 / (b - a);
-        }
-        if (x <= b) {
-            final double divident = 2 * (b - x);
-            return divident / divisor2;
-        }
-        return 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public double cumulativeProbability(double x)  {
-        if (x <= a) {
-            return 0;
-        }
-        if (x < c) {
-            final double divident = (x - a) * (x - a);
-            return divident / divisor1;
-        }
-        if (x == c) {
-            return cdfMode;
-        }
-        if (x < b) {
-            final double divident = (b - x) * (b - x);
-            return 1 - (divident / divisor2);
-        }
-        return 1;
+    public double cumulativeProbability(double x) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public double survivalProbability(double x)  {
-        // By symmetry:
-        if (x <= a) {
-            return 1;
-        }
-        if (x < c) {
-            final double divident = (x - a) * (x - a);
-            return 1 - (divident / divisor1);
-        }
-        if (x == c) {
-            return sfMode;
-        }
-        if (x < b) {
-            final double divident = (b - x) * (b - x);
-            return divident / divisor2;
-        }
-        return 0;
+    public double survivalProbability(double x) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double inverseCumulativeProbability(double p) {
-        ArgumentUtils.checkProbability(p);
-        if (p == 0) {
-            return a;
-        }
-        if (p == 1) {
-            return b;
-        }
-        if (p < cdfMode) {
-            return a + Math.sqrt(p * divisor1);
-        }
-        return b - Math.sqrt((1 - p) * divisor2);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double inverseSurvivalProbability(double p) {
-        // By symmetry:
-        ArgumentUtils.checkProbability(p);
-        if (p == 1) {
-            return a;
-        }
-        if (p == 0) {
-            return b;
-        }
-        if (p >= sfMode) {
-            return a + Math.sqrt((1 - p) * divisor1);
-        }
-        return b - Math.sqrt(p * divisor2);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -207,7 +156,7 @@ public final class TriangularDistribution extends AbstractContinuousDistribution
      */
     @Override
     public double getMean() {
-        return (a + b + c) / 3;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -218,7 +167,7 @@ public final class TriangularDistribution extends AbstractContinuousDistribution
      */
     @Override
     public double getVariance() {
-        return (a * a + b * b + c * c - a * b - a * c - b * c) / 18;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -229,7 +178,7 @@ public final class TriangularDistribution extends AbstractContinuousDistribution
      */
     @Override
     public double getSupportLowerBound() {
-        return a;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -240,6 +189,6 @@ public final class TriangularDistribution extends AbstractContinuousDistribution
      */
     @Override
     public double getSupportUpperBound() {
-        return b;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

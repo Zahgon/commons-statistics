@@ -51,7 +51,9 @@ package org.apache.commons.statistics.descriptive;
  */
 public final class Sum implements DoubleStatistic, StatisticAccumulator<Sum> {
 
-    /** {@link org.apache.commons.numbers.core.Sum Sum} used to compute the sum. */
+    /**
+     * {@link org.apache.commons.numbers.core.Sum Sum} used to compute the sum.
+     */
     private final org.apache.commons.numbers.core.Sum delegate;
 
     /**
@@ -78,7 +80,7 @@ public final class Sum implements DoubleStatistic, StatisticAccumulator<Sum> {
      * @return {@code Sum} instance.
      */
     public static Sum create() {
-        return new Sum();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -93,7 +95,7 @@ public final class Sum implements DoubleStatistic, StatisticAccumulator<Sum> {
      * @return {@code Sum} instance.
      */
     public static Sum of(double... values) {
-        return new Sum(org.apache.commons.numbers.core.Sum.of(values));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -112,8 +114,7 @@ public final class Sum implements DoubleStatistic, StatisticAccumulator<Sum> {
      * @since 1.2
      */
     public static Sum ofRange(double[] values, int from, int to) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return new Sum(Statistics.sum(values, from, to));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -123,7 +124,7 @@ public final class Sum implements DoubleStatistic, StatisticAccumulator<Sum> {
      */
     @Override
     public void accept(double value) {
-        delegate.accept(value);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -135,12 +136,11 @@ public final class Sum implements DoubleStatistic, StatisticAccumulator<Sum> {
      */
     @Override
     public double getAsDouble() {
-        return delegate.getAsDouble();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Sum combine(Sum other) {
-        delegate.add(other.delegate);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

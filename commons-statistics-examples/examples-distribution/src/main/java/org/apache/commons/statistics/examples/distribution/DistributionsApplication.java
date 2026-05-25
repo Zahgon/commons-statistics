@@ -56,48 +56,18 @@ public final class DistributionsApplication {
     // Discrete distributions have a PMF. For convenience this has an alias
     // as pdf so all distributions can be called using the same syntax.
     // Aliases have been used for the distribution names to shorten commands.
-
-    /** No public constructor. */
-    private DistributionsApplication() {}
+    /**
+     * No public constructor.
+     */
+    private DistributionsApplication() {
+    }
 
     /**
      * Specification for the top-level command in the examples distributions application.
      *
      * <p>This command will print the top-level help message.</p>
      */
-    @Command(name = "distributions",
-             description = "Apache Commons Statistics Distribution Utilities.",
-             subcommands = {
-                 BetaCommand.class,
-                 BinomialCommand.class,
-                 CauchyCommand.class,
-                 ChiSquaredCommand.class,
-                 ExpCommand.class,
-                 FCommand.class,
-                 FoldedNormalCommand.class,
-                 GammaCommand.class,
-                 GeometricCommand.class,
-                 GumbelCommand.class,
-                 HypergeometricCommand.class,
-                 LaplaceCommand.class,
-                 LevyCommand.class,
-                 LogisticCommand.class,
-                 LogNormalCommand.class,
-                 LogUniformCommand.class,
-                 NakagamiCommand.class,
-                 NormalCommand.class,
-                 ParetoCommand.class,
-                 PascalCommand.class,
-                 PoissonCommand.class,
-                 TCommand.class,
-                 TrapezoidalCommand.class,
-                 TriangularCommand.class,
-                 TruncatedNormalCommand.class,
-                 UniformContinuousCommand.class,
-                 UniformDiscreteCommand.class,
-                 WeibullCommand.class,
-                 ZipfCommand.class,
-             })
+    @Command(name = "distributions", description = "Apache Commons Statistics Distribution Utilities.", subcommands = { BetaCommand.class, BinomialCommand.class, CauchyCommand.class, ChiSquaredCommand.class, ExpCommand.class, FCommand.class, FoldedNormalCommand.class, GammaCommand.class, GeometricCommand.class, GumbelCommand.class, HypergeometricCommand.class, LaplaceCommand.class, LevyCommand.class, LogisticCommand.class, LogNormalCommand.class, LogUniformCommand.class, NakagamiCommand.class, NormalCommand.class, ParetoCommand.class, PascalCommand.class, PoissonCommand.class, TCommand.class, TrapezoidalCommand.class, TriangularCommand.class, TruncatedNormalCommand.class, UniformContinuousCommand.class, UniformDiscreteCommand.class, WeibullCommand.class, ZipfCommand.class })
     static class DistributionsCommand extends AbstractDistributionCommand {
         // Nothing to do
     }
@@ -108,8 +78,6 @@ public final class DistributionsApplication {
      * @param args Application's arguments.
      */
     public static void main(String[] args) {
-        // The command line is built using annotations
-        final CommandLine cmd = new CommandLine(new DistributionsCommand());
-        System.exit(cmd.execute(args));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -30,6 +30,7 @@ import java.util.function.LongSupplier;
  */
 @FunctionalInterface
 public interface StatisticResult extends DoubleSupplier, IntSupplier, LongSupplier {
+
     /**
      * {@inheritDoc}
      *
@@ -43,7 +44,7 @@ public interface StatisticResult extends DoubleSupplier, IntSupplier, LongSuppli
      */
     @Override
     default int getAsInt() {
-        return IntMath.toIntExact(getAsDouble());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -59,7 +60,7 @@ public interface StatisticResult extends DoubleSupplier, IntSupplier, LongSuppli
      */
     @Override
     default long getAsLong() {
-        return IntMath.toLongExact(getAsDouble());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -74,6 +75,6 @@ public interface StatisticResult extends DoubleSupplier, IntSupplier, LongSuppli
      * @throws ArithmeticException if the {@code result} is not finite
      */
     default BigInteger getAsBigInteger() {
-        return IntMath.toBigIntegerExact(getAsDouble());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

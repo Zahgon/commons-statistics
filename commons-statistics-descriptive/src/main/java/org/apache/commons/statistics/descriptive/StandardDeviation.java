@@ -96,7 +96,9 @@ public final class StandardDeviation implements DoubleStatistic, StatisticAccumu
      */
     private final SumOfSquaredDeviations ss;
 
-    /** Flag to control if the statistic is biased, or should use a bias correction. */
+    /**
+     * Flag to control if the statistic is biased, or should use a bias correction.
+     */
     private boolean biased;
 
     /**
@@ -123,7 +125,7 @@ public final class StandardDeviation implements DoubleStatistic, StatisticAccumu
      * @return {@code StandardDeviation} instance.
      */
     public static StandardDeviation create() {
-        return new StandardDeviation();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -138,7 +140,7 @@ public final class StandardDeviation implements DoubleStatistic, StatisticAccumu
      * @return {@code StandardDeviation} instance.
      */
     public static StandardDeviation of(double... values) {
-        return new StandardDeviation(SumOfSquaredDeviations.of(values));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -157,8 +159,7 @@ public final class StandardDeviation implements DoubleStatistic, StatisticAccumu
      * @since 1.2
      */
     public static StandardDeviation ofRange(double[] values, int from, int to) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return new StandardDeviation(SumOfSquaredDeviations.ofRange(values, from, to));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -168,7 +169,7 @@ public final class StandardDeviation implements DoubleStatistic, StatisticAccumu
      */
     @Override
     public void accept(double value) {
-        ss.accept(value);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -180,25 +181,12 @@ public final class StandardDeviation implements DoubleStatistic, StatisticAccumu
      */
     @Override
     public double getAsDouble() {
-        // This method checks the sum of squared is finite
-        // to provide a consistent NaN when the computation is not possible.
-        // Note: The SS checks for n=0 and returns NaN.
-        final double m2 = ss.getSumOfSquaredDeviations();
-        if (!Double.isFinite(m2)) {
-            return Double.NaN;
-        }
-        final long n = ss.n;
-        // Avoid a divide by zero
-        if (n == 1) {
-            return 0;
-        }
-        return biased ? Math.sqrt(m2 / n) : Math.sqrt(m2 / (n - 1));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public StandardDeviation combine(StandardDeviation other) {
-        ss.combine(other.ss);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -216,7 +204,6 @@ public final class StandardDeviation implements DoubleStatistic, StatisticAccumu
      * @see Variance#setBiased(boolean)
      */
     public StandardDeviation setBiased(boolean v) {
-        biased = v;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

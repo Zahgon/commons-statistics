@@ -47,7 +47,9 @@ import java.math.BigInteger;
  */
 public final class LongMin implements LongStatistic, StatisticAccumulator<LongMin> {
 
-    /** Current minimum. */
+    /**
+     * Current minimum.
+     */
     private long minimum = Long.MAX_VALUE;
 
     /**
@@ -65,7 +67,7 @@ public final class LongMin implements LongStatistic, StatisticAccumulator<LongMi
      * @return {@code LongMin} instance.
      */
     public static LongMin create() {
-        return new LongMin();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -78,7 +80,7 @@ public final class LongMin implements LongStatistic, StatisticAccumulator<LongMi
      * @return {@code LongMin} instance.
      */
     public static LongMin of(long... values) {
-        return Statistics.add(new LongMin(), values);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -95,8 +97,7 @@ public final class LongMin implements LongStatistic, StatisticAccumulator<LongMi
      * @since 1.2
      */
     public static LongMin ofRange(long[] values, int from, int to) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return createFromRange(values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -110,7 +111,7 @@ public final class LongMin implements LongStatistic, StatisticAccumulator<LongMi
      * @return {@code LongMin} instance.
      */
     static LongMin createFromRange(long[] values, int from, int to) {
-        return Statistics.add(new LongMin(), values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -120,7 +121,7 @@ public final class LongMin implements LongStatistic, StatisticAccumulator<LongMi
      */
     @Override
     public void accept(long value) {
-        minimum = Math.min(minimum, value);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -133,7 +134,7 @@ public final class LongMin implements LongStatistic, StatisticAccumulator<LongMi
      */
     @Override
     public long getAsLong() {
-        return minimum;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -147,22 +148,21 @@ public final class LongMin implements LongStatistic, StatisticAccumulator<LongMi
      */
     @Override
     public int getAsInt() {
-        return Math.toIntExact(minimum);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public double getAsDouble() {
-        return minimum;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public BigInteger getAsBigInteger() {
-        return BigInteger.valueOf(minimum);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public LongMin combine(LongMin other) {
-        accept(other.getAsLong());
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

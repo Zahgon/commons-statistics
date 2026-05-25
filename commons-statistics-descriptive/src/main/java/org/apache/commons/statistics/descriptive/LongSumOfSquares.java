@@ -57,7 +57,9 @@ import java.math.BigInteger;
  */
 public final class LongSumOfSquares implements LongStatistic, StatisticAccumulator<LongSumOfSquares> {
 
-    /** Sum of the squared values. */
+    /**
+     * Sum of the squared values.
+     */
     private final UInt192 sumSq;
 
     /**
@@ -84,7 +86,7 @@ public final class LongSumOfSquares implements LongStatistic, StatisticAccumulat
      * @return {@code LongSumOfSquares} instance.
      */
     public static LongSumOfSquares create() {
-        return new LongSumOfSquares();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -96,11 +98,7 @@ public final class LongSumOfSquares implements LongStatistic, StatisticAccumulat
      * @return {@code LongSumOfSquares} instance.
      */
     public static LongSumOfSquares of(long... values) {
-        final UInt192 ss = UInt192.create();
-        for (final long x : values) {
-            ss.addSquare(x);
-        }
-        return new LongSumOfSquares(ss);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -116,8 +114,7 @@ public final class LongSumOfSquares implements LongStatistic, StatisticAccumulat
      * @since 1.2
      */
     public static LongSumOfSquares ofRange(long[] values, int from, int to) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return createFromRange(values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -131,11 +128,7 @@ public final class LongSumOfSquares implements LongStatistic, StatisticAccumulat
      * @return {@code LongSumOfSquares} instance.
      */
     static LongSumOfSquares createFromRange(long[] values, int from, int to) {
-        final UInt192 ss = UInt192.create();
-        for (int i = from; i < to; i++) {
-            ss.addSquare(values[i]);
-        }
-        return new LongSumOfSquares(ss);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -146,7 +139,7 @@ public final class LongSumOfSquares implements LongStatistic, StatisticAccumulat
      * @return the sum of squares
      */
     UInt192 getSumOfSquares() {
-        return sumSq;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -156,7 +149,7 @@ public final class LongSumOfSquares implements LongStatistic, StatisticAccumulat
      */
     @Override
     public void accept(long value) {
-        sumSq.addSquare(value);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -173,7 +166,7 @@ public final class LongSumOfSquares implements LongStatistic, StatisticAccumulat
      */
     @Override
     public int getAsInt() {
-        return sumSq.toIntExact();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -190,7 +183,7 @@ public final class LongSumOfSquares implements LongStatistic, StatisticAccumulat
      */
     @Override
     public long getAsLong() {
-        return sumSq.toLongExact();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -206,7 +199,7 @@ public final class LongSumOfSquares implements LongStatistic, StatisticAccumulat
      */
     @Override
     public double getAsDouble() {
-        return sumSq.toDouble();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -218,12 +211,11 @@ public final class LongSumOfSquares implements LongStatistic, StatisticAccumulat
      */
     @Override
     public BigInteger getAsBigInteger() {
-        return sumSq.toBigInteger();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public LongSumOfSquares combine(LongSumOfSquares other) {
-        sumSq.add(other.sumSq);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

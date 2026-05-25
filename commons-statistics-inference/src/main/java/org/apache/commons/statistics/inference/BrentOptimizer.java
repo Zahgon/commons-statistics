@@ -44,16 +44,30 @@ import org.apache.commons.numbers.core.Precision;
  * @since 1.1
  */
 final class BrentOptimizer {
-    /** Golden section. (3 - sqrt(5)) / 2. */
+
+    /**
+     * Golden section. (3 - sqrt(5)) / 2.
+     */
     private static final double GOLDEN_SECTION = 0.3819660112501051;
-    /** Minimum relative tolerance. 2 * eps = 2^-51. */
+
+    /**
+     * Minimum relative tolerance. 2 * eps = 2^-51.
+     */
     private static final double MIN_RELATIVE_TOLERANCE = 0x1.0p-51;
 
-    /** Relative threshold. */
+    /**
+     * Relative threshold.
+     */
     private final double relativeThreshold;
-    /** Absolute threshold. */
+
+    /**
+     * Absolute threshold.
+     */
     private final double absoluteThreshold;
-    /** The number of function evaluations from the most recent call to optimize. */
+
+    /**
+     * The number of function evaluations from the most recent call to optimize.
+     */
     private int evaluations;
 
     /**
@@ -63,9 +77,15 @@ final class BrentOptimizer {
      * @since 1.1
      */
     static final class PointValuePair {
-        /** Point. */
+
+        /**
+         * Point.
+         */
         private final double point;
-        /** Value of the objective function at the point. */
+
+        /**
+         * Value of the objective function at the point.
+         */
         private final double value;
 
         /**
@@ -85,7 +105,7 @@ final class BrentOptimizer {
          * @return the pair
          */
         static PointValuePair of(double point, double value) {
-            return new PointValuePair(point, value);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -94,7 +114,7 @@ final class BrentOptimizer {
          * @return the point.
          */
         double getPoint() {
-            return point;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -103,7 +123,7 @@ final class BrentOptimizer {
          * @return the stored value of the objective function.
          */
         double getValue() {
-            return value;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -137,7 +157,7 @@ final class BrentOptimizer {
      * @return the function evaluations
      */
     int getEvaluations() {
-        return evaluations;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -157,159 +177,7 @@ final class BrentOptimizer {
      * @throws IllegalArgumentException if start point is not within the search interval
      * @throws IllegalStateException if the maximum number of iterations is exceeded
      */
-    PointValuePair optimize(DoubleUnaryOperator func,
-                            double lo, double hi,
-                            double mid, double fMid) {
-        double a;
-        double b;
-        if (lo < hi) {
-            a = lo;
-            b = hi;
-        } else {
-            a = hi;
-            b = lo;
-        }
-        if (!(a < mid && mid < b)) {
-            throw new InferenceException("Invalid bounds: (%s, %s) with start %s", a, b, mid);
-        }
-        double x = mid;
-        double v = x;
-        double w = x;
-        double d = 0;
-        double e = 0;
-        double fx = fMid;
-        double fv = fx;
-        double fw = fx;
-
-        // Best point encountered so far (which is the initial guess).
-        double bestX = x;
-        double bestFx = fx;
-
-        // No test for iteration count.
-        // Note that the termination criterion is based purely on the size of the current
-        // bracket and the current point x. If the function evaluates NaN then golden
-        // section steps are taken.
-        evaluations = 0;
-        for (;;) {
-            final double m = 0.5 * (a + b);
-            final double tol1 = relativeThreshold * Math.abs(x) + absoluteThreshold;
-            final double tol2 = 2 * tol1;
-
-            // Default termination (Brent's criterion).
-            if (Math.abs(x - m) <= tol2 - 0.5 * (b - a)) {
-                return PointValuePair.of(bestX, bestFx);
-            }
-
-            if (Math.abs(e) > tol1) {
-                // Fit parabola.
-                double r = (x - w) * (fx - fv);
-                double q = (x - v) * (fx - fw);
-                double p = (x - v) * q - (x - w) * r;
-                q = 2 * (q - r);
-
-                if (q > 0) {
-                    p = -p;
-                } else {
-                    q = -q;
-                }
-
-                r = e;
-                e = d;
-
-                if (p > q * (a - x) &&
-                    p < q * (b - x) &&
-                    Math.abs(p) < Math.abs(0.5 * q * r)) {
-                    // Parabolic interpolation step.
-                    d = p / q;
-                    final double u = x + d;
-
-                    // f must not be evaluated too close to a or b.
-                    if (u - a < tol2 || b - u < tol2) {
-                        if (x <= m) {
-                            d = tol1;
-                        } else {
-                            d = -tol1;
-                        }
-                    }
-                } else {
-                    // Golden section step.
-                    if (x < m) {
-                        e = b - x;
-                    } else {
-                        e = a - x;
-                    }
-                    d = GOLDEN_SECTION * e;
-                }
-            } else {
-                // Golden section step.
-                if (x < m) {
-                    e = b - x;
-                } else {
-                    e = a - x;
-                }
-                d = GOLDEN_SECTION * e;
-            }
-
-            // Update by at least "tol1".
-            // Here d is never NaN so the evaluation point u is always finite.
-            final double u;
-            if (Math.abs(d) < tol1) {
-                if (d >= 0) {
-                    u = x + tol1;
-                } else {
-                    u = x - tol1;
-                }
-            } else {
-                u = x + d;
-            }
-
-            evaluations++;
-            final double fu = func.applyAsDouble(u);
-
-            // Maintain the best encountered result
-            if (fu < bestFx) {
-                bestX = u;
-                bestFx = fu;
-            }
-
-            // Note:
-            // Here the use of a convergence checker on f(x) previous vs current has been removed.
-            // Typically when the checker requires a very small relative difference
-            // the optimizer will stop before, or soon after, on Brent's criterion when that is
-            // configured with the smallest recommended convergence criteria.
-
-            // Update a, b, v, w and x.
-            if (fu <= fx) {
-                if (u < x) {
-                    b = x;
-                } else {
-                    a = x;
-                }
-                v = w;
-                fv = fw;
-                w = x;
-                fw = fx;
-                x = u;
-                fx = fu;
-            } else {
-                if (u < x) {
-                    a = u;
-                } else {
-                    b = u;
-                }
-                if (fu <= fw ||
-                    Precision.equals(w, x)) {
-                    v = w;
-                    fv = fw;
-                    w = u;
-                    fw = fu;
-                } else if (fu <= fv ||
-                           Precision.equals(v, x) ||
-                           Precision.equals(v, w)) {
-                    v = u;
-                    fv = fu;
-                }
-            }
-        }
+    PointValuePair optimize(DoubleUnaryOperator func, double lo, double hi, double mid, double fMid) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

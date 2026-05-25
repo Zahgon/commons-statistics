@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.apache.commons.statistics.examples.jmh.descriptive;
 
 import java.util.ArrayList;
@@ -57,18 +56,32 @@ import org.openjdk.jmh.infra.Blackhole;
 @Warmup(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 @Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 @State(Scope.Benchmark)
-@Fork(value = 1, jvmArgs = {"-server", "-Xms512M", "-Xmx8192M"})
+@Fork(value = 1, jvmArgs = { "-server", "-Xms512M", "-Xmx8192M" })
 public class QuantilePerformance {
-    /** Use the JDK sort function. */
+
+    /**
+     * Use the JDK sort function.
+     */
     private static final String JDK = "JDK";
-    /** Commons Math 3 Percentile implementation. */
+
+    /**
+     * Commons Math 3 Percentile implementation.
+     */
     private static final String CM3 = "CM3";
-    /** Commons Math 4 Percentile implementation. */
+
+    /**
+     * Commons Math 4 Percentile implementation.
+     */
     private static final String CM4 = "CM4";
-    /** Commons Statistics implementation. */
+
+    /**
+     * Commons Statistics implementation.
+     */
     private static final String STATISTICS = "Statistics";
 
-    /** Random source. */
+    /**
+     * Random source.
+     */
     private static final RandomSource RANDOM_SOURCE = RandomSource.XO_RO_SHI_RO_128_PP;
 
     /**
@@ -100,77 +113,122 @@ public class QuantilePerformance {
      */
     @State(Scope.Benchmark)
     public abstract static class AbstractDataSource {
-        /** All distributions / modifications. */
+
+        /**
+         * All distributions / modifications.
+         */
         private static final String ALL = "all";
-        /** All distributions / modifications in the Bentley and McIlroy test suite. */
+
+        /**
+         * All distributions / modifications in the Bentley and McIlroy test suite.
+         */
         private static final String BM = "bm";
-        /** All distributions in the Valois test suite. These do not use the seed
+
+        /**
+         * All distributions in the Valois test suite. These do not use the seed
          * in {@link #createDistributions(EnumSet, UniformRandomProvider, int, int, int)}.
-         * To replicate Valois use a fixed seed and the copy modification. */
+         * To replicate Valois use a fixed seed and the copy modification.
+         */
         private static final String VALOIS = "valois";
-        /** Flag to determine if the data size should be logged. This is useful to be
+
+        /**
+         * Flag to determine if the data size should be logged. This is useful to be
          * able to determine the execution time per sample when the number of samples
-         * is dynamically created based on the data length, range and seed. */
+         * is dynamically created based on the data length, range and seed.
+         */
         private static final AtomicInteger LOG_SIZE = new AtomicInteger();
 
         /**
          * The type of distribution.
          */
         enum Distribution {
+
             // B&M (1993)
-
-            /** sawtooth distribution. */
+            /**
+             * sawtooth distribution.
+             */
             SAWTOOTH,
-            /** random distribution. */
+            /**
+             * random distribution.
+             */
             RANDOM,
-            /** stagger distribution. */
+            /**
+             * stagger distribution.
+             */
             STAGGER,
-            /** plateau distribution. */
+            /**
+             * plateau distribution.
+             */
             PLATEAU,
-            /** shuffle distribution. */
+            /**
+             * shuffle distribution.
+             */
             SHUFFLE,
-
-            /** sharktooth distribution. This is an addition to the original suite of B & M
+            /**
+             * sharktooth distribution. This is an addition to the original suite of B & M
              * and is not included in the test suite by default and must be specified.
              *
              * <p>An ascending then descending sequence is also known as organpipe in
              * Valois (2000),
              * Introspective sorting and selection revisited,
              * Software–Practice and Experience 30, 617–638.
-             * This version allows multiple ascending/descending runs in the same length. */
+             * This version allows multiple ascending/descending runs in the same length.
+             */
             SHARKTOOTH,
-
             // Valois (2000)
-
-            /** Sorted. */
+            /**
+             * Sorted.
+             */
             SORTED,
-            /** Permutation of ones and zeros. */
+            /**
+             * Permutation of ones and zeros.
+             */
             ONEZERO,
-            /** Musser's median-of-3 killer. */
+            /**
+             * Musser's median-of-3 killer.
+             */
             M3KILLER,
-            /** A sorted sequence rotated left once. */
+            /**
+             * A sorted sequence rotated left once.
+             */
             ROTATED,
-            /** Musser's two-faced sequence (the median-of-3 killer with two random permutations). */
+            /**
+             * Musser's two-faced sequence (the median-of-3 killer with two random permutations).
+             */
             TWOFACED,
-            /** An ascending then descending sequence. */
-            ORGANPIPE;
+            /**
+             * An ascending then descending sequence.
+             */
+            ORGANPIPE
         }
 
         /**
          * The type of data modification.
          */
         enum Modification {
-            /** copy modification. */
+
+            /**
+             * copy modification.
+             */
             COPY,
-            /** reverse modification. */
+            /**
+             * reverse modification.
+             */
             REVERSE,
-            /** reverse front-half modification. */
+            /**
+             * reverse front-half modification.
+             */
             REVERSE_FRONT,
-            /** reverse back-half modification. */
+            /**
+             * reverse back-half modification.
+             */
             REVERSE_BACK,
-            /** sort modification. */
+            /**
+             * sort modification.
+             */
             SORT,
-            /** descending modification (this is an addition to the original suite of B & M).
+            /**
+             * descending modification (this is an addition to the original suite of B & M).
              * It is useful for testing worst case performance, e.g. insertion sort performs
              * poorly on descending data. Heapselect using a max heap would perform poorly
              * if data is processed in the forward direction as all elements must be inserted.
@@ -178,62 +236,86 @@ public class QuantilePerformance {
              * <p>This is not included in the test suite by default and must be specified.
              * Note that the Shuffle distribution with a very large seed 'm' is effectively an
              * ascending sequence and will be reversed to descending as part of the original
-             * B&M suite of data. */
+             * B&M suite of data.
+             */
             DESCENDING,
-            /** dither modification. */
-            DITHER;
+            /**
+             * dither modification.
+             */
+            DITHER
         }
 
-        /** Order. This is randomized to ensure that successive calls do not partition
+        /**
+         * Order. This is randomized to ensure that successive calls do not partition
          * similar distributions. Randomized per invocation to avoid the JVM 'learning'
-         * branch decisions to take in small data sets. */
+         * branch decisions to take in small data sets.
+         */
         protected int[] order;
-        /** Cached source of randomness. */
+
+        /**
+         * Cached source of randomness.
+         */
         protected UniformRandomProvider rng;
 
-        /** Type of data. Multiple types can be specified in the same string using
-         * lower/upper case, delimited using ':'. */
-        @Param({BM})
+        /**
+         * Type of data. Multiple types can be specified in the same string using
+         * lower/upper case, delimited using ':'.
+         */
+        @Param({ BM })
         private String distribution = BM;
 
-        /** Type of data modification. Multiple types can be specified in the same string using
-         * lower/upper case, delimited using ':'. */
-        @Param({BM})
+        /**
+         * Type of data modification. Multiple types can be specified in the same string using
+         * lower/upper case, delimited using ':'.
+         */
+        @Param({ BM })
         private String modification = BM;
 
-        /** Extra range to add to the data length.
-         * E.g. Use 1 to force use of odd and even length samples for the median. */
-        @Param({"1"})
+        /**
+         * Extra range to add to the data length.
+         * E.g. Use 1 to force use of odd and even length samples for the median.
+         */
+        @Param({ "1" })
         private int range = 1;
 
-        /** Sample 'seed'. This is {@code m} in Bentley and McIlroy's test suite.
-         * If set to zero the default is to use powers of 2 based on sample size. */
-        @Param({"0"})
+        /**
+         * Sample 'seed'. This is {@code m} in Bentley and McIlroy's test suite.
+         * If set to zero the default is to use powers of 2 based on sample size.
+         */
+        @Param({ "0" })
         private int seed;
 
-        /** Sample offset. This is used to shift each distribution to create different data.
-         * It is advanced on each invocation of {@link #setup()}. */
-        @Param({"0"})
+        /**
+         * Sample offset. This is used to shift each distribution to create different data.
+         * It is advanced on each invocation of {@link #setup()}.
+         */
+        @Param({ "0" })
         private int offset;
 
-        /** Number of samples. Applies only to the random distribution. In this case
-         * the length of the data is randomly chosen in {@code [length, length + range)}. */
-        @Param({"0"})
+        /**
+         * Number of samples. Applies only to the random distribution. In this case
+         * the length of the data is randomly chosen in {@code [length, length + range)}.
+         */
+        @Param({ "0" })
         private int samples;
 
-        /** RNG seed. Created using ThreadLocalRandom.current().nextLong(). This is advanced
+        /**
+         * RNG seed. Created using ThreadLocalRandom.current().nextLong(). This is advanced
          * for the random distribution mode per iteration. Each benchmark executed by
          * JMH will use the same random data, even across JVMs.
          *
-         * <p>If this is zero then a random seed is chosen. */
-        @Param({"-7450238124206088695"})
+         * <p>If this is zero then a random seed is chosen.
+         */
+        @Param({ "-7450238124206088695" })
         private long rngSeed = -7450238124206088695L;
 
-        /** Data. This is stored as integer data which saves memory. Note that when ranking
+        /**
+         * Data. This is stored as integer data which saves memory. Note that when ranking
          * data it is not necessary to have the full range of the double data type; the same
          * number of unique values can be recorded in an array using an integer type.
          * Returning a double[] forces a copy to be generated for destructive sorting /
-         * partitioning methods. */
+         * partitioning methods.
+         */
         private int[][] data;
 
         /**
@@ -245,7 +327,7 @@ public class QuantilePerformance {
          * @return the data sample
          */
         public double[] getData(int index) {
-            return getDataSample(order[index]);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -257,7 +339,7 @@ public class QuantilePerformance {
          * @return the data sample
          */
         public int[] getIntData(int index) {
-            return getIntDataSample(order[index]);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -269,7 +351,7 @@ public class QuantilePerformance {
          * @return the data sample
          */
         public long[] getLongData(int index) {
-            return getLongDataSample(order[index]);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -281,7 +363,7 @@ public class QuantilePerformance {
         private double[] getDataSample(int index) {
             final int[] a = data[index];
             final double[] x = new double[a.length];
-            for (int i = -1; ++i < a.length;) {
+            for (int i = -1; ++i < a.length; ) {
                 x[i] = a[i];
             }
             return x;
@@ -297,7 +379,7 @@ public class QuantilePerformance {
             // For parity with other methods do not use data.clone()
             final int[] a = data[index];
             final int[] x = new int[a.length];
-            for (int i = -1; ++i < a.length;) {
+            for (int i = -1; ++i < a.length; ) {
                 x[i] = a[i];
             }
             return x;
@@ -312,7 +394,7 @@ public class QuantilePerformance {
         private long[] getLongDataSample(int index) {
             final int[] a = data[index];
             final long[] x = new long[a.length];
-            for (int i = -1; ++i < a.length;) {
+            for (int i = -1; ++i < a.length; ) {
                 x[i] = a[i];
             }
             return x;
@@ -325,7 +407,7 @@ public class QuantilePerformance {
          * @return the data sample size
          */
         public int getDataSize(int index) {
-            return data[index].length;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -343,7 +425,7 @@ public class QuantilePerformance {
          * @return the number of samples
          */
         public int size() {
-            return data.length;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -351,117 +433,7 @@ public class QuantilePerformance {
          */
         @Setup(Level.Iteration)
         public void setup() {
-            Objects.requireNonNull(distribution);
-            Objects.requireNonNull(modification);
-
-            // Set-up using parameters (may throw)
-            final EnumSet<Distribution> dist = getDistributions();
-            final int length = getLength();
-            if (length < 1) {
-                throw new IllegalStateException("Unsupported length: " + length);
-            }
-            // Note: Bentley-McIlroy use n in {100, 1023, 1024, 1025}.
-            // Here we only support a continuous range. The range is important
-            // for the median as it will require one or two points to partition
-            // if the length is odd or even.
-            final int r = range > 0 ? range : 0;
-            if (length + (long) r > Integer.MAX_VALUE) {
-                throw new IllegalStateException("Unsupported upper length: " + length);
-            }
-            final int length2 = length + r;
-
-            // Allow pseudorandom seeding
-            if (rngSeed == 0) {
-                rngSeed = RandomSource.createLong();
-            }
-            if (rng == null) {
-                // First call, create objects
-                rng = RANDOM_SOURCE.create(rngSeed);
-            }
-
-            // Special case for random distribution mode
-            if (dist.contains(Distribution.RANDOM) && dist.size() == 1 && samples > 0) {
-                data = new int[samples][];
-                final int upper = seed > 0 ? seed : Integer.MAX_VALUE;
-                final SharedStateDiscreteSampler s1 = DiscreteUniformSampler.of(rng, 0, upper);
-                final SharedStateDiscreteSampler s2 = DiscreteUniformSampler.of(rng, length, length2);
-                for (int i = 0; i < data.length; i++) {
-                    final int[] a = new int[s2.sample()];
-                    for (int j = a.length; --j >= 0;) {
-                        a[j] = s1.sample();
-                    }
-                    data[i] = a;
-                }
-                return;
-            }
-
-            // New data per iteration
-            data = null;
-            final int o = offset;
-            offset = rng.nextInt();
-
-            final EnumSet<Modification> mod = getModifications();
-
-            // Data using the RNG will be randomized only once.
-            // Here we use the same seed for parity across methods.
-            // Note that most distributions do not use the source of randomness.
-            final ArrayList<int[]> sampleData = new ArrayList<>();
-            for (int n = length; n <= length2; n++) {
-                // Note: Large lengths may wish to limit the range of m to limit
-                // the memory required to store the samples. Currently a single
-                // m is supported via the seed parameter.
-                // Default seed will create ceil(log2(2*n)) * 5 dist * 6 mods samples:
-                // MAX  = 32 * 5 * 7 * (2^31-1) * 4 bytes == 7679 GiB
-                // HUGE = 31 * 5 * 7 * 2^30 * 4 bytes == 3719 GiB
-                // BIG  = 21 * 5 * 7 * 2^20 * 4 bytes == 2519 MiB  <-- within configured JVM -Xmx
-                // MED  = 11 * 5 * 7 * 2^10 * 4 bytes == 1318 KiB
-                // (This excludes the descending modification.)
-                // It is possible to create lengths above 2^30 using a single distribution,
-                // modification, and seed:
-                // MAX1 = 1 * 1 * 1 * (2^31-1) * 4 bytes == 8191 MiB
-                // However this is then used to create double[] data thus requiring an extra
-                // ~16GiB memory for the sample to partition.
-                for (final int m : createSeeds(seed, n)) {
-                    final List<int[]> d = createDistributions(dist, rng, n, m, o);
-                    for (int i = 0; i < d.size(); i++) {
-                        final int[] x = d.get(i);
-                        if (mod.contains(Modification.COPY)) {
-                            // Don't copy! All other methods generate copies
-                            // so we can use this in-place.
-                            sampleData.add(x);
-                        }
-                        if (mod.contains(Modification.REVERSE)) {
-                            sampleData.add(reverse(x, 0, n));
-                        }
-                        if (mod.contains(Modification.REVERSE_FRONT)) {
-                            sampleData.add(reverse(x, 0, n >>> 1));
-                        }
-                        if (mod.contains(Modification.REVERSE_BACK)) {
-                            sampleData.add(reverse(x, n >>> 1, n));
-                        }
-                        // Only sort once
-                        if (mod.contains(Modification.SORT) ||
-                            mod.contains(Modification.DESCENDING)) {
-                            final int[] y = x.clone();
-                            Arrays.sort(y);
-                            if (mod.contains(Modification.DESCENDING)) {
-                                sampleData.add(reverse(y, 0, n));
-                            }
-                            if (mod.contains(Modification.SORT)) {
-                                sampleData.add(y);
-                            }
-                        }
-                        if (mod.contains(Modification.DITHER)) {
-                            sampleData.add(dither(x));
-                        }
-                    }
-                }
-            }
-            data = sampleData.toArray(int[][]::new);
-            if (LOG_SIZE.getAndSet(length) != length) {
-                Logger.getLogger(getClass().getName()).info(
-                    () -> String.format("Data length: [%d, %d] n=%d", length, length2, data.length));
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -473,11 +445,7 @@ public class QuantilePerformance {
          */
         @Setup(Level.Invocation)
         public void createOrder() {
-            if (order == null) {
-                // First call, create objects
-                order = PermutationSampler.natural(size());
-            }
-            ArraySampler.shuffle(rng, order);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -486,21 +454,9 @@ public class QuantilePerformance {
         private EnumSet<Distribution> getDistributions() {
             EnumSet<Distribution> dist;
             if (BM.equals(distribution)) {
-                dist = EnumSet.of(
-                    Distribution.SAWTOOTH,
-                    Distribution.RANDOM,
-                    Distribution.STAGGER,
-                    Distribution.PLATEAU,
-                    Distribution.SHUFFLE);
+                dist = EnumSet.of(Distribution.SAWTOOTH, Distribution.RANDOM, Distribution.STAGGER, Distribution.PLATEAU, Distribution.SHUFFLE);
             } else if (VALOIS.equals(distribution)) {
-                dist = EnumSet.of(
-                    Distribution.RANDOM,
-                    Distribution.SORTED,
-                    Distribution.ONEZERO,
-                    Distribution.M3KILLER,
-                    Distribution.ROTATED,
-                    Distribution.TWOFACED,
-                    Distribution.ORGANPIPE);
+                dist = EnumSet.of(Distribution.RANDOM, Distribution.SORTED, Distribution.ONEZERO, Distribution.M3KILLER, Distribution.ROTATED, Distribution.TWOFACED, Distribution.ORGANPIPE);
             } else {
                 dist = getEnumFromParam(Distribution.class, distribution);
             }
@@ -535,27 +491,7 @@ public class QuantilePerformance {
          * @return the enum values
          */
         static <E extends Enum<E>> EnumSet<E> getEnumFromParam(Class<E> cls, String parameters) {
-            if (ALL.equals(parameters)) {
-                return EnumSet.allOf(cls);
-            }
-            final EnumSet<E> set = EnumSet.noneOf(cls);
-            final String s = parameters.toUpperCase(Locale.ROOT);
-            for (final E e : cls.getEnumConstants()) {
-                // Scan for the name
-                for (int i = s.indexOf(e.name(), 0); i >= 0; i = s.indexOf(e.name(), i)) {
-                    // Ensure a full match to the name:
-                    // either at the end of the string, or followed by the delimiter
-                    i += e.name().length();
-                    if (i == s.length() || s.charAt(i) == ':') {
-                        set.add(e);
-                        break;
-                    }
-                }
-            }
-            if (set.isEmpty()) {
-                throw new IllegalStateException("Unknown parameters: " + parameters);
-            }
-            return set;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -572,13 +508,12 @@ public class QuantilePerformance {
         private static int[] createSeeds(int seed, int n) {
             // Allow [1, 2^31] (note 2^31 is negative but handled as a power of 2)
             if (seed - 1 >= 0) {
-                return new int[] {seed};
+                return new int[] { seed };
             }
             // Bentley-McIlroy use:
             // for: m = 1; m < 2 * n; m *= 2
             // This has been modified here to handle n up to MAX_VALUE
             // by knowing the count of m to generate as the power of 2 >= n.
-
             // ceil(log2(n)) + 1 == ceil(log2(2*n)) but handles MAX_VALUE
             int c = 33 - Integer.numberOfLeadingZeros(n - 1);
             final int[] seeds = new int[c];
@@ -608,8 +543,7 @@ public class QuantilePerformance {
          * @param o Offset.
          * @return the samples
          */
-        private static List<int[]> createDistributions(EnumSet<Distribution> dist,
-                UniformRandomProvider rng, int n, int m, int o) {
+        private static List<int[]> createDistributions(EnumSet<Distribution> dist, UniformRandomProvider rng, int n, int m, int o) {
             final ArrayList<int[]> distData = new ArrayList<>(6);
             int[] x;
             // B&M (1993)
@@ -620,13 +554,13 @@ public class QuantilePerformance {
                 // Use the offset.
                 final int mask = m - 1;
                 if ((m & mask) == 0) {
-                    for (int i = -1; ++i < n;) {
+                    for (int i = -1; ++i < n; ) {
                         x[i] = (i + o) & mask;
                     }
                 } else {
                     // User input seed. Start at the offset.
                     int j = Integer.remainderUnsigned(o, m);
-                    for (int i = -1; ++i < n;) {
+                    for (int i = -1; ++i < n; ) {
                         j = j % m;
                         x[i] = j++;
                     }
@@ -637,7 +571,7 @@ public class QuantilePerformance {
                 // rand() % m
                 // A sampler is faster than rng.nextInt(m); the sampler has an inclusive upper.
                 final SharedStateDiscreteSampler s = DiscreteUniformSampler.of(rng, 0, m - 1);
-                for (int i = -1; ++i < n;) {
+                for (int i = -1; ++i < n; ) {
                     x[i] = s.sample();
                 }
             }
@@ -646,7 +580,7 @@ public class QuantilePerformance {
                 // Overflow safe: (i * m + i) % n
                 final long nn = n;
                 final long oo = Integer.toUnsignedLong(o);
-                for (int i = -1; ++i < n;) {
+                for (int i = -1; ++i < n; ) {
                     final long j = i + oo;
                     x[i] = (int) ((j * m + j) % nn);
                 }
@@ -654,10 +588,10 @@ public class QuantilePerformance {
             if (dist.contains(Distribution.PLATEAU)) {
                 distData.add(x = new int[n]);
                 // min(i, m)
-                for (int i = Math.min(n, m); --i >= 0;) {
+                for (int i = Math.min(n, m); --i >= 0; ) {
                     x[i] = i;
                 }
-                for (int i = m - 1; ++i < n;) {
+                for (int i = m - 1; ++i < n; ) {
                     x[i] = m;
                 }
                 // Rotate
@@ -673,7 +607,7 @@ public class QuantilePerformance {
                 distData.add(x = new int[n]);
                 // rand() % m ? (j += 2) : (k += 2)
                 final SharedStateDiscreteSampler s = DiscreteUniformSampler.of(rng, 0, m - 1);
-                for (int i = -1, j = 0, k = 1; ++i < n;) {
+                for (int i = -1, j = 0, k = 1; ++i < n; ) {
                     x[i] = s.sample() != 0 ? (j += 2) : (k += 2);
                 }
             }
@@ -683,8 +617,7 @@ public class QuantilePerformance {
                 // ascending-descending runs
                 int i = -1;
                 int j = (o & Integer.MAX_VALUE) % m - 1;
-                OUTER:
-                for (;;) {
+                OUTER: for (; ; ) {
                     while (++j < m) {
                         if (++i == n) {
                             break OUTER;
@@ -702,7 +635,7 @@ public class QuantilePerformance {
             // Valois (2000)
             if (dist.contains(Distribution.SORTED)) {
                 distData.add(x = new int[n]);
-                for (int i = -1; ++i < n;) {
+                for (int i = -1; ++i < n; ) {
                     x[i] = i;
                 }
             }
@@ -715,12 +648,12 @@ public class QuantilePerformance {
                 final int end = n & ~31;
                 for (int i = 0; i < end; i += 32) {
                     int z = rng.nextInt();
-                    for (int j = -1; ++j < 32;) {
+                    for (int j = -1; ++j < 32; ) {
                         x[i + j] = z & 1;
                         z >>>= 1;
                     }
                 }
-                for (int i = end; ++i < n;) {
+                for (int i = end; ++i < n; ) {
                     x[i] = rng.nextBoolean() ? 1 : 0;
                 }
             }
@@ -732,7 +665,7 @@ public class QuantilePerformance {
                 distData.add(x = new int[n]);
                 // sorted sequence rotated left once
                 // 1, 2, 3, ..., n-1, n, 0
-                for (int i = 0; i < n;) {
+                for (int i = 0; i < n; ) {
                     x[i] = ++i;
                 }
                 x[n - 1] = 0;
@@ -751,7 +684,7 @@ public class QuantilePerformance {
                 distData.add(x = new int[n]);
                 // 0, 1, 2, 3, ..., 3, 2, 1, 0
                 // n should be even to leave two equal values in the middle, otherwise a single
-                for (int i = -1, j = n; ++i <= --j;) {
+                for (int i = -1, j = n; ++i <= --j; ) {
                     x[i] = i;
                     x[j] = i;
                 }
@@ -795,7 +728,7 @@ public class QuantilePerformance {
          */
         private static int[] reverse(int[] x, int from, int to) {
             final int[] a = x.clone();
-            for (int i = from - 1, j = to; ++i < --j;) {
+            for (int i = from - 1, j = to; ++i < --j; ) {
                 final int v = a[i];
                 a[i] = a[j];
                 a[j] = v;
@@ -811,7 +744,7 @@ public class QuantilePerformance {
          */
         private static int[] dither(int[] x) {
             final int[] a = x.clone();
-            for (int i = a.length; --i >= 0;) {
+            for (int i = a.length; --i >= 0; ) {
                 // Bentley-McIlroy use i % 5.
                 // It is important this is not a power of 2 so it will not coincide
                 // with patterns created in the data using the default m powers-of-2.
@@ -834,7 +767,7 @@ public class QuantilePerformance {
          * @return the range
          */
         final int getRange() {
-            return range;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -843,14 +776,19 @@ public class QuantilePerformance {
      */
     @State(Scope.Benchmark)
     public static class DataSource extends AbstractDataSource {
-        /** Data length. */
-        @Param({"1000", "100000"})
+
+        /**
+         * Data length.
+         */
+        @Param({ "1000", "100000" })
         private int length;
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         @Override
         protected int getLength() {
-            return length;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -859,25 +797,26 @@ public class QuantilePerformance {
      */
     @State(Scope.Benchmark)
     public static class QuantileSource {
-        /** Quantiles.
+
+        /**
+         * Quantiles.
          * Delimited by ':' to allow use via the JMH command-line parser which
-         * uses ',' as the delimiter. */
-        @Param({"0.25:0.5:0.75",
-                "0.01:0.99",
-                "1e-100:1.0", // min,max: CM implementations do not allow p=0.0
-                "0.25:0.75",
-                "0.001:0.005:0.01:0.02:0.05:0.1:0.5",
-                "0.01:0.05:0.1:0.5:0.9:0.95:0.99"})
+         * uses ',' as the delimiter.
+         */
+        @Param({ "0.25:0.5:0.75", "0.01:0.99", // min,max: CM implementations do not allow p=0.0
+        "1e-100:1.0", "0.25:0.75", "0.001:0.005:0.01:0.02:0.05:0.1:0.5", "0.01:0.05:0.1:0.5:0.9:0.95:0.99" })
         private String quantiles;
 
-        /** Data. */
+        /**
+         * Data.
+         */
         private double[] data;
 
         /**
          * @return the data
          */
         public double[] getData() {
-            return data;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -885,7 +824,7 @@ public class QuantilePerformance {
          */
         @Setup
         public void setup() {
-            data = Arrays.stream(quantiles.split(":")).mapToDouble(Double::parseDouble).toArray();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -894,24 +833,35 @@ public class QuantilePerformance {
      */
     @State(Scope.Benchmark)
     public static class QuantileRangeSource {
-        /** Lower quantile. */
-        @Param({"0.01"})
+
+        /**
+         * Lower quantile.
+         */
+        @Param({ "0.01" })
         private double lowerQ;
-        /** Upper quantile. */
-        @Param({"0.99"})
+
+        /**
+         * Upper quantile.
+         */
+        @Param({ "0.99" })
         private double upperQ;
-        /** Number of quantiles. */
-        @Param({"100"})
+
+        /**
+         * Number of quantiles.
+         */
+        @Param({ "100" })
         private int quantiles;
 
-        /** Data. */
+        /**
+         * Data.
+         */
         private double[] data;
 
         /**
          * @return the data
          */
         public double[] getData() {
-            return data;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -919,18 +869,7 @@ public class QuantilePerformance {
          */
         @Setup
         public void setup() {
-            if (quantiles < 2) {
-                throw new IllegalStateException("Bad quantile count: " + quantiles);
-            }
-            if (!(lowerQ >= 0 && upperQ <= 1)) {
-                throw new IllegalStateException("Bad quantile range: [" + lowerQ + ", " + upperQ + "]");
-            }
-            data = new double[quantiles];
-            for (int i = 0; i < quantiles; i++) {
-                // Create u in [0, 1]
-                final double u = i / (quantiles - 1.0);
-                data[i] = (1 - u) * lowerQ + u * upperQ;
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -939,6 +878,7 @@ public class QuantilePerformance {
      */
     @State(Scope.Benchmark)
     public static class DoubleQuantileFunctionSource {
+
         /**
          * Name of the source.
          *
@@ -951,14 +891,16 @@ public class QuantilePerformance {
          */
         private String name;
 
-        /** The action. */
+        /**
+         * The action.
+         */
         private BinaryOperator<double[]> function;
 
         /**
          * @return the function
          */
         public BinaryOperator<double[]> getFunction() {
-            return function;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -966,45 +908,7 @@ public class QuantilePerformance {
          */
         @Setup
         public void setup() {
-            // Note: Functions should not defensively copy the data
-            // as a clone is passed in from the data source.
-            if (JDK.equals(name)) {
-                function = DoubleQuantileFunctionSource::sortQuantile;
-            } else if (CM3.equals(name)) {
-                // No way to avoid a data copy here. CM does
-                // defensive copying for most array input.
-                final org.apache.commons.math3.stat.descriptive.rank.Percentile s =
-                    new org.apache.commons.math3.stat.descriptive.rank.Percentile().withNaNStrategy(
-                        org.apache.commons.math3.stat.ranking.NaNStrategy.FIXED);
-                function = (x, p) -> {
-                    final double[] q = new double[p.length];
-                    s.setData(x);
-                    for (int i = 0; i < p.length; i++) {
-                        // Convert quantile to percentile
-                        q[i] = s.evaluate(p[i] * 100);
-                    }
-                    return q;
-                };
-            } else if (CM4.equals(name)) {
-                // CM4 differs from CM3 by using Double.compare(x, y) for comparisons.
-                // This handles NaN and signed zeros but is slower than using < and >.
-                final org.apache.commons.math4.legacy.stat.descriptive.rank.Percentile s =
-                    new org.apache.commons.math4.legacy.stat.descriptive.rank.Percentile().withNaNStrategy(
-                        org.apache.commons.math4.legacy.stat.ranking.NaNStrategy.FIXED);
-                function = (x, p) -> {
-                    final double[] q = new double[p.length];
-                    s.setData(x);
-                    for (int i = 0; i < p.length; i++) {
-                        // Convert quantile to percentile
-                        q[i] = s.evaluate(p[i] * 100);
-                    }
-                    return q;
-                };
-            } else if (STATISTICS.equals(name)) {
-                function = Quantile.withDefaults()::evaluate;
-            } else {
-                throw new IllegalStateException("Unknown double[] function: " + name);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1055,18 +959,23 @@ public class QuantilePerformance {
      */
     @State(Scope.Benchmark)
     public static class IntQuantileFunctionSource {
-        /** Name of the source. */
-        @Param({JDK, STATISTICS})
+
+        /**
+         * Name of the source.
+         */
+        @Param({ JDK, STATISTICS })
         private String name;
 
-        /** The action. */
+        /**
+         * The action.
+         */
         private BiFunction<int[], double[], double[]> function;
 
         /**
          * @return the function
          */
         public BiFunction<int[], double[], double[]> getFunction() {
-            return function;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1074,15 +983,7 @@ public class QuantilePerformance {
          */
         @Setup
         public void setup() {
-            // Note: Functions should not defensively copy the data
-            // as a clone is passed in from the data source.
-            if (JDK.equals(name)) {
-                function = IntQuantileFunctionSource::sortQuantile;
-            } else if (STATISTICS.equals(name)) {
-                function = Quantile.withDefaults()::evaluate;
-            } else {
-                throw new IllegalStateException("Unknown int[] function: " + name);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1133,18 +1034,23 @@ public class QuantilePerformance {
      */
     @State(Scope.Benchmark)
     public static class LongQuantileFunctionSource {
-        /** Name of the source. */
-        @Param({JDK, STATISTICS})
+
+        /**
+         * Name of the source.
+         */
+        @Param({ JDK, STATISTICS })
         private String name;
 
-        /** The action. */
+        /**
+         * The action.
+         */
         private BiFunction<long[], double[], Object> function;
 
         /**
          * @return the function
          */
         public BiFunction<long[], double[], Object> getFunction() {
-            return function;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1152,15 +1058,7 @@ public class QuantilePerformance {
          */
         @Setup
         public void setup() {
-            // Note: Functions should not defensively copy the data
-            // as a clone is passed in from the data source.
-            if (JDK.equals(name)) {
-                function = LongQuantileFunctionSource::sortQuantile;
-            } else if (STATISTICS.equals(name)) {
-                function = Quantile.withDefaults()::evaluate;
-            } else {
-                throw new IllegalStateException("Unknown long[] function: " + name);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1227,14 +1125,8 @@ public class QuantilePerformance {
      * @param bh Data sink.
      */
     @Benchmark
-    public void doubleQuantiles(DoubleQuantileFunctionSource function, DataSource source,
-            QuantileSource quantiles, Blackhole bh) {
-        final int size = source.size();
-        final double[] p = quantiles.getData();
-        final BinaryOperator<double[]> fun = function.getFunction();
-        for (int j = -1; ++j < size;) {
-            bh.consume(fun.apply(source.getData(j), p));
-        }
+    public void doubleQuantiles(DoubleQuantileFunctionSource function, DataSource source, QuantileSource quantiles, Blackhole bh) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1246,14 +1138,8 @@ public class QuantilePerformance {
      * @param bh Data sink.
      */
     @Benchmark
-    public void doubleQuantileRange(DoubleQuantileFunctionSource function, DataSource source,
-            QuantileRangeSource quantiles, Blackhole bh) {
-        final int size = source.size();
-        final double[] p = quantiles.getData();
-        final BinaryOperator<double[]> fun = function.getFunction();
-        for (int j = -1; ++j < size;) {
-            bh.consume(fun.apply(source.getData(j), p));
-        }
+    public void doubleQuantileRange(DoubleQuantileFunctionSource function, DataSource source, QuantileRangeSource quantiles, Blackhole bh) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1265,14 +1151,8 @@ public class QuantilePerformance {
      * @param bh Data sink.
      */
     @Benchmark
-    public void intQuantiles(IntQuantileFunctionSource function, DataSource source,
-            QuantileSource quantiles, Blackhole bh) {
-        final int size = source.size();
-        final double[] p = quantiles.getData();
-        final BiFunction<int[], double[], double[]> fun = function.getFunction();
-        for (int j = -1; ++j < size;) {
-            bh.consume(fun.apply(source.getIntData(j), p));
-        }
+    public void intQuantiles(IntQuantileFunctionSource function, DataSource source, QuantileSource quantiles, Blackhole bh) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1284,14 +1164,8 @@ public class QuantilePerformance {
      * @param bh Data sink.
      */
     @Benchmark
-    public void intQuantileRange(IntQuantileFunctionSource function, DataSource source,
-            QuantileRangeSource quantiles, Blackhole bh) {
-        final int size = source.size();
-        final double[] p = quantiles.getData();
-        final BiFunction<int[], double[], double[]> fun = function.getFunction();
-        for (int j = -1; ++j < size;) {
-            bh.consume(fun.apply(source.getIntData(j), p));
-        }
+    public void intQuantileRange(IntQuantileFunctionSource function, DataSource source, QuantileRangeSource quantiles, Blackhole bh) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1303,14 +1177,8 @@ public class QuantilePerformance {
      * @param bh Data sink.
      */
     @Benchmark
-    public void longQuantiles(LongQuantileFunctionSource function, DataSource source,
-            QuantileSource quantiles, Blackhole bh) {
-        final int size = source.size();
-        final double[] p = quantiles.getData();
-        final BiFunction<long[], double[],  Object> fun = function.getFunction();
-        for (int j = -1; ++j < size;) {
-            bh.consume(fun.apply(source.getLongData(j), p));
-        }
+    public void longQuantiles(LongQuantileFunctionSource function, DataSource source, QuantileSource quantiles, Blackhole bh) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1322,13 +1190,7 @@ public class QuantilePerformance {
      * @param bh Data sink.
      */
     @Benchmark
-    public void longQuantileRange(LongQuantileFunctionSource function, DataSource source,
-            QuantileRangeSource quantiles, Blackhole bh) {
-        final int size = source.size();
-        final double[] p = quantiles.getData();
-        final BiFunction<long[], double[], Object> fun = function.getFunction();
-        for (int j = -1; ++j < size;) {
-            bh.consume(fun.apply(source.getLongData(j), p));
-        }
+    public void longQuantileRange(LongQuantileFunctionSource function, DataSource source, QuantileRangeSource quantiles, Blackhole bh) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -37,19 +37,36 @@ import org.apache.commons.rng.sampling.distribution.GeometricSampler;
  * @see <a href="https://mathworld.wolfram.com/GeometricDistribution.html">Geometric distribution (MathWorld)</a>
  */
 public final class GeometricDistribution extends AbstractDiscreteDistribution {
-    /** 1/2. */
+
+    /**
+     * 1/2.
+     */
     private static final double HALF = 0.5;
 
-    /** The probability of success. */
+    /**
+     * The probability of success.
+     */
     private final double probabilityOfSuccess;
-    /** {@code log(p)} where p is the probability of success. */
+
+    /**
+     * {@code log(p)} where p is the probability of success.
+     */
     private final double logProbabilityOfSuccess;
-    /** {@code log(1 - p)} where p is the probability of success. */
+
+    /**
+     * {@code log(1 - p)} where p is the probability of success.
+     */
     private final double log1mProbabilityOfSuccess;
-    /** Value of survival probability for x=0.
-     * Used in the survival functions. Equal to (1 - probability of success). */
+
+    /**
+     * Value of survival probability for x=0.
+     * Used in the survival functions. Equal to (1 - probability of success).
+     */
     private final double sf0;
-    /** Implementation of PMF(x). Assumes that {@code x > 0}. */
+
+    /**
+     * Implementation of PMF(x). Assumes that {@code x > 0}.
+     */
     private final IntToDoubleFunction pmf;
 
     /**
@@ -60,7 +77,6 @@ public final class GeometricDistribution extends AbstractDiscreteDistribution {
         logProbabilityOfSuccess = Math.log(p);
         log1mProbabilityOfSuccess = Math.log1p(-p);
         sf0 = 1 - p;
-
         // Choose the PMF implementation.
         // When p >= 0.5 then 1 - p is exact and using the power function
         // is consistently more accurate than the use of the exponential function.
@@ -82,10 +98,7 @@ public final class GeometricDistribution extends AbstractDiscreteDistribution {
      * @throws IllegalArgumentException if {@code p <= 0} or {@code p > 1}.
      */
     public static GeometricDistribution of(double p) {
-        if (p <= 0 || p > 1) {
-            throw new DistributionException(DistributionException.INVALID_NON_ZERO_PROBABILITY, p);
-        }
-        return new GeometricDistribution(p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -94,113 +107,55 @@ public final class GeometricDistribution extends AbstractDiscreteDistribution {
      * @return the probability of success.
      */
     public double getProbabilityOfSuccess() {
-        return probabilityOfSuccess;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double probability(int x) {
-        if (x <= 0) {
-            // Special case of x=0 exploiting cancellation.
-            return x == 0 ? probabilityOfSuccess : 0;
-        }
-        return pmf.applyAsDouble(x);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double logProbability(int x) {
-        if (x <= 0) {
-            // Special case of x=0 exploiting cancellation.
-            return x == 0 ? logProbabilityOfSuccess : Double.NEGATIVE_INFINITY;
-        }
-        return x * log1mProbabilityOfSuccess + logProbabilityOfSuccess;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double cumulativeProbability(int x) {
-        if (x <= 0) {
-            // Note: CDF(x=0) = PDF(x=0) = probabilityOfSuccess
-            return x == 0 ? probabilityOfSuccess : 0;
-        }
-        // Note: Double addition avoids overflow. This may compute a value less than 1.0
-        // for the max integer value when p is very small.
-        return -Math.expm1(log1mProbabilityOfSuccess * (x + 1.0));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double survivalProbability(int x) {
-        if (x <= 0) {
-            // Note: SF(x=0) = 1 - PDF(x=0) = 1 - probabilityOfSuccess
-            // Use a pre-computed value to avoid cancellation when probabilityOfSuccess -> 0
-            return x == 0 ? sf0 : 1;
-        }
-        // Note: Double addition avoids overflow. This may compute a value greater than 0.0
-        // for the max integer value when p is very small.
-        return Math.exp(log1mProbabilityOfSuccess * (x + 1.0));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int inverseCumulativeProbability(double p) {
-        ArgumentUtils.checkProbability(p);
-        if (p == 1) {
-            return getSupportUpperBound();
-        }
-        if (p <= probabilityOfSuccess) {
-            return 0;
-        }
-        // p > probabilityOfSuccess
-        // => log(1-p) < log(1-probabilityOfSuccess);
-        // Both terms are negative as probabilityOfSuccess > 0.
-        // This should be lower bounded to (2 - 1) = 1
-        int x = (int) (Math.ceil(Math.log1p(-p) / log1mProbabilityOfSuccess) - 1);
-
-        // Correct rounding errors.
-        // This ensures x == icdf(cdf(x))
-
-        if (cumulativeProbability(x - 1) >= p) {
-            // No checks for x=0.
-            // If x=0; cdf(-1) = 0 and the condition is false as p>0 at this point.
-            x--;
-        } else if (cumulativeProbability(x) < p && x < Integer.MAX_VALUE) {
-            // The supported upper bound is max_value here as probabilityOfSuccess != 1
-            x++;
-        }
-
-        return x;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int inverseSurvivalProbability(double p) {
-        ArgumentUtils.checkProbability(p);
-        if (p == 0) {
-            return getSupportUpperBound();
-        }
-        if (p >= sf0) {
-            return 0;
-        }
-
-        // p < 1 - probabilityOfSuccess
-        // Inversion as for icdf using log(p) in place of log1p(-p)
-        int x = (int) (Math.ceil(Math.log(p) / log1mProbabilityOfSuccess) - 1);
-
-        // Correct rounding errors.
-        // This ensures x == isf(sf(x))
-
-        if (survivalProbability(x - 1) <= p) {
-            // No checks for x=0
-            // If x=0; sf(-1) = 1 and the condition is false as p<1 at this point.
-            x--;
-        } else if (survivalProbability(x) > p && x < Integer.MAX_VALUE) {
-            // The supported upper bound is max_value here as probabilityOfSuccess != 1
-            x++;
-        }
-
-        return x;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -212,7 +167,7 @@ public final class GeometricDistribution extends AbstractDiscreteDistribution {
      */
     @Override
     public double getMean() {
-        return (1 - probabilityOfSuccess) / probabilityOfSuccess;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -224,7 +179,7 @@ public final class GeometricDistribution extends AbstractDiscreteDistribution {
      */
     @Override
     public double getVariance() {
-        return (1 - probabilityOfSuccess) / (probabilityOfSuccess * probabilityOfSuccess);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -236,7 +191,7 @@ public final class GeometricDistribution extends AbstractDiscreteDistribution {
      */
     @Override
     public int getSupportLowerBound() {
-        return 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -249,12 +204,14 @@ public final class GeometricDistribution extends AbstractDiscreteDistribution {
      */
     @Override
     public int getSupportUpperBound() {
-        return probabilityOfSuccess < 1 ? Integer.MAX_VALUE : 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Sampler createSampler(UniformRandomProvider rng) {
-        return GeometricSampler.of(rng, probabilityOfSuccess)::sample;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

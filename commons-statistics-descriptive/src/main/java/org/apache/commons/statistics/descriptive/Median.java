@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.apache.commons.statistics.descriptive;
 
 import java.util.Objects;
@@ -66,14 +65,25 @@ import org.apache.commons.numbers.arrays.Selection;
  * @since 1.1
  */
 public final class Median {
-    /** Default instance. */
+
+    /**
+     * Default instance.
+     */
     private static final Median DEFAULT = new Median(false, NaNPolicy.INCLUDE);
 
-    /** Flag to indicate if the data should be copied. */
+    /**
+     * Flag to indicate if the data should be copied.
+     */
     private final boolean copy;
-    /** NaN policy for floating point data. */
+
+    /**
+     * NaN policy for floating point data.
+     */
     private final NaNPolicy nanPolicy;
-    /** Transformer for NaN data. */
+
+    /**
+     * Transformer for NaN data.
+     */
     private final NaNTransformer nanTransformer;
 
     /**
@@ -103,7 +113,7 @@ public final class Median {
      * @see #with(NaNPolicy)
      */
     public static Median withDefaults() {
-        return DEFAULT;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -115,7 +125,7 @@ public final class Median {
      * @return an instance
      */
     public Median withCopy(boolean v) {
-        return new Median(v, nanPolicy);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -145,7 +155,7 @@ public final class Median {
      * @return an instance
      */
     public Median with(NaNPolicy v) {
-        return new Median(copy, Objects.requireNonNull(v));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -160,7 +170,7 @@ public final class Median {
      * @see #with(NaNPolicy)
      */
     public double evaluate(double[] values) {
-        return compute(values, 0, values.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -179,8 +189,7 @@ public final class Median {
      * @since 1.2
      */
     public double evaluateRange(double[] values, int from, int to) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return compute(values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -200,20 +209,20 @@ public final class Median {
         final int n = end - start;
         // Special cases
         if (n <= 2) {
-            switch (n) {
-            case 2:
-                // Sorting the array matches the behaviour of Quantile for n==2
-                // Handle NaN and signed zeros
-                if (Double.compare(x[start + 1], x[start]) < 0) {
-                    final double t = x[start];
-                    x[start] = x[start + 1];
-                    x[start + 1] = t;
-                }
-                return Interpolation.mean(x[start], x[start + 1]);
-            case 1:
-                return x[start];
-            default:
-                return Double.NaN;
+            switch(n) {
+                case 2:
+                    // Sorting the array matches the behaviour of Quantile for n==2
+                    // Handle NaN and signed zeros
+                    if (Double.compare(x[start + 1], x[start]) < 0) {
+                        final double t = x[start];
+                        x[start] = x[start + 1];
+                        x[start + 1] = t;
+                    }
+                    return Interpolation.mean(x[start], x[start + 1]);
+                case 1:
+                    return x[start];
+                default:
+                    return Double.NaN;
             }
         }
         // Median index (including the offset)
@@ -224,7 +233,7 @@ public final class Median {
             return x[m];
         }
         // Even: require (m-1, m)
-        Selection.select(x, start, end, new int[] {m - 1, m});
+        Selection.select(x, start, end, new int[] { m - 1, m });
         return Interpolation.mean(x[m - 1], x[m]);
     }
 
@@ -238,7 +247,7 @@ public final class Median {
      * @return the median
      */
     public double evaluate(int[] values) {
-        return compute(values, 0, values.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -255,8 +264,7 @@ public final class Median {
      * @since 1.2
      */
     public double evaluateRange(int[] values, int from, int to) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return compute(values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -283,19 +291,19 @@ public final class Median {
         final int n = end - start;
         // Special cases
         if (n <= 2) {
-            switch (n) {
-            case 2:
-                // Sorting the array matches the behaviour of Quantile for n==2
-                if (x[start + 1] < x[start]) {
-                    final int t = x[start];
-                    x[start] = x[start + 1];
-                    x[start + 1] = t;
-                }
-                return Interpolation.mean(x[start], x[start + 1]);
-            case 1:
-                return x[start];
-            default:
-                return Double.NaN;
+            switch(n) {
+                case 2:
+                    // Sorting the array matches the behaviour of Quantile for n==2
+                    if (x[start + 1] < x[start]) {
+                        final int t = x[start];
+                        x[start] = x[start + 1];
+                        x[start + 1] = t;
+                    }
+                    return Interpolation.mean(x[start], x[start + 1]);
+                case 1:
+                    return x[start];
+                default:
+                    return Double.NaN;
             }
         }
         // Median index (including the offset)
@@ -306,10 +314,9 @@ public final class Median {
             return x[m];
         }
         // Even: require (m-1, m)
-        Selection.select(x, start, end, new int[] {m - 1, m});
+        Selection.select(x, start, end, new int[] { m - 1, m });
         return Interpolation.mean(x[m - 1], x[m]);
     }
-
 
     /**
      * Evaluate the median.
@@ -328,7 +335,7 @@ public final class Median {
      * @since 1.3
      */
     public StatisticResult evaluate(long[] values) {
-        return compute(values, 0, values.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -351,8 +358,7 @@ public final class Median {
      * @since 1.3
      */
     public StatisticResult evaluateRange(long[] values, int from, int to) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return compute(values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -379,19 +385,19 @@ public final class Median {
         final int n = end - start;
         // Special cases
         if (n <= 2) {
-            switch (n) {
-            case 2:
-                // Sorting the array matches the behaviour of Quantile for n==2
-                if (x[start + 1] < x[start]) {
-                    final long t = x[start];
-                    x[start] = x[start + 1];
-                    x[start + 1] = t;
-                }
-                return Interpolation.mean(x[start], x[start + 1]);
-            case 1:
-                return Statistics.createStatisticResult(x[start]);
-            default:
-                return () -> Double.NaN;
+            switch(n) {
+                case 2:
+                    // Sorting the array matches the behaviour of Quantile for n==2
+                    if (x[start + 1] < x[start]) {
+                        final long t = x[start];
+                        x[start] = x[start + 1];
+                        x[start + 1] = t;
+                    }
+                    return Interpolation.mean(x[start], x[start + 1]);
+                case 1:
+                    return Statistics.createStatisticResult(x[start]);
+                default:
+                    return () -> Double.NaN;
             }
         }
         // Median index (including the offset)
@@ -402,7 +408,7 @@ public final class Median {
             return Statistics.createStatisticResult(x[m]);
         }
         // Even: require (m-1, m)
-        Selection.select(x, start, end, new int[] {m - 1, m});
+        Selection.select(x, start, end, new int[] { m - 1, m });
         return Interpolation.mean(x[m - 1], x[m]);
     }
 }

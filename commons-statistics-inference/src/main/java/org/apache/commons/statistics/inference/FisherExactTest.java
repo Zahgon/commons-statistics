@@ -32,10 +32,15 @@ import org.apache.commons.statistics.distribution.HypergeometricDistribution;
  * @since 1.1
  */
 public final class FisherExactTest {
-    /** Default instance. */
+
+    /**
+     * Default instance.
+     */
     private static final FisherExactTest DEFAULT = new FisherExactTest(AlternativeHypothesis.TWO_SIDED);
 
-    /** Alternative hypothesis. */
+    /**
+     * Alternative hypothesis.
+     */
     private final AlternativeHypothesis alternative;
 
     /**
@@ -55,7 +60,7 @@ public final class FisherExactTest {
      * @return default instance
      */
     public static FisherExactTest withDefaults() {
-        return DEFAULT;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -65,7 +70,7 @@ public final class FisherExactTest {
      * @return an instance
      */
     public FisherExactTest with(AlternativeHypothesis v) {
-        return new FisherExactTest(Objects.requireNonNull(v));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -98,12 +103,7 @@ public final class FisherExactTest {
      * @see #test(int[][])
      */
     public double statistic(int[][] table) {
-        Arguments.checkTable(table);
-        final double a = table[0][0];
-        final double b = table[0][1];
-        final double c = table[1][0];
-        final double d = table[1][1];
-        return (a * d) / (b * c);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -134,30 +134,7 @@ public final class FisherExactTest {
      * @see #statistic(int[][])
      */
     public SignificanceResult test(int[][] table) {
-        Arguments.checkTable(table);
-        final int a = table[0][0];
-        final int b = table[0][1];
-        final int c = table[1][0];
-        final int d = table[1][1];
-
-        // Odd-ratio.
-        final double statistic = ((double) a * d) / ((double) b * c);
-
-        final int nn = a + b + c + d;
-        final int k = a + b;
-        final int n = a + c;
-
-        // Note: The distribution validates the population size is > 0
-        final HypergeometricDistribution distribution = HypergeometricDistribution.of(nn, k, n);
-        final double p;
-        if (alternative == AlternativeHypothesis.GREATER_THAN) {
-            p = distribution.survivalProbability(a - 1);
-        } else if (alternative == AlternativeHypothesis.LESS_THAN) {
-            p = distribution.cumulativeProbability(a);
-        } else {
-            p = twoSidedTest(a, distribution);
-        }
-        return new BaseSignificanceResult(statistic, p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -174,7 +151,6 @@ public final class FisherExactTest {
         // search speed. Note the search depends only on magnitude differences.
         // The current HypergeometricDistribution is faster using log probability
         // as it omits a call to Math.exp.
-
         // Use the mode as the point of largest probability.
         // The lower or upper mode is important for the search below.
         final int nn = distribution.getPopulationSize();
@@ -189,20 +165,16 @@ public final class FisherExactTest {
             // Find upper half. As k < lower mode i should never
             // reach the lower mode based on the probability alone.
             // Bracket with the upper mode.
-            final int i = Searches.searchDescending(m2, distribution.getSupportUpperBound(), pk,
-                distribution::logProbability);
-            return distribution.cumulativeProbability(k) +
-                   distribution.survivalProbability(i - 1);
+            final int i = Searches.searchDescending(m2, distribution.getSupportUpperBound(), pk, distribution::logProbability);
+            return distribution.cumulativeProbability(k) + distribution.survivalProbability(i - 1);
         } else if (k > m2) {
             final double pk = distribution.logProbability(k);
             // Upper half = sf(k - 1)
             // Find lower half. As k > upper mode i should never
             // reach the upper mode based on the probability alone.
             // Bracket with the lower mode.
-            final int i = Searches.searchAscending(distribution.getSupportLowerBound(), m1, pk,
-                distribution::logProbability);
-            return distribution.cumulativeProbability(i) +
-                   distribution.survivalProbability(k - 1);
+            final int i = Searches.searchAscending(distribution.getSupportLowerBound(), m1, pk, distribution::logProbability);
+            return distribution.cumulativeProbability(i) + distribution.survivalProbability(k - 1);
         }
         // k == mode
         // Edge case where the sum of probabilities will be either

@@ -49,8 +49,12 @@ import org.apache.commons.rng.sampling.distribution.ZigguratSampler;
  * @since 1.1
  */
 public abstract class FoldedNormalDistribution extends AbstractContinuousDistribution {
-    /** The scale. */
+
+    /**
+     * The scale.
+     */
     final double sigma;
+
     /**
      * The scale multiplied by sqrt(2).
      * This is used to avoid a double division when computing the value passed to the
@@ -63,6 +67,7 @@ public abstract class FoldedNormalDistribution extends AbstractContinuousDistrib
      * differences as the error function computes close to 0 in the extreme tail.
      */
     final double sigmaSqrt2;
+
     /**
      * The scale multiplied by sqrt(2 pi). Computed to high precision.
      */
@@ -72,11 +77,20 @@ public abstract class FoldedNormalDistribution extends AbstractContinuousDistrib
      * Regular implementation of the folded normal distribution.
      */
     private static class RegularFoldedNormalDistribution extends FoldedNormalDistribution {
-        /** The location. */
+
+        /**
+         * The location.
+         */
         private final double mu;
-        /** Cached value for inverse probability function. */
+
+        /**
+         * Cached value for inverse probability function.
+         */
         private final double mean;
-        /** Cached value for inverse probability function. */
+
+        /**
+         * Cached value for inverse probability function.
+         */
         private final double variance;
 
         /**
@@ -86,7 +100,6 @@ public abstract class FoldedNormalDistribution extends AbstractContinuousDistrib
         RegularFoldedNormalDistribution(double mu, double sigma) {
             super(sigma);
             this.mu = mu;
-
             final double a = mu / sigmaSqrt2;
             mean = sigma * Constants.ROOT_TWO_DIV_PI * Math.exp(-a * a) + mu * Erf.value(a);
             this.variance = mu * mu + sigma * sigma - mean * mean;
@@ -94,69 +107,42 @@ public abstract class FoldedNormalDistribution extends AbstractContinuousDistrib
 
         @Override
         public double getMu() {
-            return mu;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double density(double x) {
-            if (x < 0) {
-                return 0;
-            }
-            final double vm = (x - mu) / sigma;
-            final double vp = (x + mu) / sigma;
-            return (ExtendedPrecision.expmhxx(vm) + ExtendedPrecision.expmhxx(vp)) / sigmaSqrt2pi;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
-        public double probability(double x0,
-                                  double x1) {
-            if (x0 > x1) {
-                throw new DistributionException(DistributionException.INVALID_RANGE_LOW_GT_HIGH,
-                                                x0, x1);
-            }
-            if (x0 <= 0) {
-                return cumulativeProbability(x1);
-            }
-            // Assumes x1 >= x0 && x0 > 0
-            final double v0m = (x0 - mu) / sigmaSqrt2;
-            final double v1m = (x1 - mu) / sigmaSqrt2;
-            final double v0p = (x0 + mu) / sigmaSqrt2;
-            final double v1p = (x1 + mu) / sigmaSqrt2;
-            return 0.5 * (ErfDifference.value(v0m, v1m) + ErfDifference.value(v0p, v1p));
+        public double probability(double x0, double x1) {
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double cumulativeProbability(double x) {
-            if (x <= 0) {
-                return 0;
-            }
-            return 0.5 * (Erf.value((x - mu) / sigmaSqrt2) + Erf.value((x + mu) / sigmaSqrt2));
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double survivalProbability(double x) {
-            if (x <= 0) {
-                return 1;
-            }
-            return 0.5 * (Erfc.value((x - mu) / sigmaSqrt2) + Erfc.value((x + mu) / sigmaSqrt2));
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double getMean() {
-            return mean;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double getVariance() {
-            return variance;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public Sampler createSampler(UniformRandomProvider rng) {
-            // Return the absolute of a Gaussian distribution sampler.
-            final SharedStateContinuousSampler s =
-                GaussianSampler.of(ZigguratSampler.NormalizedGaussian.of(rng), mu, sigma);
-            return () -> Math.abs(s.sample());
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -167,9 +153,15 @@ public abstract class FoldedNormalDistribution extends AbstractContinuousDistrib
      * functions and allows computation of the log density and inverse CDF/SF.
      */
     private static class HalfNormalDistribution extends FoldedNormalDistribution {
-        /** Variance constant (1 - 2/pi). Computed using Matlab's VPA to 30 digits. */
+
+        /**
+         * Variance constant (1 - 2/pi). Computed using Matlab's VPA to 30 digits.
+         */
         private static final double VAR = 0.36338022763241865692446494650994;
-        /** The value of {@code log(sigma) + 0.5 * log(2*PI)} stored for faster computation. */
+
+        /**
+         * The value of {@code log(sigma) + 0.5 * log(2*PI)} stored for faster computation.
+         */
         private final double logSigmaPlusHalfLog2Pi;
 
         /**
@@ -182,87 +174,60 @@ public abstract class FoldedNormalDistribution extends AbstractContinuousDistrib
 
         @Override
         public double getMu() {
-            return 0;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double density(double x) {
-            if (x < 0) {
-                return 0;
-            }
-            return 2 * ExtendedPrecision.expmhxx(x / sigma) / sigmaSqrt2pi;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
-        public double probability(double x0,
-                                  double x1) {
-            if (x0 > x1) {
-                throw new DistributionException(DistributionException.INVALID_RANGE_LOW_GT_HIGH,
-                                                x0, x1);
-            }
-            if (x0 <= 0) {
-                return cumulativeProbability(x1);
-            }
-            // Assumes x1 >= x0 && x0 > 0
-            return ErfDifference.value(x0 / sigmaSqrt2, x1 / sigmaSqrt2);
+        public double probability(double x0, double x1) {
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double logDensity(double x) {
-            if (x < 0) {
-                return Double.NEGATIVE_INFINITY;
-            }
-            final double z = x / sigma;
-            return Constants.LN_TWO - 0.5 * z * z - logSigmaPlusHalfLog2Pi;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double cumulativeProbability(double x) {
-            if (x <= 0) {
-                return 0;
-            }
-            return Erf.value(x / sigmaSqrt2);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double survivalProbability(double x) {
-            if (x <= 0) {
-                return 1;
-            }
-            return Erfc.value(x / sigmaSqrt2);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double inverseCumulativeProbability(double p) {
-            ArgumentUtils.checkProbability(p);
-            // Addition of 0.0 ensures 0.0 is returned for p=-0.0
-            return 0.0 + sigmaSqrt2 * InverseErf.value(p);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public double inverseSurvivalProbability(double p) {
-            ArgumentUtils.checkProbability(p);
-            return sigmaSqrt2 * InverseErfc.value(p);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double getMean() {
-            return sigma * Constants.ROOT_TWO_DIV_PI;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double getVariance() {
-            // sigma^2 - mean^2
-            // sigma^2 - (sigma^2 * 2/pi)
-            return sigma * sigma * VAR;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public Sampler createSampler(UniformRandomProvider rng) {
-            // Return the absolute of a Gaussian distribution sampler.
-            final SharedStateContinuousSampler s = ZigguratSampler.NormalizedGaussian.of(rng);
-            return () -> Math.abs(s.sample() * sigma);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -287,16 +252,8 @@ public abstract class FoldedNormalDistribution extends AbstractContinuousDistrib
      * @return the distribution
      * @throws IllegalArgumentException if {@code sigma <= 0}.
      */
-    public static FoldedNormalDistribution of(double mu,
-                                              double sigma) {
-        if (sigma > 0) {
-            if (mu == 0) {
-                return new HalfNormalDistribution(sigma);
-            }
-            return new RegularFoldedNormalDistribution(mu, sigma);
-        }
-        // scale is zero, negative or nan
-        throw new DistributionException(DistributionException.NOT_STRICTLY_POSITIVE, sigma);
+    public static FoldedNormalDistribution of(double mu, double sigma) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -312,12 +269,11 @@ public abstract class FoldedNormalDistribution extends AbstractContinuousDistrib
      * @return the sigma parameter.
      */
     public double getSigma() {
-        return sigma;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * {@inheritDoc}
-     *
      *
      * <p>For location parameter \( \mu \) and scale parameter \( \sigma \), the mean is:
      *
@@ -349,7 +305,7 @@ public abstract class FoldedNormalDistribution extends AbstractContinuousDistrib
      */
     @Override
     public double getSupportLowerBound() {
-        return 0.0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -361,6 +317,6 @@ public abstract class FoldedNormalDistribution extends AbstractContinuousDistrib
      */
     @Override
     public double getSupportUpperBound() {
-        return Double.POSITIVE_INFINITY;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

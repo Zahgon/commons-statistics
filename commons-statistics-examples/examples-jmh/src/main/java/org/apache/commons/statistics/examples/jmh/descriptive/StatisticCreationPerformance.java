@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.apache.commons.statistics.examples.jmh.descriptive;
 
 import java.util.Arrays;
@@ -58,41 +57,45 @@ import org.openjdk.jmh.annotations.Warmup;
 @Warmup(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 @Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 @State(Scope.Benchmark)
-@Fork(value = 1, jvmArgs = {"-server", "-Xms512M", "-Xmx512M"})
+@Fork(value = 1, jvmArgs = { "-server", "-Xms512M", "-Xmx512M" })
 public class StatisticCreationPerformance {
+
     /**
      * Source of {@code double} array data.
      */
     @State(Scope.Benchmark)
     public static class DataSource {
-        /** Data length. */
-        @Param({"0", "1", "10", "100", "1000", "10000"})
+
+        /**
+         * Data length.
+         */
+        @Param({ "0", "1", "10", "100", "1000", "10000" })
         private int length;
 
-        /** Data. */
+        /**
+         * Data.
+         */
         private double[] data;
 
         /**
          * @return the data
          */
         public double[] getData() {
-            return data;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
          * @return the start inclusive of the sub-range.
          */
         public int from() {
-            // Approximately 1/4
-            return data.length >> 2;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
          * @return the end exclusive of the sub-range.
          */
         public int to() {
-            // Approximately 3/4
-            return (data.length >> 1) + (data.length >> 2);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -100,13 +103,7 @@ public class StatisticCreationPerformance {
          */
         @Setup(Level.Iteration)
         public void setup() {
-            // Data will be randomized per iteration.
-            // Ideally the product should not underflow/overflow.
-            // A product of 1 would have a sum of logs of 0.
-            // Create a uniform sum of logs around zero and transform:
-            // log x in [-0.5, 0.5) => x in [0.607, 1.649)
-            data = RandomSource.XO_RO_SHI_RO_128_PP.create().doubles(length)
-                .map(x -> Math.exp(x - 0.5)).toArray();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -118,6 +115,7 @@ public class StatisticCreationPerformance {
      */
     @FunctionalInterface
     interface RangeFunction<T, R> {
+
         /**
          * Returns an object created using the specified range of {@code values}.
          *
@@ -134,24 +132,33 @@ public class StatisticCreationPerformance {
      */
     @State(Scope.Benchmark)
     public static class StatisticSource {
-        /** The statistic to create. */
+
+        /**
+         * The statistic to create.
+         */
         @Param()
         private Statistic statistic;
 
-        /** Statistic factory. */
+        /**
+         * Statistic factory.
+         */
         private Supplier<DoubleStatistic> supplier;
 
-        /** Statistic factory using input data. */
+        /**
+         * Statistic factory using input data.
+         */
         private Function<double[], DoubleStatistic> factory;
 
-        /** Statistic factory using a range of input data. */
+        /**
+         * Statistic factory using a range of input data.
+         */
         private RangeFunction<double[], DoubleStatistic> rangeFactory;
 
         /**
          * @return a statistic instance
          */
         public DoubleStatistic create() {
-            return supplier.get();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -159,7 +166,7 @@ public class StatisticCreationPerformance {
          * @return a statistic instance
          */
         public DoubleStatistic create(double[] x) {
-            return factory.apply(x);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -169,7 +176,7 @@ public class StatisticCreationPerformance {
          * @return a statistic instance
          */
         public DoubleStatistic create(double[] x, int from, int to) {
-            return rangeFactory.apply(x, from, to);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -177,70 +184,7 @@ public class StatisticCreationPerformance {
          */
         @Setup(Level.Trial)
         public void setup() {
-            switch (statistic) {
-            case GEOMETRIC_MEAN:
-                supplier = GeometricMean::create;
-                factory = GeometricMean::of;
-                rangeFactory = GeometricMean::ofRange;
-                break;
-            case KURTOSIS:
-                supplier = Kurtosis::create;
-                factory = Kurtosis::of;
-                rangeFactory = Kurtosis::ofRange;
-                break;
-            case MAX:
-                supplier = Max::create;
-                factory = Max::of;
-                rangeFactory = Max::ofRange;
-                break;
-            case MEAN:
-                supplier = Mean::create;
-                factory = Mean::of;
-                rangeFactory = Mean::ofRange;
-                break;
-            case MIN:
-                supplier = Min::create;
-                factory = Min::of;
-                rangeFactory = Min::ofRange;
-                break;
-            case PRODUCT:
-                supplier = Product::create;
-                factory = Product::of;
-                rangeFactory = Product::ofRange;
-                break;
-            case SKEWNESS:
-                supplier = Skewness::create;
-                factory = Skewness::of;
-                rangeFactory = Skewness::ofRange;
-                break;
-            case STANDARD_DEVIATION:
-                supplier = StandardDeviation::create;
-                factory = StandardDeviation::of;
-                rangeFactory = StandardDeviation::ofRange;
-                break;
-            case SUM:
-                supplier = Sum::create;
-                factory = Sum::of;
-                rangeFactory = Sum::ofRange;
-                break;
-            case SUM_OF_LOGS:
-                supplier = SumOfLogs::create;
-                factory = SumOfLogs::of;
-                rangeFactory = SumOfLogs::ofRange;
-                break;
-            case SUM_OF_SQUARES:
-                supplier = SumOfSquares::create;
-                factory = SumOfSquares::of;
-                rangeFactory = SumOfSquares::ofRange;
-                break;
-            case VARIANCE:
-                supplier = Variance::create;
-                factory = Variance::of;
-                rangeFactory = Variance::ofRange;
-                break;
-            default:
-                throw new IllegalStateException("Unsupported statistic: " + statistic);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -251,14 +195,21 @@ public class StatisticCreationPerformance {
      */
     @State(Scope.Benchmark)
     public static class CustomStatisticSource {
-        /** The statistic to create. */
-        @Param({"min", "product"})
+
+        /**
+         * The statistic to create.
+         */
+        @Param({ "min", "product" })
         private String statistic;
 
-        /** Statistic factory using input data. */
+        /**
+         * Statistic factory using input data.
+         */
         private Function<double[], DoubleSupplier> factory;
 
-        /** Statistic factory using a range of input data. */
+        /**
+         * Statistic factory using a range of input data.
+         */
         private RangeFunction<double[], DoubleSupplier> rangeFactory;
 
         /**
@@ -266,7 +217,7 @@ public class StatisticCreationPerformance {
          * @return a statistic instance
          */
         public DoubleSupplier create(double[] x) {
-            return factory.apply(x);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -276,7 +227,7 @@ public class StatisticCreationPerformance {
          * @return a statistic instance
          */
         public DoubleSupplier create(double[] x, int from, int to) {
-            return rangeFactory.apply(x, from, to);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -284,20 +235,17 @@ public class StatisticCreationPerformance {
          */
         @Setup(Level.Trial)
         public void setup() {
-            if ("min".equals(statistic)) {
-                factory = CMin::of;
-                rangeFactory = CMin::ofRange;
-            } else if ("product".equals(statistic)) {
-                factory = CProduct::of;
-                rangeFactory = CProduct::ofRange;
-            } else {
-                throw new IllegalStateException("Unsupported custom statistic: " + statistic);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
-        /** Compute the minimum. */
+        /**
+         * Compute the minimum.
+         */
         static final class CMin implements DoubleSupplier {
-            /** Current statistic. */
+
+            /**
+             * Current statistic.
+             */
             private double s;
 
             /**
@@ -313,11 +261,7 @@ public class StatisticCreationPerformance {
              * @return instance.
              */
             static CMin of(double... values) {
-                double s = Double.POSITIVE_INFINITY;
-                for (final double x : values) {
-                    s = Math.min(s, x);
-                }
-                return new CMin(s);
+                throw new UnsupportedOperationException("STUB: not implemented");
             }
 
             /**
@@ -327,22 +271,23 @@ public class StatisticCreationPerformance {
              * @return instance.
              */
             static CMin ofRange(double[] values, int from, int to) {
-                double s = Double.POSITIVE_INFINITY;
-                for (int i = from; i < to; i++) {
-                    s = Math.min(s, values[i]);
-                }
-                return new CMin(s);
+                throw new UnsupportedOperationException("STUB: not implemented");
             }
 
             @Override
             public double getAsDouble() {
-                return s;
+                throw new UnsupportedOperationException("STUB: not implemented");
             }
         }
 
-        /** Compute the product. */
+        /**
+         * Compute the product.
+         */
         static final class CProduct implements DoubleSupplier {
-            /** Current statistic. */
+
+            /**
+             * Current statistic.
+             */
             private double s;
 
             /**
@@ -358,11 +303,7 @@ public class StatisticCreationPerformance {
              * @return instance.
              */
             static CProduct of(double... values) {
-                double s = 1;
-                for (final double x : values) {
-                    s *= x;
-                }
-                return new CProduct(s);
+                throw new UnsupportedOperationException("STUB: not implemented");
             }
 
             /**
@@ -372,16 +313,12 @@ public class StatisticCreationPerformance {
              * @return instance.
              */
             static CProduct ofRange(double[] values, int from, int to) {
-                double s = 1;
-                for (int i = from; i < to; i++) {
-                    s *= values[i];
-                }
-                return new CProduct(s);
+                throw new UnsupportedOperationException("STUB: not implemented");
             }
 
             @Override
             public double getAsDouble() {
-                return s;
+                throw new UnsupportedOperationException("STUB: not implemented");
             }
         }
     }
@@ -395,7 +332,7 @@ public class StatisticCreationPerformance {
      */
     @Benchmark
     public double array(DataSource dataSource, StatisticSource statisticSource) {
-        return statisticSource.create(dataSource.getData()).getAsDouble();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -407,7 +344,7 @@ public class StatisticCreationPerformance {
      */
     @Benchmark
     public double customArray(DataSource dataSource, CustomStatisticSource statisticSource) {
-        return statisticSource.create(dataSource.getData()).getAsDouble();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -419,12 +356,7 @@ public class StatisticCreationPerformance {
      */
     @Benchmark
     public double forLoop(DataSource dataSource, StatisticSource statisticSource) {
-        final double[] data = dataSource.getData();
-        final DoubleStatistic s = statisticSource.create();
-        for (int i = 0; i < data.length; i++) {
-            s.accept(data[i]);
-        }
-        return s.getAsDouble();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -436,12 +368,7 @@ public class StatisticCreationPerformance {
      */
     @Benchmark
     public double forEachLoop(DataSource dataSource, StatisticSource statisticSource) {
-        final double[] data = dataSource.getData();
-        final DoubleStatistic s = statisticSource.create();
-        for (final double x : data) {
-            s.accept(x);
-        }
-        return s.getAsDouble();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -453,10 +380,7 @@ public class StatisticCreationPerformance {
      */
     @Benchmark
     public double streamForEach(DataSource dataSource, StatisticSource statisticSource) {
-        final double[] data = dataSource.getData();
-        final DoubleStatistic s = statisticSource.create();
-        Arrays.stream(data).forEach(s::accept);
-        return s.getAsDouble();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -468,9 +392,7 @@ public class StatisticCreationPerformance {
      */
     @Benchmark
     public double arrayRange(DataSource dataSource, StatisticSource statisticSource) {
-        final int from = dataSource.from();
-        final int to = dataSource.to();
-        return statisticSource.create(dataSource.getData(), from, to).getAsDouble();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -482,9 +404,7 @@ public class StatisticCreationPerformance {
      */
     @Benchmark
     public double customArrayRange(DataSource dataSource, CustomStatisticSource statisticSource) {
-        final int from = dataSource.from();
-        final int to = dataSource.to();
-        return statisticSource.create(dataSource.getData(), from, to).getAsDouble();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -496,10 +416,7 @@ public class StatisticCreationPerformance {
      */
     @Benchmark
     public double arrayCopyOfRange(DataSource dataSource, StatisticSource statisticSource) {
-        final int from = dataSource.from();
-        final int to = dataSource.to();
-        final double[] data = Arrays.copyOfRange(dataSource.getData(), from, to);
-        return statisticSource.create(data).getAsDouble();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -511,10 +428,7 @@ public class StatisticCreationPerformance {
      */
     @Benchmark
     public double customArrayCopyOfRange(DataSource dataSource, CustomStatisticSource statisticSource) {
-        final int from = dataSource.from();
-        final int to = dataSource.to();
-        final double[] data = Arrays.copyOfRange(dataSource.getData(), from, to);
-        return statisticSource.create(data).getAsDouble();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -526,14 +440,7 @@ public class StatisticCreationPerformance {
      */
     @Benchmark
     public double forLoopRange(DataSource dataSource, StatisticSource statisticSource) {
-        final int from = dataSource.from();
-        final int to = dataSource.to();
-        final double[] data = dataSource.getData();
-        final DoubleStatistic s = statisticSource.create();
-        for (int i = from; i < to; i++) {
-            s.accept(data[i]);
-        }
-        return s.getAsDouble();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -545,14 +452,7 @@ public class StatisticCreationPerformance {
      */
     @Benchmark
     public double forEachLoopCopyOfRange(DataSource dataSource, StatisticSource statisticSource) {
-        final int from = dataSource.from();
-        final int to = dataSource.to();
-        final double[] data = Arrays.copyOfRange(dataSource.getData(), from, to);
-        final DoubleStatistic s = statisticSource.create();
-        for (final double x : data) {
-            s.accept(x);
-        }
-        return s.getAsDouble();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -564,11 +464,6 @@ public class StatisticCreationPerformance {
      */
     @Benchmark
     public double streamForEachRange(DataSource dataSource, StatisticSource statisticSource) {
-        final int from = dataSource.from();
-        final int to = dataSource.to();
-        final double[] data = dataSource.getData();
-        final DoubleStatistic s = statisticSource.create();
-        Arrays.stream(data, from, to).forEach(s::accept);
-        return s.getAsDouble();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

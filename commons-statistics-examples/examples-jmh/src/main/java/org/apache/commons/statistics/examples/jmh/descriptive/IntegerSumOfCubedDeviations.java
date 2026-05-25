@@ -53,15 +53,23 @@ import java.util.function.LongConsumer;
  * @since 1.1
  */
 class IntegerSumOfCubedDeviations implements IntConsumer, LongConsumer, DoubleSupplier {
-    /** 2, the length limit where the biased skewness is undefined.
+
+    /**
+     * 2, the length limit where the biased skewness is undefined.
      * This limit effectively imposes the result m3 / m2^1.5 = 0 / 0 = NaN when 1 value
      * has been added. Note that when more samples are added and the variance
-     * approaches zero the result is also returned as NaN. */
+     * approaches zero the result is also returned as NaN.
+     */
     private static final int LENGTH_TWO = 2;
-    /** 3, the length limit where the unbiased skewness is undefined. */
+
+    /**
+     * 3, the length limit where the unbiased skewness is undefined.
+     */
     private static final int LENGTH_THREE = 3;
 
-    /** Count of values that have been added. */
+    /**
+     * Count of values that have been added.
+     */
     protected long n;
 
     /**
@@ -86,16 +94,24 @@ class IntegerSumOfCubedDeviations implements IntConsumer, LongConsumer, DoubleSu
      */
     protected double term1;
 
-    /** First moment of values that have been added. */
+    /**
+     * First moment of values that have been added.
+     */
     protected double m1;
 
-    /** Sum of squared deviations of the values that have been added. */
+    /**
+     * Sum of squared deviations of the values that have been added.
+     */
     protected double sumSquaredDev;
 
-    /** Sum of cubed deviations of the values that have been added. */
+    /**
+     * Sum of cubed deviations of the values that have been added.
+     */
     protected double sumCubedDev;
 
-    /** Flag to control if the statistic is biased, or should use a bias correction. */
+    /**
+     * Flag to control if the statistic is biased, or should use a bias correction.
+     */
     private boolean biased;
 
     /**
@@ -112,7 +128,7 @@ class IntegerSumOfCubedDeviations implements IntConsumer, LongConsumer, DoubleSu
      */
     @Override
     public void accept(int value) {
-        update(value);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -122,7 +138,7 @@ class IntegerSumOfCubedDeviations implements IntConsumer, LongConsumer, DoubleSu
      */
     @Override
     public void accept(long value) {
-        update(value);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -131,16 +147,7 @@ class IntegerSumOfCubedDeviations implements IntConsumer, LongConsumer, DoubleSu
      * @param value Value.
      */
     void update(double value) {
-        final long np = n;
-        dev = value - m1;
-        nDev = dev / ++n;
-        term1 = np * dev * nDev;
-
-        sumCubedDev = sumCubedDev -
-            sumSquaredDev * nDev * 3 +
-            (np - 1) * term1 * nDev;
-        sumSquaredDev += term1;
-        m1 += nDev;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -152,28 +159,7 @@ class IntegerSumOfCubedDeviations implements IntConsumer, LongConsumer, DoubleSu
      */
     @Override
     public double getAsDouble() {
-        // Adapted from o.a.c.statistics.descriptive.Skewness
-        if (n < (biased ? LENGTH_TWO : LENGTH_THREE)) {
-            return Double.NaN;
-        }
-        final double x2 = sumSquaredDev;
-        // Avoid a divide by zero; for a negligible variance return NaN.
-        // Note: Commons Math returns zero if variance is < 1e-19.
-        final double m2 = x2 / n;
-        // Simple check for zero variance
-        if (m2 == 0) {
-            return Double.NaN;
-        }
-        // denom = pow(m2, 1.5)
-        final double denom = Math.sqrt(m2) * m2;
-        final double x3 = sumCubedDev;
-        final double m3 = x3 / n;
-        double g1 = m3 / denom;
-        if (!biased) {
-            final double n0 = n;
-            g1 *= Math.sqrt(n0 * (n0 - 1)) / (n0 - 2);
-        }
-        return g1;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -185,6 +171,6 @@ class IntegerSumOfCubedDeviations implements IntConsumer, LongConsumer, DoubleSu
      * @param v Value.
      */
     public void setBiased(boolean v) {
-        biased = v;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

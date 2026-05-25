@@ -33,28 +33,18 @@ import picocli.CommandLine.IVersionProvider;
  * version provider demo</a>
  */
 class ManifestVersionProvider implements IVersionProvider {
-    /** The manifest key for the implementation title. */
+
+    /**
+     * The manifest key for the implementation title.
+     */
     private static final String KEY = "Implementation-Title";
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String[] getVersion() throws Exception {
-        final Enumeration<URL> resources = Thread.currentThread().getContextClassLoader()
-                                           .getResources("META-INF/MANIFEST.MF");
-        while (resources.hasMoreElements()) {
-            final URL url = resources.nextElement();
-            try (InputStream stream = url.openStream()) {
-                final Manifest manifest = new Manifest(stream);
-                if (isApplicableManifest(manifest)) {
-                    final Attributes attr = manifest.getMainAttributes();
-                    return new String[] {get(attr, KEY) + " version \"" +
-                                         get(attr, "Implementation-Version") + "\""};
-                }
-            } catch (final IOException ex) {
-                return new String[] {"Unable to read from " + url + ". " + ex};
-            }
-        }
-        return new String[0];
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**

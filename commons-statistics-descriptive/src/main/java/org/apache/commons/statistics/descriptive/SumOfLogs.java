@@ -58,9 +58,10 @@ package org.apache.commons.statistics.descriptive;
  */
 public final class SumOfLogs implements DoubleStatistic, StatisticAccumulator<SumOfLogs> {
 
-    /** {@link org.apache.commons.numbers.core.Sum Sum} used to compute the sum. */
-    private final org.apache.commons.numbers.core.Sum delegate =
-            org.apache.commons.numbers.core.Sum.create();
+    /**
+     * {@link org.apache.commons.numbers.core.Sum Sum} used to compute the sum.
+     */
+    private final org.apache.commons.numbers.core.Sum delegate = org.apache.commons.numbers.core.Sum.create();
 
     /**
      * Create an instance.
@@ -77,7 +78,7 @@ public final class SumOfLogs implements DoubleStatistic, StatisticAccumulator<Su
      * @return {@code SumOfLogs} instance.
      */
     public static SumOfLogs create() {
-        return new SumOfLogs();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -92,7 +93,7 @@ public final class SumOfLogs implements DoubleStatistic, StatisticAccumulator<Su
      * @return {@code SumOfLogs} instance.
      */
     public static SumOfLogs of(double... values) {
-        return Statistics.add(new SumOfLogs(), values);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -111,8 +112,7 @@ public final class SumOfLogs implements DoubleStatistic, StatisticAccumulator<Su
      * @since 1.2
      */
     public static SumOfLogs ofRange(double[] values, int from, int to) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return createFromRange(values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -126,7 +126,7 @@ public final class SumOfLogs implements DoubleStatistic, StatisticAccumulator<Su
      * @return {@code SumOfLogs} instance.
      */
     static SumOfLogs createFromRange(double[] values, int from, int to) {
-        return Statistics.add(new SumOfLogs(), values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -140,7 +140,7 @@ public final class SumOfLogs implements DoubleStatistic, StatisticAccumulator<Su
      * @return {@code SumOfLogs} instance.
      */
     public static SumOfLogs of(int... values) {
-        return Statistics.add(new SumOfLogs(), values);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -158,8 +158,7 @@ public final class SumOfLogs implements DoubleStatistic, StatisticAccumulator<Su
      * @since 1.2
      */
     public static SumOfLogs ofRange(int[] values, int from, int to) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return createFromRange(values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -173,7 +172,7 @@ public final class SumOfLogs implements DoubleStatistic, StatisticAccumulator<Su
      * @return {@code SumOfLogs} instance.
      */
     static SumOfLogs createFromRange(int[] values, int from, int to) {
-        return Statistics.add(new SumOfLogs(), values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -187,7 +186,7 @@ public final class SumOfLogs implements DoubleStatistic, StatisticAccumulator<Su
      * @return {@code SumOfLogs} instance.
      */
     public static SumOfLogs of(long... values) {
-        return Statistics.add(new SumOfLogs(), values);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -205,8 +204,7 @@ public final class SumOfLogs implements DoubleStatistic, StatisticAccumulator<Su
      * @since 1.2
      */
     public static SumOfLogs ofRange(long[] values, int from, int to) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return createFromRange(values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -220,7 +218,7 @@ public final class SumOfLogs implements DoubleStatistic, StatisticAccumulator<Su
      * @return {@code SumOfLogs} instance.
      */
     static SumOfLogs createFromRange(long[] values, int from, int to) {
-        return Statistics.add(new SumOfLogs(), values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -230,7 +228,7 @@ public final class SumOfLogs implements DoubleStatistic, StatisticAccumulator<Su
      */
     @Override
     public void accept(double value) {
-        delegate.accept(Math.log(value));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -242,12 +240,11 @@ public final class SumOfLogs implements DoubleStatistic, StatisticAccumulator<Su
      */
     @Override
     public double getAsDouble() {
-        return delegate.getAsDouble();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public SumOfLogs combine(SumOfLogs other) {
-        delegate.add(other.delegate);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

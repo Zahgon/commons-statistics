@@ -47,7 +47,9 @@ package org.apache.commons.statistics.descriptive;
  */
 public final class Min implements DoubleStatistic, StatisticAccumulator<Min> {
 
-    /** Current minimum. */
+    /**
+     * Current minimum.
+     */
     private double minimum = Double.POSITIVE_INFINITY;
 
     /**
@@ -65,7 +67,7 @@ public final class Min implements DoubleStatistic, StatisticAccumulator<Min> {
      * @return {@code Min} instance.
      */
     public static Min create() {
-        return new Min();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -80,7 +82,7 @@ public final class Min implements DoubleStatistic, StatisticAccumulator<Min> {
      * @return {@code Min} instance.
      */
     public static Min of(double... values) {
-        return Statistics.add(new Min(), values);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -99,8 +101,7 @@ public final class Min implements DoubleStatistic, StatisticAccumulator<Min> {
      * @since 1.2
      */
     public static Min ofRange(double[] values, int from, int to) {
-        Statistics.checkFromToIndex(from, to, values.length);
-        return createFromRange(values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -114,7 +115,7 @@ public final class Min implements DoubleStatistic, StatisticAccumulator<Min> {
      * @return {@code Min} instance.
      */
     static Min createFromRange(double[] values, int from, int to) {
-        return Statistics.add(new Min(), values, from, to);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -124,7 +125,7 @@ public final class Min implements DoubleStatistic, StatisticAccumulator<Min> {
      */
     @Override
     public void accept(double value) {
-        minimum = Math.min(minimum, value);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -137,12 +138,11 @@ public final class Min implements DoubleStatistic, StatisticAccumulator<Min> {
      */
     @Override
     public double getAsDouble() {
-        return minimum;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Min combine(Min other) {
-        accept(other.getAsDouble());
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

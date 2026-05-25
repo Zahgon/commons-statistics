@@ -24,11 +24,17 @@ import java.util.Set;
  * @since 1.1
  */
 final class Arguments {
-    /** Two. */
+
+    /**
+     * Two.
+     */
     private static final int TWO = 2;
 
-    /** No instances. */
-    private Arguments() {}
+    /**
+     * No instances.
+     */
+    private Arguments() {
+    }
 
     /**
      * Check the significance level is in the correct range.
@@ -38,11 +44,7 @@ final class Arguments {
      * {@code (0, 0.5]}
      */
     static void checkSignificance(double alpha) {
-        if (alpha > 0 && alpha <= 0.5) {
-            return;
-        }
-        // Not in (0, 0.5], or NaN
-        throw new InferenceException(InferenceException.INVALID_SIGNIFICANCE, alpha);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -53,10 +55,7 @@ final class Arguments {
      * @throws IllegalArgumentException if the value is less than 0.
      */
     static int checkNonNegative(int v) {
-        if (v < 0) {
-            throw new InferenceException(InferenceException.NEGATIVE, v);
-        }
-        return v;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -66,11 +65,7 @@ final class Arguments {
      * @throws IllegalArgumentException if the value is less than 0.
      */
     static void checkNonNegative(double v) {
-        if (v >= 0) {
-            return;
-        }
-        // Negative, or NaN
-        throw new InferenceException(InferenceException.NEGATIVE, v);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -80,11 +75,7 @@ final class Arguments {
      * @throws IllegalArgumentException if any values are less than 0.
      */
     static void checkNonNegative(long[] values) {
-        for (final long v : values) {
-            if (v < 0) {
-                throw new InferenceException(InferenceException.NEGATIVE, v);
-            }
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -94,9 +85,7 @@ final class Arguments {
      * @throws IllegalArgumentException if any values are less than 0.
      */
     static void checkNonNegative(long[][] values) {
-        for (final long[] v : values) {
-            checkNonNegative(v);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -107,10 +96,7 @@ final class Arguments {
      * @throws IllegalArgumentException if the value is not strictly positive.
      */
     static int checkStrictlyPositive(int v) {
-        if (v <= 0) {
-            throw new InferenceException(InferenceException.NOT_STRICTLY_POSITIVE, v);
-        }
-        return v;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -121,11 +107,7 @@ final class Arguments {
      * @throws IllegalArgumentException if the value is not strictly positive.
      */
     static double checkStrictlyPositive(double v) {
-        if (v > 0) {
-            return v;
-        }
-        // not positive or NaN
-        throw new InferenceException(InferenceException.NOT_STRICTLY_POSITIVE, v);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -135,12 +117,7 @@ final class Arguments {
      * @throws IllegalArgumentException if any values are not strictly positive.
      */
     static void checkStrictlyPositive(double[] values) {
-        for (final double v : values) {
-            // Logic negation detects NaN
-            if (!(v > 0)) {
-                throw new InferenceException(InferenceException.NOT_STRICTLY_POSITIVE, v);
-            }
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -151,10 +128,7 @@ final class Arguments {
      * @throws IllegalArgumentException if the value is not finite.
      */
     static double checkFinite(double v) {
-        if (!Double.isFinite(v)) {
-            throw new InferenceException("Non-finite input value: " + v);
-        }
-        return v;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -164,11 +138,7 @@ final class Arguments {
      * @throws IllegalArgumentException if any values are NaN.
      */
     static void checkNonNaN(double[] values) {
-        for (final double v : values) {
-            if (Double.isNaN(v)) {
-                throw new InferenceException("NaN input value");
-            }
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -181,12 +151,7 @@ final class Arguments {
      * @throws IllegalArgumentException if input array is not rectangular
      */
     static void checkRectangular(long[][] array) {
-        final int first = array[0].length;
-        for (int i = 1; i < array.length; i++) {
-            if (array[i].length != first) {
-                throw new InferenceException(InferenceException.NOT_RECTANGULAR, array[i].length, first);
-            }
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -197,9 +162,7 @@ final class Arguments {
      * @throws IllegalArgumentException if {@code size < required}
      */
     static void checkValuesRequiredSize(int size, int required) {
-        if (size < required) {
-            throw new InferenceException(InferenceException.VALUES_REQUIRED, size, required);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -210,9 +173,7 @@ final class Arguments {
      * @throws IllegalArgumentException if {@code size < required}
      */
     static void checkCategoriesRequiredSize(int size, int required) {
-        if (size < required) {
-            throw new InferenceException(InferenceException.CATEGORIES_REQUIRED, size, required);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -223,9 +184,7 @@ final class Arguments {
      * @throws IllegalArgumentException if {@code size1 != size2}
      */
     static void checkValuesSizeMatch(int size1, int size2) {
-        if (size1 != size2) {
-            throw new InferenceException(InferenceException.VALUES_MISMATCH, size1, size2);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -238,10 +197,7 @@ final class Arguments {
      * @throws IllegalArgumentException if the value is not in the allowed options or is null
      */
     static <E extends Enum<E>> E checkOption(E v, Set<E> allowed) {
-        if (!allowed.contains(v)) {
-            throw new InferenceException("Invalid option: " + v);
-        }
-        return v;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -252,21 +208,6 @@ final class Arguments {
      * table entry is negative; or the sum is zero or is not an integer
      */
     static void checkTable(int[][] table) {
-        if (table.length != TWO || table[0].length != TWO || table[1].length != TWO) {
-            throw new InferenceException("Require a 2-by-2 contingency table");
-        }
-        // Must all be positive
-        final int a = table[0][0];
-        final int b = table[0][1];
-        final int c = table[1][0];
-        final int d = table[1][1];
-        // Bitwise OR combines the sign bit from all values
-        checkNonNegative(a | b | c | d);
-        // Sum must be an integer
-        final long sum = (long) a + b + c + d;
-        if (sum > Integer.MAX_VALUE) {
-            throw new InferenceException(InferenceException.X_GT_Y, sum, Integer.MAX_VALUE);
-        }
-        checkStrictlyPositive((int) sum);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

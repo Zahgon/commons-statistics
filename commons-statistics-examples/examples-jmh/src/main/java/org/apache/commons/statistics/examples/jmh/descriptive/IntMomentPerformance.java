@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.apache.commons.statistics.examples.jmh.descriptive;
 
 import java.math.BigDecimal;
@@ -69,33 +68,72 @@ import org.openjdk.jmh.infra.Blackhole;
 @Warmup(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 @Measurement(iterations = 5, time = 1, timeUnit = TimeUnit.SECONDS)
 @State(Scope.Benchmark)
-@Fork(value = 1, jvmArgs = {"-server", "-Xms512M", "-Xmx512M"})
+@Fork(value = 1, jvmArgs = { "-server", "-Xms512M", "-Xmx512M" })
 public class IntMomentPerformance {
-    /** Commons Statistics Mean implementation. */
+
+    /**
+     * Commons Statistics Mean implementation.
+     */
     private static final String DOUBLE_MEAN = "DoubleMean";
-    /** Integer mean implementation. */
+
+    /**
+     * Integer mean implementation.
+     */
     private static final String INT_MEAN = "IntMean";
-    /** Long mean implementation. */
+
+    /**
+     * Long mean implementation.
+     */
     private static final String LONG_MEAN = "LongMean";
-    /** Sum using a long mean implementation. */
+
+    /**
+     * Sum using a long mean implementation.
+     */
     private static final String LONG_SUM_MEAN = "LongSumMean";
-    /** Sum using a BigInteger mean implementation. */
+
+    /**
+     * Sum using a BigInteger mean implementation.
+     */
     private static final String BIG_INTEGER_SUM_MEAN = "BigIntegerSumMean";
-    /** JDK Stream mean implementation. */
+
+    /**
+     * JDK Stream mean implementation.
+     */
     private static final String STREAM_MEAN = "StreamMean";
-    /** Commons Statistics Variance implementation. */
+
+    /**
+     * Commons Statistics Variance implementation.
+     */
     private static final String DOUBLE_VAR = "DoubleVariance";
-    /** Integer variance implementation. */
+
+    /**
+     * Integer variance implementation.
+     */
     private static final String INT_VAR = "IntVariance";
-    /** Long variance implementation. */
+
+    /**
+     * Long variance implementation.
+     */
     private static final String LONG_VAR = "LongVariance";
-    /** Long variance implementation using Math.multiplyHigh. */
+
+    /**
+     * Long variance implementation using Math.multiplyHigh.
+     */
     private static final String LONG_VAR2 = "LongVariance2";
-    /** Commons Statistics Skewness implementation. */
+
+    /**
+     * Commons Statistics Skewness implementation.
+     */
     private static final String DOUBLE_SKEWNESS = "DoubleSkewness";
-    /** Commons Statistics Kurtosis implementation. */
+
+    /**
+     * Commons Statistics Kurtosis implementation.
+     */
     private static final String DOUBLE_KURTOSIS = "DoubleKurtosis";
-    /** Int specialization for skewness. */
+
+    /**
+     * Int specialization for skewness.
+     */
     private static final String INT_SKEWNESS = "IntSkewness";
 
     /**
@@ -103,38 +141,47 @@ public class IntMomentPerformance {
      */
     @State(Scope.Benchmark)
     public static class DataSource {
-        /** Data length. */
-        @Param({"2", "1000"})
+
+        /**
+         * Data length.
+         */
+        @Param({ "2", "1000" })
         private int length;
 
-        /** Data. */
+        /**
+         * Data.
+         */
         private int[] data;
 
-        /** Data as a double. */
+        /**
+         * Data as a double.
+         */
         private double[] doubleData;
 
-        /** Data as a long. */
+        /**
+         * Data as a long.
+         */
         private long[] longData;
 
         /**
          * @return the data
          */
         public int[] getData() {
-            return data;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
          * @return the data
          */
         public double[] getDoubleData() {
-            return doubleData;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
          * @return the data
          */
         public long[] getLongData() {
-            return longData;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -143,9 +190,7 @@ public class IntMomentPerformance {
          */
         @Setup(Level.Iteration)
         public void setup() {
-            longData = RandomSource.XO_RO_SHI_RO_128_PP.create().longs(length).toArray();
-            doubleData = Arrays.stream(longData).asDoubleStream().toArray();
-            data = Arrays.stream(longData).mapToInt(x -> (int) x).toArray();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -154,23 +199,25 @@ public class IntMomentPerformance {
      */
     @State(Scope.Benchmark)
     public static class IntActionSource {
-        /** Name of the source. */
-        @Param({DOUBLE_MEAN, INT_MEAN,
-                // Disabled: Run-time ~ IntMean
-                // LONG_SUM_MEAN
-                DOUBLE_VAR, INT_VAR,
-                DOUBLE_SKEWNESS, DOUBLE_KURTOSIS,
-                INT_SKEWNESS})
+
+        /**
+         * Name of the source.
+         */
+        @Param({ DOUBLE_MEAN, INT_MEAN, // Disabled: Run-time ~ IntMean
+        // LONG_SUM_MEAN
+        DOUBLE_VAR, INT_VAR, DOUBLE_SKEWNESS, DOUBLE_KURTOSIS, INT_SKEWNESS })
         private String name;
 
-        /** The action. */
+        /**
+         * The action.
+         */
         private Supplier<IntStatistic> action;
 
         /**
          * @return the action
          */
         public IntStatistic getAction() {
-            return action.get();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -178,49 +225,7 @@ public class IntMomentPerformance {
          */
         @Setup(Level.Iteration)
         public void setup() {
-            if (DOUBLE_MEAN.equals(name)) {
-                action = () -> {
-                    final Mean m = Mean.create();
-                    return createDoubleAsIntStatistic(m, m);
-                };
-            } else if (INT_MEAN.equals(name)) {
-                action = () -> {
-                    final IntMean m = IntMean.create();
-                    return createIntStatistic(m, m);
-                };
-            } else if (LONG_SUM_MEAN.equals(name)) {
-                action = () -> {
-                    final LongSumMean m = new LongSumMean();
-                    return createIntStatistic(m, m);
-                };
-            } else if (DOUBLE_VAR.equals(name)) {
-                action = () -> {
-                    final Variance m = Variance.create();
-                    return createDoubleAsIntStatistic(m, m);
-                };
-            } else if (INT_VAR.equals(name)) {
-                action = () -> {
-                    final IntVariance m = IntVariance.create();
-                    return createIntStatistic(m, m);
-                };
-            } else if (DOUBLE_SKEWNESS.equals(name)) {
-                action = () -> {
-                    final Skewness m = Skewness.create();
-                    return createDoubleAsIntStatistic((DoubleConsumer) m, m);
-                };
-            } else if (DOUBLE_KURTOSIS.equals(name)) {
-                action = () -> {
-                    final Kurtosis m = Kurtosis.create();
-                    return createDoubleAsIntStatistic(m, m);
-                };
-            } else if (INT_SKEWNESS.equals(name)) {
-                action = () -> {
-                    final IntegerSumOfCubedDeviations m = new IntegerSumOfCubedDeviations();
-                    return createIntStatistic(m, m);
-                };
-            } else {
-                throw new IllegalStateException("Unknown int action: " + name);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -232,13 +237,15 @@ public class IntMomentPerformance {
          */
         private static IntStatistic createIntStatistic(IntConsumer c, DoubleSupplier s) {
             return new IntStatistic() {
+
                 @Override
                 public void accept(int value) {
-                    c.accept(value);
+                    throw new UnsupportedOperationException("STUB: not implemented");
                 }
+
                 @Override
                 public double getAsDouble() {
-                    return s.getAsDouble();
+                    throw new UnsupportedOperationException("STUB: not implemented");
                 }
             };
         }
@@ -252,13 +259,15 @@ public class IntMomentPerformance {
          */
         private static IntStatistic createDoubleAsIntStatistic(DoubleConsumer c, DoubleSupplier s) {
             return new IntStatistic() {
+
                 @Override
                 public void accept(int value) {
-                    c.accept(value);
+                    throw new UnsupportedOperationException("STUB: not implemented");
                 }
+
                 @Override
                 public double getAsDouble() {
-                    return s.getAsDouble();
+                    throw new UnsupportedOperationException("STUB: not implemented");
                 }
             };
         }
@@ -269,19 +278,23 @@ public class IntMomentPerformance {
      */
     @State(Scope.Benchmark)
     public static class DoubleActionSource {
-        /** Name of the source. */
-        @Param({DOUBLE_MEAN, DOUBLE_VAR,
-                DOUBLE_SKEWNESS, DOUBLE_KURTOSIS})
+
+        /**
+         * Name of the source.
+         */
+        @Param({ DOUBLE_MEAN, DOUBLE_VAR, DOUBLE_SKEWNESS, DOUBLE_KURTOSIS })
         private String name;
 
-        /** The action. */
+        /**
+         * The action.
+         */
         private Supplier<DoubleStatistic> action;
 
         /**
          * @return the action
          */
         public DoubleStatistic getAction() {
-            return action.get();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -289,29 +302,7 @@ public class IntMomentPerformance {
          */
         @Setup(Level.Iteration)
         public void setup() {
-            if (DOUBLE_MEAN.equals(name)) {
-                action = () -> {
-                    final Mean m = Mean.create();
-                    return createDoubleStatistic(m, m);
-                };
-            } else if (DOUBLE_VAR.equals(name)) {
-                action = () -> {
-                    final Variance m = Variance.create();
-                    return createDoubleStatistic(m, m);
-                };
-            } else if (DOUBLE_SKEWNESS.equals(name)) {
-                action = () -> {
-                    final Skewness m = Skewness.create();
-                    return createDoubleStatistic(m, m);
-                };
-            } else if (DOUBLE_KURTOSIS.equals(name)) {
-                action = () -> {
-                    final Kurtosis m = Kurtosis.create();
-                    return createDoubleStatistic(m, m);
-                };
-            } else {
-                throw new IllegalStateException("Unknown double action: " + name);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -327,13 +318,15 @@ public class IntMomentPerformance {
          */
         private static DoubleStatistic createDoubleStatistic(DoubleConsumer c, DoubleSupplier s) {
             return new DoubleStatistic() {
+
                 @Override
                 public void accept(double value) {
-                    c.accept(value);
+                    throw new UnsupportedOperationException("STUB: not implemented");
                 }
+
                 @Override
                 public double getAsDouble() {
-                    return s.getAsDouble();
+                    throw new UnsupportedOperationException("STUB: not implemented");
                 }
             };
         }
@@ -344,20 +337,23 @@ public class IntMomentPerformance {
      */
     @State(Scope.Benchmark)
     public static class LongActionSource {
-        /** Name of the source. */
-        @Param({DOUBLE_MEAN, LONG_MEAN, BIG_INTEGER_SUM_MEAN,
-                DOUBLE_VAR, LONG_VAR, LONG_VAR2,
-                DOUBLE_SKEWNESS, DOUBLE_KURTOSIS})
+
+        /**
+         * Name of the source.
+         */
+        @Param({ DOUBLE_MEAN, LONG_MEAN, BIG_INTEGER_SUM_MEAN, DOUBLE_VAR, LONG_VAR, LONG_VAR2, DOUBLE_SKEWNESS, DOUBLE_KURTOSIS })
         private String name;
 
-        /** The action. */
+        /**
+         * The action.
+         */
         private Supplier<LongStatistic> action;
 
         /**
          * @return the action
          */
         public LongStatistic getAction() {
-            return action.get();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -365,49 +361,7 @@ public class IntMomentPerformance {
          */
         @Setup(Level.Iteration)
         public void setup() {
-            if (DOUBLE_MEAN.equals(name)) {
-                action = () -> {
-                    final Mean m = Mean.create();
-                    return createDoubleAsLongStatistic(m, m);
-                };
-            } else if (LONG_MEAN.equals(name)) {
-                action = () -> {
-                    final LongMean m = LongMean.create();
-                    return createLongStatistic(m, m);
-                };
-            } else if (BIG_INTEGER_SUM_MEAN.equals(name)) {
-                action = () -> {
-                    final BigIntegerSumMean m = new BigIntegerSumMean();
-                    return createLongStatistic(m, m);
-                };
-            } else if (DOUBLE_VAR.equals(name)) {
-                action = () -> {
-                    final Variance m = Variance.create();
-                    return createDoubleAsLongStatistic(m, m);
-                };
-            } else if (LONG_VAR.equals(name)) {
-                action = () -> {
-                    final LongVariance m = LongVariance.create();
-                    return createLongStatistic(m, m);
-                };
-            } else if (LONG_VAR2.equals(name)) {
-                action = () -> {
-                    final LongVariance2 m = LongVariance2.create();
-                    return createLongStatistic(m, m);
-                };
-            } else if (DOUBLE_SKEWNESS.equals(name)) {
-                action = () -> {
-                    final Skewness m = Skewness.create();
-                    return createDoubleAsLongStatistic((DoubleConsumer) m, m);
-                };
-            } else if (DOUBLE_KURTOSIS.equals(name)) {
-                action = () -> {
-                    final Kurtosis m = Kurtosis.create();
-                    return createDoubleAsLongStatistic(m, m);
-                };
-            } else {
-                throw new IllegalStateException("Unknown long action: " + name);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -419,13 +373,15 @@ public class IntMomentPerformance {
          */
         private static LongStatistic createLongStatistic(LongConsumer c, DoubleSupplier s) {
             return new LongStatistic() {
+
                 @Override
                 public void accept(long value) {
-                    c.accept(value);
+                    throw new UnsupportedOperationException("STUB: not implemented");
                 }
+
                 @Override
                 public double getAsDouble() {
-                    return s.getAsDouble();
+                    throw new UnsupportedOperationException("STUB: not implemented");
                 }
             };
         }
@@ -439,13 +395,15 @@ public class IntMomentPerformance {
          */
         private static LongStatistic createDoubleAsLongStatistic(DoubleConsumer c, DoubleSupplier s) {
             return new LongStatistic() {
+
                 @Override
                 public void accept(long value) {
-                    c.accept(value);
+                    throw new UnsupportedOperationException("STUB: not implemented");
                 }
+
                 @Override
                 public double getAsDouble() {
-                    return s.getAsDouble();
+                    throw new UnsupportedOperationException("STUB: not implemented");
                 }
             };
         }
@@ -456,22 +414,25 @@ public class IntMomentPerformance {
      */
     @State(Scope.Benchmark)
     public static class IntFunctionSource {
-        /** Name of the source. */
-        @Param({INT_MEAN,
-            // Disabled: Run-time ~ IntMean
-            //LONG_SUM_MEAN,
-            STREAM_MEAN, INT_VAR,
-            INT_SKEWNESS})
+
+        /**
+         * Name of the source.
+         */
+        @Param({ INT_MEAN, // Disabled: Run-time ~ IntMean
+        //LONG_SUM_MEAN,
+        STREAM_MEAN, INT_VAR, INT_SKEWNESS })
         private String name;
 
-        /** The action. */
+        /**
+         * The action.
+         */
         private ToDoubleFunction<int[]> function;
 
         /**
          * @return the function
          */
         public ToDoubleFunction<int[]> getFunction() {
-            return function;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -479,19 +440,7 @@ public class IntMomentPerformance {
          */
         @Setup(Level.Iteration)
         public void setup() {
-            if (INT_MEAN.equals(name)) {
-                function = x -> IntMean.of(x).getAsDouble();
-            } else if (LONG_SUM_MEAN.equals(name)) {
-                function = LongSumMean::mean;
-            } else if (STREAM_MEAN.equals(name)) {
-                function = x -> Arrays.stream(x).average().orElse(Double.NaN);
-            } else if (INT_VAR.equals(name)) {
-                function = x -> IntVariance.of(x).getAsDouble();
-            } else if (INT_SKEWNESS.equals(name)) {
-                function = x -> Skewness.of(x).getAsDouble();
-            } else {
-                throw new IllegalStateException("Unknown int function: " + name);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -500,19 +449,23 @@ public class IntMomentPerformance {
      */
     @State(Scope.Benchmark)
     public static class DoubleFunctionSource {
-        /** Name of the source. */
-        @Param({DOUBLE_MEAN, DOUBLE_VAR,
-                DOUBLE_SKEWNESS, DOUBLE_KURTOSIS})
+
+        /**
+         * Name of the source.
+         */
+        @Param({ DOUBLE_MEAN, DOUBLE_VAR, DOUBLE_SKEWNESS, DOUBLE_KURTOSIS })
         private String name;
 
-        /** The action. */
+        /**
+         * The action.
+         */
         private ToDoubleFunction<double[]> function;
 
         /**
          * @return the function
          */
         public ToDoubleFunction<double[]> getFunction() {
-            return function;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -520,17 +473,7 @@ public class IntMomentPerformance {
          */
         @Setup(Level.Iteration)
         public void setup() {
-            if (DOUBLE_MEAN.equals(name)) {
-                function = x -> Mean.of(x).getAsDouble();
-            } else if (DOUBLE_VAR.equals(name)) {
-                function = x -> Variance.of(x).getAsDouble();
-            } else if (DOUBLE_SKEWNESS.equals(name)) {
-                function = x -> Skewness.of(x).getAsDouble();
-            } else if (DOUBLE_KURTOSIS.equals(name)) {
-                function = x -> Kurtosis.of(x).getAsDouble();
-            } else {
-                throw new IllegalStateException("Unknown double function: " + name);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -539,18 +482,23 @@ public class IntMomentPerformance {
      */
     @State(Scope.Benchmark)
     public static class LongFunctionSource {
-        /** Name of the source. */
-        @Param({LONG_MEAN, BIG_INTEGER_SUM_MEAN, LONG_VAR, LONG_VAR2})
+
+        /**
+         * Name of the source.
+         */
+        @Param({ LONG_MEAN, BIG_INTEGER_SUM_MEAN, LONG_VAR, LONG_VAR2 })
         private String name;
 
-        /** The action. */
+        /**
+         * The action.
+         */
         private ToDoubleFunction<long[]> function;
 
         /**
          * @return the function
          */
         public ToDoubleFunction<long[]> getFunction() {
-            return function;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -558,17 +506,7 @@ public class IntMomentPerformance {
          */
         @Setup(Level.Iteration)
         public void setup() {
-            if (LONG_MEAN.equals(name)) {
-                function = x -> LongMean.of(x).getAsDouble();
-            } else if (BIG_INTEGER_SUM_MEAN.equals(name)) {
-                function = BigIntegerSumMean::mean;
-            } else if (LONG_VAR.equals(name)) {
-                function = x -> LongVariance.of(x).getAsDouble();
-            } else if (LONG_VAR2.equals(name)) {
-                function = x -> LongVariance2.of(x).getAsDouble();
-            } else {
-                throw new IllegalStateException("Unknown long function: " + name);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -576,11 +514,20 @@ public class IntMomentPerformance {
      * Class containing the variance data.
      */
     static class IntVarianceData {
-        /** Sum of the squared values. */
+
+        /**
+         * Sum of the squared values.
+         */
         private final UInt128 sumSq;
-        /** Sum of the values. */
+
+        /**
+         * Sum of the values.
+         */
         private final Int128 sum;
-        /** Count of values that have been added. */
+
+        /**
+         * Count of values that have been added.
+         */
         private long n;
 
         /**
@@ -598,28 +545,28 @@ public class IntMomentPerformance {
          * @return the sum of the squared values
          */
         UInt128 getSumSq() {
-            return new UInt128(sumSq.hi64(), sumSq.lo64());
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
          * @return the sum
          */
         Int128 getSum() {
-            return new Int128(sum.hi64(), sum.lo64());
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
          * @return the count of values that have been added
          */
         long getN() {
-            return n;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
          * @return the copy
          */
         IntVarianceData copy() {
-            return new IntVarianceData(getSumSq(), getSum(), n);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -629,11 +576,7 @@ public class IntMomentPerformance {
          * @return this instance
          */
         IntVarianceData add(IntVarianceData other) {
-            // Prevent the data from becoming too large
-            n = Math.addExact(n, other.n);
-            sumSq.add(other.sumSq);
-            sum.add(other.sum);
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -656,28 +599,51 @@ public class IntMomentPerformance {
      */
     @State(Scope.Benchmark)
     public static class IntVarianceDataSource {
-        /** Consistent seed. */
+
+        /**
+         * Consistent seed.
+         */
         private static final Long SEED = ThreadLocalRandom.current().nextLong();
-        /** Lower limit. */
-        @Param({"0"})
+
+        /**
+         * Lower limit.
+         */
+        @Param({ "0" })
         private int origin;
-        /** Upper limit. */
-        @Param({"512"})
+
+        /**
+         * Upper limit.
+         */
+        @Param({ "512" })
         private int bound;
-        /** Minimum samples. */
-        @Param({"32"})
+
+        /**
+         * Minimum samples.
+         */
+        @Param({ "32" })
         private int minSamples;
-        /** Maximum samples. */
-        @Param({"64"})
+
+        /**
+         * Maximum samples.
+         */
+        @Param({ "64" })
         private int maxSamples;
-        /** Pool size. */
-        @Param({"64"})
+
+        /**
+         * Pool size.
+         */
+        @Param({ "64" })
         private int poolSize;
-        /** Number of combine operations. */
-        @Param({"8", "16", "24", "32", "48"})
+
+        /**
+         * Number of combine operations.
+         */
+        @Param({ "8", "16", "24", "32", "48" })
         private int combine;
 
-        /** Data. */
+        /**
+         * Data.
+         */
         private IntVarianceData[] data;
 
         /**
@@ -686,8 +652,9 @@ public class IntMomentPerformance {
          * @return the size
          */
         public int size() {
-            return data.length;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
+
         /**
          * Get a copy of the data for the specified index.
          *
@@ -695,7 +662,7 @@ public class IntMomentPerformance {
          * @return the data
          */
         public IntVarianceData getData(int i) {
-            return data[i].copy();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -703,29 +670,7 @@ public class IntMomentPerformance {
          */
         @Setup
         public void setup() {
-            // Consistent seed so the same data is provided to all methods
-            final UniformRandomProvider rng = RandomSource.XO_SHI_RO_512_SS.create(SEED);
-            // Initial pool
-            final IntVarianceData[] pool = new IntVarianceData[poolSize];
-            for (int i = 0; i < pool.length; i++) {
-                final int n = rng.nextInt(minSamples, maxSamples);
-                final UInt128 sumSq = UInt128.create();
-                final Int128 sum = Int128.create();
-                rng.ints(n, origin, bound).forEach(x -> {
-                    sumSq.addPositive((long) x * x);
-                    sum.add(x);
-                });
-                pool[i] = new IntVarianceData(sumSq, sum, n);
-            }
-            // Combine to grow the average size of the pool objects
-            for (int round = 0; round < combine; round++) {
-                final IntVarianceData[] last = pool.clone();
-                for (int i = 0; i < pool.length; i++) {
-                    // Copy the instance that will be the LHS of the add operation
-                    pool[i] = last[i].copy().add(last[rng.nextInt(poolSize)]);
-                }
-            }
-            data = pool;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -734,27 +679,30 @@ public class IntMomentPerformance {
      */
     @State(Scope.Benchmark)
     public static class IntVarianceFunctionSource {
-        /** {@link MathContext} with 20 digits of precision. */
+
+        /**
+         * {@link MathContext} with 20 digits of precision.
+         */
         private static final MathContext MC_20_DIGITS = new MathContext(20);
 
-        /** Name of the source. */
-        @Param({"DD", "DD2", "BigIntegerPow", "BigIntegerMultiply",
-            "SumSquareBigInteger", "SumSquareMultiplyBigInteger",
-            "UIntBigInteger", "UIntDD", "UIntDD2", "UIntBigInteger2", "UIntBigInteger3",
-            "UIntDouble",
-            // Very slow
-            //"UIntBigFraction", "UIntBigDecimal"
+        /**
+         * Name of the source.
+         */
+        @Param({ "DD", "DD2", "BigIntegerPow", "BigIntegerMultiply", "SumSquareBigInteger", "SumSquareMultiplyBigInteger", "UIntBigInteger", "UIntDD", "UIntDD2", "UIntBigInteger2", "UIntBigInteger3", "UIntDouble" // Very slow
+        //"UIntBigFraction", "UIntBigDecimal"
         })
         private String name;
 
-        /** The action. */
+        /**
+         * The action.
+         */
         private ToDoubleFunction<IntVarianceData> function;
 
         /**
          * @return the function
          */
         public ToDoubleFunction<IntVarianceData> getFunction() {
-            return function;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -762,37 +710,7 @@ public class IntMomentPerformance {
          */
         @Setup(Level.Iteration)
         public void setup() {
-            if ("DD".equals(name)) {
-                function = IntVarianceFunctionSource::varianceDD;
-            } else if ("DD2".equals(name)) {
-                function = IntVarianceFunctionSource::varianceDD2;
-            } else if ("BigIntegerPow".equals(name)) {
-                function = IntVarianceFunctionSource::varianceBigIntegerPow;
-            } else if ("BigIntegerMultiply".equals(name)) {
-                function = IntVarianceFunctionSource::varianceBigIntegerMultiply;
-            } else if ("SumSquareBigInteger".equals(name)) {
-                function = IntVarianceFunctionSource::varianceSumSquareBigInteger;
-            } else if ("SumSquareMultiplyBigInteger".equals(name)) {
-                function = IntVarianceFunctionSource::varianceSumSquareMultiplyIntBigInteger;
-            } else if ("UIntBigInteger".equals(name)) {
-                function = IntVarianceFunctionSource::varianceUIntBigInteger;
-            } else if ("UIntDD".equals(name)) {
-                function = IntVarianceFunctionSource::varianceUIntDD;
-            } else if ("UIntDD2".equals(name)) {
-                function = IntVarianceFunctionSource::varianceUIntDD2;
-            } else if ("UIntBigInteger2".equals(name)) {
-                function = IntVarianceFunctionSource::varianceUIntBigInteger2;
-            } else if ("UIntBigInteger3".equals(name)) {
-                function = IntVarianceFunctionSource::varianceUIntBigInteger3;
-            } else if ("UIntDouble".equals(name)) {
-                function = IntVarianceFunctionSource::varianceUIntDouble;
-            } else if ("UIntBigFraction".equals(name)) {
-                function = IntVarianceFunctionSource::varianceUIntBigFraction;
-            } else if ("UIntBigDecimal".equals(name)) {
-                function = IntVarianceFunctionSource::varianceUIntBigDecimal;
-            } else {
-                throw new IllegalStateException("Unknown int variance function: " + name);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -812,30 +730,7 @@ public class IntMomentPerformance {
          * @return the variance
          */
         static double varianceDD(IntVarianceData data) {
-            final long n = data.getN();
-            if (n == 0) {
-                return Double.NaN;
-            }
-            // Avoid a divide by zero
-            if (n == 1) {
-                return 0;
-            }
-            final UInt128 sumSq = data.getSumSq();
-            final Int128 sum = data.getSum();
-            // Assume unbiased
-            final long n0 = n - 1;
-            // Extended precision.
-            // Sum-of-squared deviations precursor: n * sum(x^2) - sum(x)^2
-            final DD diff = sumSq.toDD().multiply(n).subtract(sum.toDD().square());
-            if (diff.hi() < 0) {
-                return 0;
-            }
-            // Divisor is an exact double
-            if (n < (1L << 26)) {
-                // n0*n is safe as a long
-                return diff.divide(n0 * n).doubleValue();
-            }
-            return diff.divide(DD.of(n).multiply(DD.of(n0))).doubleValue();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -845,25 +740,7 @@ public class IntMomentPerformance {
          * @return the variance
          */
         static double varianceDD2(IntVarianceData data) {
-            final long n = data.getN();
-            if (n == 0) {
-                return Double.NaN;
-            }
-            // Avoid a divide by zero
-            if (n == 1) {
-                return 0;
-            }
-            final UInt128 sumSq = data.getSumSq();
-            final Int128 sum = data.getSum();
-            // Assume unbiased
-            final long n0 = n - 1;
-            // Extended precision.
-            // Sum-of-squared deviations: sum(x^2) - sum(x)^2 / n
-            final DD ss = sumSq.toDD().subtract(sum.toDD().square().divide(n));
-            if (ss.hi() < 0) {
-                return 0;
-            }
-            return ss.divide(n0).doubleValue();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -873,24 +750,7 @@ public class IntMomentPerformance {
          * @return the variance
          */
         static double varianceBigIntegerPow(IntVarianceData data) {
-            final long n = data.getN();
-            if (n == 0) {
-                return Double.NaN;
-            }
-            // Avoid a divide by zero
-            if (n == 1) {
-                return 0;
-            }
-            final UInt128 sumSq = data.getSumSq();
-            final Int128 sum = data.getSum();
-            // Assume unbiased
-            final long n0 = n - 1;
-            // Extended precision.
-            // Sum-of-squared deviations precursor: n * sum(x^2) - sum(x)^2
-            final BigInteger diff = sumSq.toBigInteger().multiply(BigInteger.valueOf(n))
-                .subtract(sum.toBigInteger().pow(2));
-            // Compute the divide in double precision
-            return diff.doubleValue() / ((double) n0 * n);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -900,24 +760,7 @@ public class IntMomentPerformance {
          * @return the variance
          */
         static double varianceBigIntegerMultiply(IntVarianceData data) {
-            final long n = data.getN();
-            if (n == 0) {
-                return Double.NaN;
-            }
-            // Avoid a divide by zero
-            if (n == 1) {
-                return 0;
-            }
-            final UInt128 sumSq = data.getSumSq();
-            final Int128 sum = data.getSum();
-            // Assume unbiased
-            final long n0 = n - 1;
-            // Extended precision.
-            // Sum-of-squared deviations precursor: n * sum(x^2) - sum(x)^2
-            final BigInteger diff = sumSq.toBigInteger().multiply(BigInteger.valueOf(n))
-                .subtract(square(sum.toBigInteger()));
-            // Compute the divide in double precision
-            return diff.doubleValue() / ((double) n0 * n);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -927,26 +770,7 @@ public class IntMomentPerformance {
          * @return the variance
          */
         static double varianceSumSquareBigInteger(IntVarianceData data) {
-            final long n = data.getN();
-            if (n == 0) {
-                return Double.NaN;
-            }
-            // Avoid a divide by zero
-            if (n == 1) {
-                return 0;
-            }
-            final UInt128 sumSq = data.getSumSq();
-            final Int128 sum = data.getSum();
-            // Assume unbiased
-            final long n0 = n - 1;
-            // Extended precision.
-            // Sum-of-squared deviations precursor: n * sum(x^2) - sum(x)^2
-            // Compute the second term if possible using fast integer arithmetic.
-            final BigInteger term1 = sumSq.toBigInteger().multiply(BigInteger.valueOf(n));
-            final BigInteger term2 = sum.hi64() == 0 ? sum.squareLow().toBigInteger() : square(sum.toBigInteger());
-            final BigInteger diff = term1.subtract(term2);
-            // Compute the divide in double precision
-            return diff.doubleValue() / ((double) n0 * n);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -956,28 +780,7 @@ public class IntMomentPerformance {
          * @return the variance
          */
         static double varianceSumSquareMultiplyIntBigInteger(IntVarianceData data) {
-            final long n = data.getN();
-            if (n == 0) {
-                return Double.NaN;
-            }
-            // Avoid a divide by zero
-            if (n == 1) {
-                return 0;
-            }
-            final UInt128 sumSq = data.getSumSq();
-            final Int128 sum = data.getSum();
-            // Assume unbiased
-            final long n0 = n - 1;
-            // Extended precision.
-            // Sum-of-squared deviations precursor: n * sum(x^2) - sum(x)^2
-            // Compute the term if possible using fast integer arithmetic.
-            // sum(x^2) * n will be OK when n < 2^32.
-            final BigInteger term1 = n < 1L << 32 ? sumSq.unsignedMultiply((int) n).toBigInteger() :
-                sumSq.toBigInteger().multiply(BigInteger.valueOf(n));
-            final BigInteger term2 = sum.hi64() == 0 ? sum.squareLow().toBigInteger() : square(sum.toBigInteger());
-            final BigInteger diff = term1.subtract(term2);
-            // Compute the divide in double precision
-            return diff.doubleValue() / ((double) n0 * n);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -987,40 +790,7 @@ public class IntMomentPerformance {
          * @return the variance
          */
         static double varianceUIntBigInteger(IntVarianceData data) {
-            final long n = data.getN();
-            if (n == 0) {
-                return Double.NaN;
-            }
-            // Avoid a divide by zero
-            if (n == 1) {
-                return 0;
-            }
-            final UInt128 sumSq = data.getSumSq();
-            final Int128 sum = data.getSum();
-            // Assume unbiased
-            final long n0 = n - 1;
-            // Extended precision.
-            // Sum-of-squared deviations precursor: n * sum(x^2) - sum(x)^2
-            // Compute the term if possible using fast integer arithmetic.
-            // 128-bit sum(x^2) * n will be OK when the upper 32-bits are zero.
-            // 128-bit sum(x)^2 will be OK when the upper 64-bits are zero.
-            // Both are safe when n < 2^32.
-            BigInteger diff;
-            if ((n >>> Integer.SIZE) == 0) {
-                diff = sumSq.unsignedMultiply((int) n).subtract(sum.squareLow()).toBigInteger();
-            } else {
-                // It may still be possible to compute the square
-                BigInteger sum2;
-                if (sum.hi64() == 0) {
-                    sum2 = sum.squareLow().toBigInteger();
-                } else {
-                    sum2 = sum.toBigInteger();
-                    sum2 = sum2.multiply(sum2);
-                }
-                diff = sumSq.toBigInteger().multiply(BigInteger.valueOf(n)).subtract(sum2);
-            }
-            // Compute the divide in double precision
-            return diff.doubleValue() / ((double) n0 * n);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1031,36 +801,7 @@ public class IntMomentPerformance {
          * @return the variance
          */
         static double varianceUIntDD(IntVarianceData data) {
-            final long n = data.getN();
-            if (n == 0) {
-                return Double.NaN;
-            }
-            // Avoid a divide by zero
-            if (n == 1) {
-                return 0;
-            }
-            final UInt128 sumSq = data.getSumSq();
-            final Int128 sum = data.getSum();
-            // Assume unbiased
-            final long n0 = n - 1;
-            // Extended precision.
-            // Sum-of-squared deviations precursor: n * sum(x^2) - sum(x)^2
-            // Compute the term if possible using fast integer arithmetic.
-            // sum(x^2) * n will be OK when the upper 32-bits are zero.
-            // Both are safe when n < 2^32.
-            if ((n >>> Integer.SIZE) == 0) {
-                final DD diff = sumSq.unsignedMultiply((int) n).subtract(sum.squareLow()).toDD();
-                // Divisor is an exact double
-                if (n < (1L << 26)) {
-                    // n0*n is safe as a long
-                    return diff.divide(n0 * n).doubleValue();
-                }
-                return diff.divide(DD.of(n).multiply(DD.of(n0))).doubleValue();
-            }
-            final BigInteger diff = sumSq.toBigInteger().multiply(
-                BigInteger.valueOf(n)).subtract(square(sum.toBigInteger()));
-            // Compute the divide in double precision
-            return diff.doubleValue() / ((double) n0 * n);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1070,37 +811,7 @@ public class IntMomentPerformance {
          * @return the variance
          */
         static double varianceUIntDD2(IntVarianceData data) {
-            final long n = data.getN();
-            if (n == 0) {
-                return Double.NaN;
-            }
-            // Avoid a divide by zero
-            if (n == 1) {
-                return 0;
-            }
-            final UInt128 sumSq = data.getSumSq();
-            final Int128 sum = data.getSum();
-            // Assume unbiased
-            final long n0 = n - 1;
-            // Extended precision.
-            // Sum-of-squared deviations precursor: n * sum(x^2) - sum(x)^2
-            // Compute the term if possible using fast integer arithmetic.
-            // sum(x^2) * n will be OK when the upper 32-bits are zero.
-            // Both are safe when n < 2^32.
-            if ((n >>> Integer.SIZE) == 0) {
-                final DD diff = sumSq.unsignedMultiply((int) n).subtract(sum.squareLow()).toDD();
-                // Divisor is an exact double
-                if (n < (1L << 26)) {
-                    // n0*n is safe as a long
-                    return diff.divide(n0 * n).doubleValue();
-                }
-                return diff.divide(DD.of(n).multiply(DD.of(n0))).doubleValue();
-            }
-            final BigInteger diff = sumSq.toBigInteger().multiply(
-                BigInteger.valueOf(n)).subtract(square(sum.toBigInteger()));
-            // Assume n is big to overflow the sum(x)
-            // Compute the divide in double-double precision
-            return DD.of(diff.doubleValue()).divide(DD.of(n).multiply(DD.of(n0))).doubleValue();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1115,32 +826,7 @@ public class IntMomentPerformance {
          * @return the variance
          */
         static double varianceUIntBigInteger2(IntVarianceData data) {
-            final long n = data.getN();
-            if (n == 0) {
-                return Double.NaN;
-            }
-            // Avoid a divide by zero
-            if (n == 1) {
-                return 0;
-            }
-            final UInt128 sumSq = data.getSumSq();
-            final Int128 sum = data.getSum();
-            // Assume unbiased
-            final long n0 = n - 1;
-            // Extended precision.
-            // Sum-of-squared deviations precursor: n * sum(x^2) - sum(x)^2
-            // Compute the term if possible using fast integer arithmetic.
-            // 128-bit sum(x^2) * n will be OK when the upper 32-bits are zero.
-            // 128-bit sum(x)^2 will be OK when the upper 64-bits are zero.
-            // Both are safe when n < 2^32.
-            BigInteger diff;
-            if ((n >>> Integer.SIZE) == 0) {
-                diff = sumSq.unsignedMultiply((int) n).subtract(sum.squareLow()).toBigInteger();
-            } else {
-                diff = sumSq.toBigInteger().multiply(BigInteger.valueOf(n)).subtract(square(sum.toBigInteger()));
-            }
-            // Compute the divide in double precision
-            return diff.doubleValue() / ((double) n0 * n);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1155,32 +841,7 @@ public class IntMomentPerformance {
          * @return the variance
          */
         static double varianceUIntBigInteger3(IntVarianceData data) {
-            final long n = data.getN();
-            if (n == 0) {
-                return Double.NaN;
-            }
-            // Avoid a divide by zero
-            if (n == 1) {
-                return 0;
-            }
-            final UInt128 sumSq = data.getSumSq();
-            final Int128 sum = data.getSum();
-            // Assume unbiased
-            final long n0 = n - 1;
-            // Extended precision.
-            // Sum-of-squared deviations precursor: n * sum(x^2) - sum(x)^2
-            // Compute the term if possible using fast integer arithmetic.
-            // 128-bit sum(x^2) * n will be OK when the upper 32-bits are zero.
-            // 128-bit sum(x)^2 will be OK when the upper 64-bits are zero.
-            // Both are safe when n < 2^32.
-            BigInteger diff;
-            if ((n >>> Integer.SIZE) == 0) {
-                diff = sumSq.unsignedMultiply((int) n).subtract(sum.squareLow()).toBigInteger();
-            } else {
-                diff = sumSq.toBigInteger().multiply(BigInteger.valueOf(n)).subtract(sum.square());
-            }
-            // Compute the divide in double precision
-            return diff.doubleValue() / ((double) n0 * n);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1198,33 +859,7 @@ public class IntMomentPerformance {
          * @return the variance
          */
         static double varianceUIntDouble(IntVarianceData data) {
-            final long n = data.getN();
-            if (n == 0) {
-                return Double.NaN;
-            }
-            // Avoid a divide by zero
-            if (n == 1) {
-                return 0;
-            }
-            final UInt128 sumSq = data.getSumSq();
-            final Int128 sum = data.getSum();
-            // Assume unbiased
-            final long n0 = n - 1;
-            // Extended precision.
-            // Sum-of-squared deviations precursor: n * sum(x^2) - sum(x)^2
-            // Compute the term if possible using fast integer arithmetic.
-            // 128-bit sum(x^2) * n will be OK when the upper 32-bits are zero.
-            // 128-bit sum(x)^2 will be OK when the upper 64-bits are zero.
-            // Both are safe when n < 2^32.
-            double diff;
-            if ((n >>> Integer.SIZE) == 0) {
-                diff = sumSq.unsignedMultiply((int) n).subtract(sum.squareLow()).toDouble();
-            } else {
-                diff = sumSq.toBigInteger().multiply(BigInteger.valueOf(n))
-                    .subtract(square(sum.toBigInteger())).doubleValue();
-            }
-            // Compute the divide in double precision
-            return diff / IntMath.unsignedMultiplyToDouble(n, n0);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1241,36 +876,7 @@ public class IntMomentPerformance {
          * @return the variance
          */
         static double varianceUIntBigFraction(IntVarianceData data) {
-            final long n = data.getN();
-            if (n == 0) {
-                return Double.NaN;
-            }
-            // Avoid a divide by zero
-            if (n == 1) {
-                return 0;
-            }
-            final UInt128 sumSq = data.getSumSq();
-            final Int128 sum = data.getSum();
-            // Assume unbiased
-            final long n0 = n - 1;
-            // Extended precision.
-            // Sum-of-squared deviations precursor: n * sum(x^2) - sum(x)^2
-            // Compute the term if possible using fast integer arithmetic.
-            // 128-bit sum(x^2) * n will be OK when the upper 32-bits are zero.
-            // 128-bit sum(x)^2 will be OK when the upper 64-bits are zero.
-            // Both are safe when n < 2^32.
-            BigInteger diff;
-            if ((n >>> Integer.SIZE) == 0) {
-                diff = sumSq.unsignedMultiply((int) n).subtract(sum.squareLow()).toBigInteger();
-            } else {
-                diff = sumSq.toBigInteger().multiply(BigInteger.valueOf(n)).subtract(square(sum.toBigInteger()));
-            }
-            if (n < (1L << 26)) {
-                // Compute the divide in double precision
-                return diff.doubleValue() / ((double) n0 * n);
-            }
-            return BigFraction.of(diff, BigInteger.valueOf(n0).multiply(BigInteger.valueOf(n)))
-                .doubleValue();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1287,37 +893,7 @@ public class IntMomentPerformance {
          * @return the variance
          */
         static double varianceUIntBigDecimal(IntVarianceData data) {
-            final long n = data.getN();
-            if (n == 0) {
-                return Double.NaN;
-            }
-            // Avoid a divide by zero
-            if (n == 1) {
-                return 0;
-            }
-            final UInt128 sumSq = data.getSumSq();
-            final Int128 sum = data.getSum();
-            // Assume unbiased
-            final long n0 = n - 1;
-            // Extended precision.
-            // Sum-of-squared deviations precursor: n * sum(x^2) - sum(x)^2
-            // Compute the term if possible using fast integer arithmetic.
-            // 128-bit sum(x^2) * n will be OK when the upper 32-bits are zero.
-            // 128-bit sum(x)^2 will be OK when the upper 64-bits are zero.
-            // Both are safe when n < 2^32.
-            BigInteger diff;
-            if ((n >>> Integer.SIZE) == 0) {
-                diff = sumSq.unsignedMultiply((int) n).subtract(sum.squareLow()).toBigInteger();
-            } else {
-                diff = sumSq.toBigInteger().multiply(BigInteger.valueOf(n)).subtract(square(sum.toBigInteger()));
-            }
-            if (n < (1L << 26)) {
-                // Compute the divide in double precision
-                return diff.doubleValue() / ((double) n0 * n);
-            }
-            return new BigDecimal(diff).divide(new BigDecimal(
-                BigInteger.valueOf(n0).multiply(BigInteger.valueOf(n))), MC_20_DIGITS)
-                .doubleValue();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -1333,24 +909,35 @@ public class IntMomentPerformance {
      */
     @State(Scope.Benchmark)
     public static class LongDataSource {
-        /** Data length: 2^10. If shift is above 10 then no overflow will occur. */
-        @Param({"1024"})
+
+        /**
+         * Data length: 2^10. If shift is above 10 then no overflow will occur.
+         */
+        @Param({ "1024" })
         private int length;
-        /** Data sign. */
-        @Param({"positive", "negative", "both"})
+
+        /**
+         * Data sign.
+         */
+        @Param({ "positive", "negative", "both" })
         private String sign;
-        /** Data bit shift. */
-        @Param({"0", "1", "2", "4", "8", "16"})
+
+        /**
+         * Data bit shift.
+         */
+        @Param({ "0", "1", "2", "4", "8", "16" })
         private int shift;
 
-        /** Data. */
+        /**
+         * Data.
+         */
         private long[] data;
 
         /**
          * @return the data
          */
         public long[] getData() {
-            return data;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1359,20 +946,7 @@ public class IntMomentPerformance {
          */
         @Setup(Level.Iteration)
         public void setup() {
-            LongStream s = RandomSource.XO_RO_SHI_RO_128_PP.create().longs(length);
-            if ("positive".equals(sign)) {
-                s = s.map(x -> x >>> 1);
-            } else if ("negative".equals(sign)) {
-                s = s.map(x -> x | Long.MIN_VALUE);
-            } else if (!"both".equals(sign)) {
-                throw new IllegalStateException("Unknown sign: " + sign);
-            }
-            if (shift > 0) {
-                final int bits = shift;
-                // Signed shift maintains negative values
-                s = s.map(x -> x >> bits);
-            }
-            data = s.toArray();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -1381,19 +955,24 @@ public class IntMomentPerformance {
      */
     @State(Scope.Benchmark)
     public static class LongSumFunctionSource {
-        /** Name of the source.
-         * The branchless 128bitAdd2 runs at constant speed but is slower than 128bitAdd. */
-        @Param({"128bitAdd", "128bitAdd2", "64bitSum"})
+
+        /**
+         * Name of the source.
+         * The branchless 128bitAdd2 runs at constant speed but is slower than 128bitAdd.
+         */
+        @Param({ "128bitAdd", "128bitAdd2", "64bitSum" })
         private String name;
 
-        /** The action. */
+        /**
+         * The action.
+         */
         private ToLongFunction<long[]> function;
 
         /**
          * @return the function
          */
         public ToLongFunction<long[]> getFunction() {
-            return function;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1401,33 +980,7 @@ public class IntMomentPerformance {
          */
         @Setup(Level.Iteration)
         public void setup() {
-            if ("128bitAdd".equals(name)) {
-                function = x -> {
-                    final Int128 s = Int128.create();
-                    for (final long y : x) {
-                        s.add(y);
-                    }
-                    return s.hi64();
-                };
-            } else if ("128bitAdd2".equals(name)) {
-                function = x -> {
-                    final Int128 s = Int128.create();
-                    for (final long y : x) {
-                        s.add2(y);
-                    }
-                    return s.hi64();
-                };
-            } else if ("64bitSum".equals(name)) {
-                function = x -> {
-                    long s = 0;
-                    for (final long y : x) {
-                        s += y;
-                    }
-                    return s;
-                };
-            } else {
-                throw new IllegalStateException("Unknown long sum function: " + name);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -1437,21 +990,29 @@ public class IntMomentPerformance {
      */
     @State(Scope.Benchmark)
     public static class MultiplyLongDataSource {
-        /** Data length. */
-        @Param({"1024"})
+
+        /**
+         * Data length.
+         */
+        @Param({ "1024" })
         private int length;
-        /** Data bit shift. */
-        @Param({"0", "33"})
+
+        /**
+         * Data bit shift.
+         */
+        @Param({ "0", "33" })
         private int shift;
 
-        /** Data. */
+        /**
+         * Data.
+         */
         private long[] data;
 
         /**
          * @return the data
          */
         public long[] getData() {
-            return data;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1460,12 +1021,7 @@ public class IntMomentPerformance {
          */
         @Setup(Level.Iteration)
         public void setup() {
-            LongStream s = RandomSource.XO_RO_SHI_RO_128_PP.create().longs(length * 2L);
-            if (shift > 0) {
-                final int bits = shift;
-                s = s.map(x -> x >>> bits);
-            }
-            data = s.toArray();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -1474,17 +1030,23 @@ public class IntMomentPerformance {
      */
     @State(Scope.Benchmark)
     public static class MultiplyLongFunctionSource {
-        /** Name of the source. */
-        @Param({"double", "unsignedMultiplyToDoubleBigInteger", "unsignedMultiplyToDouble"})
+
+        /**
+         * Name of the source.
+         */
+        @Param({ "double", "unsignedMultiplyToDoubleBigInteger", "unsignedMultiplyToDouble" })
         private String name;
 
-        /** The action. */
+        /**
+         * The action.
+         */
         private ToDoubleFunction<long[]> function;
 
         /**
          * Function for two long arguments.
          */
         interface LongLongToDoubleFunction {
+
             /**
              * Apply the function.
              *
@@ -1499,7 +1061,7 @@ public class IntMomentPerformance {
          * @return the function
          */
         public ToDoubleFunction<long[]> getFunction() {
-            return function;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1507,8 +1069,7 @@ public class IntMomentPerformance {
          */
         @Setup(Level.Iteration)
         public void setup() {
-            final LongLongToDoubleFunction f = createFunction(name);
-            function = x -> applyAll(x, f);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1549,21 +1110,25 @@ public class IntMomentPerformance {
      * A mean of {@code int} data using a {@code long} sum.
      */
     static class LongSumMean implements IntConsumer, DoubleSupplier {
-        /** Count of values that have been added. */
+
+        /**
+         * Count of values that have been added.
+         */
         private long n;
 
-        /** Sum of values that have been added. */
+        /**
+         * Sum of values that have been added.
+         */
         private long s;
 
         @Override
         public void accept(int value) {
-            s += value;
-            n++;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double getAsDouble() {
-            return (double) s / n;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1573,11 +1138,7 @@ public class IntMomentPerformance {
          * @return the mean
          */
         static double mean(int[] data) {
-            long s = 0;
-            for (final int x : data) {
-                s += x;
-            }
-            return (double) s / data.length;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -1585,21 +1146,25 @@ public class IntMomentPerformance {
      * A mean of {@code long} data using a {@code BigInteger} sum.
      */
     static class BigIntegerSumMean implements LongConsumer, DoubleSupplier {
-        /** Count of values that have been added. */
+
+        /**
+         * Count of values that have been added.
+         */
         private long n;
 
-        /** Sum of values that have been added. */
+        /**
+         * Sum of values that have been added.
+         */
         private BigInteger s = BigInteger.ZERO;
 
         @Override
         public void accept(long value) {
-            s = s.add(BigInteger.valueOf(value));
-            n++;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public double getAsDouble() {
-            return s.doubleValue() / n;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -1609,11 +1174,7 @@ public class IntMomentPerformance {
          * @return the mean
          */
         static double mean(long[] data) {
-            BigInteger s = BigInteger.ZERO;
-            for (final long x : data) {
-                s = s.add(BigInteger.valueOf(x));
-            }
-            return s.doubleValue() / data.length;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -1626,10 +1187,7 @@ public class IntMomentPerformance {
      * @return the value
      */
     static <T extends IntConsumer & DoubleSupplier> double forEach(T action, int[] values) {
-        for (final int x : values) {
-            action.accept(x);
-        }
-        return action.getAsDouble();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1641,10 +1199,7 @@ public class IntMomentPerformance {
      * @return the value
      */
     static <T extends DoubleConsumer & DoubleSupplier> double forEach(T action, double[] values) {
-        for (final double x : values) {
-            action.accept(x);
-        }
-        return action.getAsDouble();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1656,10 +1211,7 @@ public class IntMomentPerformance {
      * @return the value
      */
     static <T extends LongConsumer & DoubleSupplier> double forEach(T action, long[] values) {
-        for (final long x : values) {
-            action.accept(x);
-        }
-        return action.getAsDouble();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1671,7 +1223,7 @@ public class IntMomentPerformance {
      */
     @Benchmark
     public double forEachIntStatistic(IntActionSource action, DataSource source) {
-        return forEach(action.getAction(), source.getData());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1683,7 +1235,7 @@ public class IntMomentPerformance {
      */
     @Benchmark
     public double forEachDoubleStatistic(DoubleActionSource action, DataSource source) {
-        return forEach(action.getAction(), source.getDoubleData());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1695,7 +1247,7 @@ public class IntMomentPerformance {
      */
     @Benchmark
     public double forEachLongStatistic(LongActionSource action, DataSource source) {
-        return forEach(action.getAction(), source.getLongData());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1707,7 +1259,7 @@ public class IntMomentPerformance {
      */
     @Benchmark
     public double arrayIntStatistic(IntFunctionSource function, DataSource source) {
-        return function.getFunction().applyAsDouble(source.getData());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1719,7 +1271,7 @@ public class IntMomentPerformance {
      */
     @Benchmark
     public double arrayDoubleStatistic(DoubleFunctionSource function, DataSource source) {
-        return function.getFunction().applyAsDouble(source.getDoubleData());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1731,7 +1283,7 @@ public class IntMomentPerformance {
      */
     @Benchmark
     public double arrayLongStatistic(LongFunctionSource function, DataSource source) {
-        return function.getFunction().applyAsDouble(source.getLongData());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1743,11 +1295,7 @@ public class IntMomentPerformance {
      */
     @Benchmark
     public void intVariance(IntVarianceFunctionSource function, IntVarianceDataSource source, Blackhole bh) {
-        final int size = source.size();
-        final ToDoubleFunction<IntVarianceData> f = function.getFunction();
-        for (int i = 0; i < size; i++) {
-            bh.consume(f.applyAsDouble(source.getData(i)));
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1759,7 +1307,7 @@ public class IntMomentPerformance {
      */
     @Benchmark
     public long longSum(LongSumFunctionSource function, LongDataSource source) {
-        return function.getFunction().applyAsLong(source.getData());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1771,6 +1319,6 @@ public class IntMomentPerformance {
      */
     @Benchmark
     public double multiplyToDouble(MultiplyLongFunctionSource function, MultiplyLongDataSource source) {
-        return function.getFunction().applyAsDouble(source.getData());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

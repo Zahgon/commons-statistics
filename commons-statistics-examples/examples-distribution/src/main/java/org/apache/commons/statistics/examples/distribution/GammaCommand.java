@@ -27,46 +27,46 @@ import picocli.CommandLine.Option;
 /**
  * Command for the {@link GammaDistribution}.
  */
-@Command(name = "gamma",
-         aliases = {"gam"},
-         description = "Gamma distribution.",
-         subcommands = {
-             GammaCommand.Check.class,
-             GammaCommand.PDF.class,
-             GammaCommand.LPDF.class,
-             GammaCommand.CDF.class,
-             GammaCommand.SF.class,
-             GammaCommand.ICDF.class,
-             GammaCommand.ISF.class,
-         })
+@Command(name = "gamma", aliases = { "gam" }, description = "Gamma distribution.", subcommands = { GammaCommand.Check.class, GammaCommand.PDF.class, GammaCommand.LPDF.class, GammaCommand.CDF.class, GammaCommand.SF.class, GammaCommand.ICDF.class, GammaCommand.ISF.class })
 class GammaCommand extends AbstractDistributionCommand {
 
-    /** Base command for the distribution that defines the parameters. */
+    /**
+     * Base command for the distribution that defines the parameters.
+     */
     private abstract static class BaseCommand extends AbstractContinuousDistributionCommand {
-        /** Distribution parameters. */
+
+        /**
+         * Distribution parameters.
+         */
         @ArgGroup(validate = false, heading = "Distribution parameters:%n", order = 1)
         private Params params = new Params();
 
-        /** Parameters class. */
+        /**
+         * Parameters class.
+         */
         static class Params {
-            /** The distribution shape. */
-            @Option(names = {"-k", "--shape"},
-                    arity = "1..*",
-                    split = ",",
-                    description = {"shape (default: ${DEFAULT-VALUE})."})
-            private double[] shape = {1, 2, 3, 5, 9, 7.5, 0.5};
 
-            /** The distribution scale. */
-            @Option(names = {"-t", "--scale"},
-                    arity = "1..*",
-                    split = ",",
-                    description = {"scale (default: ${DEFAULT-VALUE})."})
-            private double[] scale = {2, 2, 2, 1, 0.5, 1, 1};
+            /**
+             * The distribution shape.
+             */
+            @Option(names = { "-k", "--shape" }, arity = "1..*", split = ",", description = { "shape (default: ${DEFAULT-VALUE})." })
+            private double[] shape = { 1, 2, 3, 5, 9, 7.5, 0.5 };
+
+            /**
+             * The distribution scale.
+             */
+            @Option(names = { "-t", "--scale" }, arity = "1..*", split = ",", description = { "scale (default: ${DEFAULT-VALUE})." })
+            private double[] scale = { 2, 2, 2, 1, 0.5, 1, 1 };
         }
 
-        /** Extend the options to set the default values for this distribution. */
+        /**
+         * Extend the options to set the default values for this distribution.
+         */
         static final class Options extends ContinuousDistributionOptions {
-            /** Set defaults. */
+
+            /**
+             * Set defaults.
+             */
             private Options() {
                 min = 0;
                 max = 20;
@@ -75,80 +75,90 @@ class GammaCommand extends AbstractDistributionCommand {
 
         @Override
         protected List<Distribution<ContinuousDistribution>> getDistributions() {
-            double[] shape = params.shape;
-            double[] scale = params.scale;
-            final int n = DistributionUtils.validateLengths(shape.length, scale.length);
-
-            shape = DistributionUtils.expandToLength(shape, n);
-            scale = DistributionUtils.expandToLength(scale, n);
-
-            // Create distributions
-            final ArrayList<Distribution<ContinuousDistribution>> list = new ArrayList<>();
-            for (int i = 0; i < n; i++) {
-                final ContinuousDistribution d = GammaDistribution.of(shape[i], scale[i]);
-                list.add(new Distribution<>(d, "shape=" + shape[i] + ",scale=" + scale[i]));
-            }
-            return list;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    /** Base command for the distribution that defines the parameters. */
+    /**
+     * Base command for the distribution that defines the parameters.
+     */
     private abstract static class ProbabilityCommand extends BaseCommand {
-        /** The distribution options. */
+
+        /**
+         * The distribution options.
+         */
         @ArgGroup(validate = false, heading = "Evaluation options:%n", order = 2)
         private Options distributionOptions = new Options();
 
         @Override
         protected DistributionOptions getDistributionOptions() {
-            return distributionOptions;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    /** Base command for the distribution that defines the parameters for inverse probability functions. */
+    /**
+     * Base command for the distribution that defines the parameters for inverse probability functions.
+     */
     private abstract static class InverseProbabilityCommand extends BaseCommand {
-        /** The distribution options. */
+
+        /**
+         * The distribution options.
+         */
         @ArgGroup(validate = false, heading = "Evaluation options:%n", order = 2)
         private InverseContinuousDistributionOptions distributionOptions = new InverseContinuousDistributionOptions();
 
         @Override
         protected DistributionOptions getDistributionOptions() {
-            return distributionOptions;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    /** Verification checks command. */
-    @Command(name = "check",
-             hidden = true,
-             description = "Gamma distribution verification checks.")
-    static class Check extends ProbabilityCommand {}
+    /**
+     * Verification checks command.
+     */
+    @Command(name = "check", hidden = true, description = "Gamma distribution verification checks.")
+    static class Check extends ProbabilityCommand {
+    }
 
-    /** PDF command. */
-    @Command(name = "pdf",
-             description = "Gamma distribution PDF.")
-    static class PDF extends ProbabilityCommand {}
+    /**
+     * PDF command.
+     */
+    @Command(name = "pdf", description = "Gamma distribution PDF.")
+    static class PDF extends ProbabilityCommand {
+    }
 
-    /** LPDF command. */
-    @Command(name = "lpdf",
-             description = "Gamma distribution natural logarithm of the PDF.")
-    static class LPDF extends ProbabilityCommand {}
+    /**
+     * LPDF command.
+     */
+    @Command(name = "lpdf", description = "Gamma distribution natural logarithm of the PDF.")
+    static class LPDF extends ProbabilityCommand {
+    }
 
-    /** CDF command. */
-    @Command(name = "cdf",
-             description = "Gamma distribution CDF.")
-    static class CDF extends ProbabilityCommand {}
+    /**
+     * CDF command.
+     */
+    @Command(name = "cdf", description = "Gamma distribution CDF.")
+    static class CDF extends ProbabilityCommand {
+    }
 
-    /** SF command. */
-    @Command(name = "sf",
-             description = "Gamma distribution survival probability.")
-    static class SF extends ProbabilityCommand {}
+    /**
+     * SF command.
+     */
+    @Command(name = "sf", description = "Gamma distribution survival probability.")
+    static class SF extends ProbabilityCommand {
+    }
 
-    /** ICDF command. */
-    @Command(name = "icdf",
-             description = "Gamma distribution inverse CDF.")
-    static class ICDF extends InverseProbabilityCommand {}
+    /**
+     * ICDF command.
+     */
+    @Command(name = "icdf", description = "Gamma distribution inverse CDF.")
+    static class ICDF extends InverseProbabilityCommand {
+    }
 
-    /** ISF command. */
-    @Command(name = "isf",
-             description = "Gamma distribution inverse SF.")
-    static class ISF extends InverseProbabilityCommand {}
+    /**
+     * ISF command.
+     */
+    @Command(name = "isf", description = "Gamma distribution inverse SF.")
+    static class ISF extends InverseProbabilityCommand {
+    }
 }

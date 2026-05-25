@@ -42,7 +42,10 @@ import org.apache.commons.statistics.distribution.FDistribution;
  * @since 1.1
  */
 public final class OneWayAnova {
-    /** Default instance. */
+
+    /**
+     * Default instance.
+     */
     private static final OneWayAnova DEFAULT = new OneWayAnova();
 
     /**
@@ -53,15 +56,30 @@ public final class OneWayAnova {
      * @since 1.1
      */
     public static final class Result extends BaseSignificanceResult {
-        /** Degrees of freedom in numerator (between groups). */
+
+        /**
+         * Degrees of freedom in numerator (between groups).
+         */
         private final int dfbg;
-        /** Degrees of freedom in denominator (within groups). */
+
+        /**
+         * Degrees of freedom in denominator (within groups).
+         */
         private final long dfwg;
-        /** Mean square between groups. */
+
+        /**
+         * Mean square between groups.
+         */
         private final double msbg;
-        /** Mean square within groups. */
+
+        /**
+         * Mean square within groups.
+         */
         private final double mswg;
-        /** nO value used to partition the variance. */
+
+        /**
+         * nO value used to partition the variance.
+         */
         private final double nO;
 
         /**
@@ -88,7 +106,7 @@ public final class OneWayAnova {
          * @return degrees of freedom between groups
          */
         int getDFBG() {
-            return dfbg;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -97,7 +115,7 @@ public final class OneWayAnova {
          * @return degrees of freedom within groups
          */
         long getDFWG() {
-            return dfwg;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -106,7 +124,7 @@ public final class OneWayAnova {
          * @return mean square between groups
          */
         public double getMSBG() {
-            return msbg;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -115,7 +133,7 @@ public final class OneWayAnova {
          * @return mean square within groups
          */
         public double getMSWG() {
-            return mswg;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -150,13 +168,7 @@ public final class OneWayAnova {
          * @return variance component between groups (in [0, 1]).
          */
         public double getVCBG() {
-            if (msbg <= mswg) {
-                return 0;
-            }
-            // a is an estimate of the between-group variance
-            final double a = (msbg - mswg) / nO;
-            final double b = mswg;
-            return a / (a + b);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -169,16 +181,13 @@ public final class OneWayAnova {
          * @return variance component within groups (in [0, 1]).
          */
         public double getVCWG() {
-            if (msbg <= mswg) {
-                return 1;
-            }
-            final double a = (msbg - mswg) / nO;
-            final double b = mswg;
-            return b / (a + b);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    /** Private constructor. */
+    /**
+     * Private constructor.
+     */
     private OneWayAnova() {
         // Do nothing
     }
@@ -189,7 +198,7 @@ public final class OneWayAnova {
      * @return default instance
      */
     public static OneWayAnova withDefaults() {
-        return DEFAULT;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -212,9 +221,7 @@ public final class OneWayAnova {
      * categories have only one value (zero degrees of freedom within groups)
      */
     public double statistic(Collection<double[]> data) {
-        final double[] f = new double[1];
-        aov(data, f);
-        return f[0];
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -237,7 +244,7 @@ public final class OneWayAnova {
      * categories have only one value (zero degrees of freedom within groups)
      */
     public Result test(Collection<double[]> data) {
-        return aov(data, null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -266,10 +273,8 @@ public final class OneWayAnova {
         if (dfwg == 0) {
             throw new InferenceException(InferenceException.ZERO, "Degrees of freedom within groups");
         }
-
         // wg = within group
         // bg = between group
-
         // F = Var(bg) / Var(wg)
         // Var = SS / df
         // SStotal = sum((x - u)^2) = sum(x^2) - sum(x)^2/n
@@ -280,7 +285,6 @@ public final class OneWayAnova {
         //      = sum_g { sum(x)^2/n) } - sum(x)^2/n
         // SSwg = SStotal - SSbg
         //      = sum(x^2) - sum_g { sum(x)^2/n) }
-
         // Stabilize the computation by shifting all to a common mean of zero.
         // This minimise the magnitude of x^2 terms.
         // The terms sum(x)^2/n -> 0. Included them to capture the round-off.
@@ -305,7 +309,6 @@ public final class OneWayAnova {
             // -sum_g { sum(x)^2/n) }
             sg.add(-pow2(s.getAsDouble()) / array.length);
         }
-
         // Note: SS terms should not be negative given:
         // SS = sum((x - u)^2)
         // This can happen due to floating-point error in sum(x^2) - sum(x)^2/n
@@ -327,13 +330,10 @@ public final class OneWayAnova {
             return null;
         }
         final double p = FDistribution.of(dfbg, dfwg).survivalProbability(f);
-
         // Support partitioning the variance
         // ni = size of each of the groups
         // nO=(1/(a−1))*(sum(ni)−(sum(ni^2)/sum(ni))
-        final double nO = (n - data.stream()
-                .mapToDouble(x -> pow2(x.length)).sum() / n) / dfbg;
-
+        final double nO = (n - data.stream().mapToDouble(x -> pow2(x.length)).sum() / n) / dfbg;
         return new Result(dfbg, dfwg, msbg, mswg, nO, f, p);
     }
 

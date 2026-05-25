@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.apache.commons.statistics.distribution;
 
 import org.apache.commons.numbers.gamma.LogGamma;
@@ -42,25 +41,42 @@ import org.apache.commons.rng.sampling.distribution.ZigguratSampler;
  * @see <a href="https://mathworld.wolfram.com/WeibullDistribution.html">Weibull distribution (MathWorld)</a>
  */
 public final class WeibullDistribution extends AbstractContinuousDistribution {
-    /** Support lower bound. */
+
+    /**
+     * Support lower bound.
+     */
     private static final double SUPPORT_LO = 0;
-    /** Support upper bound. */
+
+    /**
+     * Support upper bound.
+     */
     private static final double SUPPORT_HI = Double.POSITIVE_INFINITY;
-    /** The shape parameter. */
+
+    /**
+     * The shape parameter.
+     */
     private final double shape;
-    /** The scale parameter. */
+
+    /**
+     * The scale parameter.
+     */
     private final double scale;
-    /** shape / scale. */
+
+    /**
+     * shape / scale.
+     */
     private final double shapeOverScale;
-    /** log(shape / scale). */
+
+    /**
+     * log(shape / scale).
+     */
     private final double logShapeOverScale;
 
     /**
      * @param shape Shape parameter.
      * @param scale Scale parameter.
      */
-    private WeibullDistribution(double shape,
-                                double scale) {
+    private WeibullDistribution(double shape, double scale) {
         this.scale = scale;
         this.shape = shape;
         shapeOverScale = shape / scale;
@@ -75,17 +91,8 @@ public final class WeibullDistribution extends AbstractContinuousDistribution {
      * @return the distribution
      * @throws IllegalArgumentException if {@code shape <= 0} or {@code scale <= 0}.
      */
-    public static WeibullDistribution of(double shape,
-                                         double scale) {
-        if (shape <= 0) {
-            throw new DistributionException(DistributionException.NOT_STRICTLY_POSITIVE,
-                                            shape);
-        }
-        if (scale <= 0) {
-            throw new DistributionException(DistributionException.NOT_STRICTLY_POSITIVE,
-                                            scale);
-        }
-        return new WeibullDistribution(shape, scale);
+    public static WeibullDistribution of(double shape, double scale) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -94,7 +101,7 @@ public final class WeibullDistribution extends AbstractContinuousDistribution {
      * @return the shape parameter.
      */
     public double getShape() {
-        return shape;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -103,10 +110,11 @@ public final class WeibullDistribution extends AbstractContinuousDistribution {
      * @return the scale parameter.
      */
     public double getScale() {
-        return scale;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
      *
      * <p>Returns the limit when {@code x = 0}:
      * <ul>
@@ -117,31 +125,11 @@ public final class WeibullDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double density(double x) {
-        if (x <= SUPPORT_LO || x >= SUPPORT_HI) {
-            // Special case x=0
-            if (x == SUPPORT_LO && shape <= 1) {
-                return shape == 1 ?
-                    // Exponential distribution
-                    shapeOverScale :
-                    Double.POSITIVE_INFINITY;
-            }
-            return 0;
-        }
-
-        final double xscale = x / scale;
-        final double xscalepow = Math.pow(xscale, shape - 1);
-
-        /*
-         * Math.pow(x / scale, shape) =
-         * Math.pow(xscale, shape) =
-         * Math.pow(xscale, shape - 1) * xscale
-         */
-        final double xscalepowshape = xscalepow * xscale;
-
-        return shapeOverScale * xscalepow * Math.exp(-xscalepowshape);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
      *
      * <p>Returns the limit when {@code x = 0}:
      * <ul>
@@ -152,49 +140,23 @@ public final class WeibullDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double logDensity(double x) {
-        if (x <= SUPPORT_LO || x >= SUPPORT_HI) {
-            // Special case x=0
-            if (x == SUPPORT_LO && shape <= 1) {
-                return shape == 1 ?
-                    // Exponential distribution
-                    logShapeOverScale :
-                    Double.POSITIVE_INFINITY;
-            }
-            return Double.NEGATIVE_INFINITY;
-        }
-
-        final double xscale = x / scale;
-        final double logxscalepow = Math.log(xscale) * (shape - 1);
-
-        /*
-         * Math.pow(x / scale, shape) =
-         * Math.pow(xscale, shape) =
-         * Math.pow(xscale, shape - 1) * xscale
-         * Math.exp(log(xscale) * (shape - 1)) * xscale
-         */
-        final double xscalepowshape = Math.exp(logxscalepow) * xscale;
-
-        return logShapeOverScale + logxscalepow - xscalepowshape;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double cumulativeProbability(double x) {
-        if (x <= SUPPORT_LO) {
-            return 0;
-        }
-
-        return -Math.expm1(-Math.pow(x / scale, shape));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double survivalProbability(double x) {
-        if (x <= SUPPORT_LO) {
-            return 1;
-        }
-
-        return Math.exp(-Math.pow(x / scale, shape));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -205,13 +167,7 @@ public final class WeibullDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double inverseCumulativeProbability(double p) {
-        ArgumentUtils.checkProbability(p);
-        if (p == 0) {
-            return 0.0;
-        } else  if (p == 1) {
-            return Double.POSITIVE_INFINITY;
-        }
-        return scale * Math.pow(-Math.log1p(-p), 1.0 / shape);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -222,13 +178,7 @@ public final class WeibullDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double inverseSurvivalProbability(double p) {
-        ArgumentUtils.checkProbability(p);
-        if (p == 1) {
-            return 0.0;
-        } else  if (p == 0) {
-            return Double.POSITIVE_INFINITY;
-        }
-        return scale * Math.pow(-Math.log(p), 1.0 / shape);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -242,11 +192,7 @@ public final class WeibullDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getMean() {
-        final double sh = getShape();
-        final double sc = getScale();
-
-        // Special case of exponential when shape is 1
-        return sh == 1 ? sc : sc * Math.exp(LogGamma.value(1 + (1 / sh)));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -261,15 +207,7 @@ public final class WeibullDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getVariance() {
-        final double sh = getShape();
-        final double sc = getScale();
-        final double mn = getMean();
-
-        // Special case of exponential when shape is 1
-        return sh == 1 ?
-               sc * sc :
-               (sc * sc) * Math.exp(LogGamma.value(1 + (2 / sh))) -
-               (mn * mn);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -281,7 +219,7 @@ public final class WeibullDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getSupportLowerBound() {
-        return SUPPORT_LO;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -293,17 +231,14 @@ public final class WeibullDistribution extends AbstractContinuousDistribution {
      */
     @Override
     public double getSupportUpperBound() {
-        return SUPPORT_HI;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ContinuousDistribution.Sampler createSampler(final UniformRandomProvider rng) {
-        // Special case: shape=1 is the exponential distribution
-        if (shape == 1) {
-            // Exponential distribution sampler.
-            return ZigguratSampler.Exponential.of(rng, scale)::sample;
-        }
-        return super.createSampler(rng);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -40,14 +40,25 @@ import org.apache.commons.statistics.distribution.TDistribution;
  * @since 1.1
  */
 public final class TTest {
-    /** Default instance. */
+
+    /**
+     * Default instance.
+     */
     private static final TTest DEFAULT = new TTest(AlternativeHypothesis.TWO_SIDED, false, 0);
 
-    /** Alternative hypothesis. */
+    /**
+     * Alternative hypothesis.
+     */
     private final AlternativeHypothesis alternative;
-    /** Assume the two samples have the same population variance. */
+
+    /**
+     * Assume the two samples have the same population variance.
+     */
     private final boolean equalVariances;
-    /** The true value of the mean (or difference in means for a two sample test). */
+
+    /**
+     * The true value of the mean (or difference in means for a two sample test).
+     */
     private final double mu;
 
     /**
@@ -56,7 +67,10 @@ public final class TTest {
      * <p>This class is immutable.
      */
     public static final class Result extends BaseSignificanceResult {
-        /** Degrees of freedom. */
+
+        /**
+         * Degrees of freedom.
+         */
         private final double degreesOfFreedom;
 
         /**
@@ -77,7 +91,7 @@ public final class TTest {
          * @return the degrees of freedom
          */
         public double getDegreesOfFreedom() {
-            return degreesOfFreedom;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -104,7 +118,7 @@ public final class TTest {
      * @return default instance
      */
     public static TTest withDefaults() {
-        return DEFAULT;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -114,7 +128,7 @@ public final class TTest {
      * @return an instance
      */
     public TTest with(AlternativeHypothesis v) {
-        return new TTest(Objects.requireNonNull(v), equalVariances, mu);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -131,7 +145,7 @@ public final class TTest {
      * @see #test(double, double, long, double, double, long)
      */
     public TTest with(DataDispersion v) {
-        return new TTest(alternative, Objects.requireNonNull(v) == DataDispersion.HOMOSCEDASTIC, mu);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -146,7 +160,7 @@ public final class TTest {
      * @throws IllegalArgumentException if the value is not finite
      */
     public TTest withMu(double v) {
-        return new TTest(alternative, equalVariances, Arguments.checkFinite(v));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -165,9 +179,7 @@ public final class TTest {
      * @see #withMu(double)
      */
     public double statistic(double m, double v, long n) {
-        Arguments.checkNonNegative(v);
-        checkSampleSize(n);
-        return computeT(m - mu, v, n);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -180,12 +192,7 @@ public final class TTest {
      * @see #withMu(double)
      */
     public double statistic(double[] x) {
-        final long n = checkSampleSize(x.length);
-        final DoubleStatistics s = DoubleStatistics.of(
-            EnumSet.of(Statistic.MEAN, Statistic.VARIANCE), x);
-        final double m = s.getAsDouble(Statistic.MEAN);
-        final double v = s.getAsDouble(Statistic.VARIANCE);
-        return computeT(m - mu, v, n);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -205,10 +212,7 @@ public final class TTest {
      * @see #withMu(double)
      */
     public double pairedStatistic(double[] x, double[] y) {
-        final long n = checkSampleSize(x.length);
-        final double m = StatisticUtils.meanDifference(x, y);
-        final double v = StatisticUtils.varianceDifference(x, y, m);
-        return computeT(m - mu, v, n);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -241,15 +245,8 @@ public final class TTest {
      * @see #withMu(double)
      * @see #with(DataDispersion)
      */
-    public double statistic(double m1, double v1, long n1,
-                            double m2, double v2, long n2) {
-        Arguments.checkNonNegative(v1);
-        Arguments.checkNonNegative(v2);
-        checkSampleSize(n1);
-        checkSampleSize(n2);
-        return equalVariances ?
-            computeHomoscedasticT(mu, m1, v1, n1, m2, v2, n2) :
-            computeT(mu, m1, v1, n1, m2, v2, n2);
+    public double statistic(double m1, double v1, long n1, double m2, double v2, long n2) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -266,18 +263,7 @@ public final class TTest {
      * @see #with(DataDispersion)
      */
     public double statistic(double[] x, double[] y) {
-        final long n1 = checkSampleSize(x.length);
-        final long n2 = checkSampleSize(y.length);
-        final DoubleStatistics.Builder b = DoubleStatistics.builder(Statistic.MEAN, Statistic.VARIANCE);
-        final DoubleStatistics s1 = b.build(x);
-        final double m1 = s1.getAsDouble(Statistic.MEAN);
-        final double v1 = s1.getAsDouble(Statistic.VARIANCE);
-        final DoubleStatistics s2 = b.build(y);
-        final double m2 = s2.getAsDouble(Statistic.MEAN);
-        final double v2 = s2.getAsDouble(Statistic.VARIANCE);
-        return equalVariances ?
-            computeHomoscedasticT(mu, m1, v1, n1, m2, v2, n2) :
-            computeT(mu, m1, v1, n1, m2, v2, n2);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -294,10 +280,7 @@ public final class TTest {
      * @see #statistic(double, double, long)
      */
     public Result test(double m, double v, long n) {
-        final double t = statistic(m, v, n);
-        final double df = n - 1.0;
-        final double p = computeP(t, df);
-        return new Result(t, df, p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -312,10 +295,7 @@ public final class TTest {
      * @see #statistic(double[])
      */
     public Result test(double[] sample) {
-        final double t = statistic(sample);
-        final double df = sample.length - 1.0;
-        final double p = computeP(t, df);
-        return new Result(t, df, p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -335,10 +315,7 @@ public final class TTest {
      * @see #pairedStatistic(double[], double[])
      */
     public Result pairedTest(double[] x, double[] y) {
-        final double t = pairedStatistic(x, y);
-        final double df = x.length - 1.0;
-        final double p = computeP(t, df);
-        return new Result(t, df, p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -366,14 +343,8 @@ public final class TTest {
      * {@code < 2}; or the variances are negative.
      * @see #statistic(double, double, long, double, double, long)
      */
-    public Result test(double m1, double v1, long n1,
-                       double m2, double v2, long n2) {
-        final double t = statistic(m1, v1, n1, m2, v2, n2);
-        final double df = equalVariances ?
-                -2.0 + n1 + n2 :
-                computeDf(v1, n1, v2, n2);
-        final double p = computeP(t, df);
-        return new Result(t, df, p);
+    public Result test(double m1, double v1, long n1, double m2, double v2, long n2) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -391,28 +362,7 @@ public final class TTest {
      * @see #test(double, double, long, double, double, long)
      */
     public Result test(double[] x, double[] y) {
-        // Here we do not call statistic(double[], double[]) because the degreesOfFreedom
-        // requires the variance. So repeat the computation and compute p.
-        final long n1 = checkSampleSize(x.length);
-        final long n2 = checkSampleSize(y.length);
-        final DoubleStatistics.Builder b = DoubleStatistics.builder(Statistic.MEAN, Statistic.VARIANCE);
-        final DoubleStatistics s1 = b.build(x);
-        final double m1 = s1.getAsDouble(Statistic.MEAN);
-        final double v1 = s1.getAsDouble(Statistic.VARIANCE);
-        final DoubleStatistics s2 = b.build(y);
-        final double m2 = s2.getAsDouble(Statistic.MEAN);
-        final double v2 = s2.getAsDouble(Statistic.VARIANCE);
-        final double t;
-        final double df;
-        if (equalVariances) {
-            t = computeHomoscedasticT(mu, m1, v1, n1, m2, v2, n2);
-            df = -2.0 + n1 + n2;
-        } else {
-            t = computeT(mu, m1, v1, n1, m2, v2, n2);
-            df = computeDf(v1, n1, v2, n2);
-        }
-        final double p = computeP(t, df);
-        return new Result(t, df, p);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -440,9 +390,7 @@ public final class TTest {
      * @param n2 Second sample size.
      * @return t test statistic
      */
-    private static double computeT(double mu,
-                                   double m1, double v1, long n1,
-                                   double m2, double v2, long n2)  {
+    private static double computeT(double mu, double m1, double v1, long n1, double m2, double v2, long n2) {
         return (m1 - m2 - mu) / Math.sqrt((v1 / n1) + (v2 / n2));
     }
 
@@ -456,13 +404,11 @@ public final class TTest {
      * @param n2 Second sample size.
      * @return approximate degrees of freedom
      */
-    private static double computeDf(double v1, long n1,
-                                    double v2, long n2) {
+    private static double computeDf(double v1, long n1, double v2, long n2) {
         // Sample sizes are specified as a double to avoid integer overflow
         final double d1 = n1;
         final double d2 = n2;
-        return (((v1 / d1) + (v2 / d2)) * ((v1 / d1) + (v2 / d2))) /
-            ((v1 * v1) / (d1 * d1 * (n1 - 1)) + (v2 * v2) / (d2 * d2 * (n2 - 1)));
+        return (((v1 / d1) + (v2 / d2)) * ((v1 / d1) + (v2 / d2))) / ((v1 * v1) / (d1 * d1 * (n1 - 1)) + (v2 * v2) / (d2 * d2 * (n2 - 1)));
     }
 
     /**
@@ -478,9 +424,7 @@ public final class TTest {
      * @param n2 Second sample size.
      * @return t test statistic
      */
-    private static double computeHomoscedasticT(double mu,
-                                                double m1, double v1, long n1,
-                                                double m2, double v2, long n2)  {
+    private static double computeHomoscedasticT(double mu, double m1, double v1, long n1, double m2, double v2, long n2) {
         final double pooledVariance = ((n1 - 1) * v1 + (n2 - 1) * v2) / (-2.0 + n1 + n2);
         return (m1 - m2 - mu) / Math.sqrt(pooledVariance * (1.0 / n1 + 1.0 / n2));
     }
